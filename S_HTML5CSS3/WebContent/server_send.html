@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SSE server send</title>
+</head>
+<body> 
+
+<script type="text/javascript">
+	function start() 
+	{
+		//服务器端把 "Content-Type" 报头设置为 "text/event-stream"。
+		var eventSource = new EventSource("serverSend");
+		eventSource.onmessage = function(event) {
+			//服务端返回字串，格式data:xx
+		 	document.getElementById('foo').innerHTML += event.data+" <br/>";
+		};
+		eventSource.onopen=function(event)
+		{
+			document.getElementById("foo").innerHTML+=  "onopen <br/>";
+		};
+		eventSource.onerror=function(event)
+		{
+			document.getElementById("foo").innerHTML+=  "onerror"+event+" <br/>";
+		};
+	}
+	function startMulti()
+	{
+		var eventSource = new EventSource("serverSendMulti");
+		eventSource.addEventListener('up_vote',//对应服务端的 event:up_vote\n
+			function(event) {
+				document.getElementById('up').innerHTML = event.data;
+			}, false);
+		eventSource.addEventListener('down_vote', 
+			function(event) {
+				document.getElementById('down').innerHTML = event.data;
+			}, false);
+	}
+</script> 
+
+Time:  <div id="foo"></div> 
+<button onclick="start()">Start Server Send</button>
+
+
+<br/>
+up:  <div id="up"></div> 
+down:  <div id="down"></div> 
+<button onclick="startMulti()">Start Multi Server Send</button>
+
+
+</body>
+</html>
+ 

@@ -1,0 +1,36 @@
+<!doctype html>
+<head>
+
+
+<title>CodeMirror: SQL Mode for CodeMirror</title>
+<meta charset="utf-8"/>
+<script src="js/codemirror.js"></script>
+<script src="js/mode/sql.js"></script>
+
+<link rel="stylesheet" href="css/codemirror.css">
+<style type="text/css">
+.CodeMirror {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+}
+</style>
+            
+<script type="text/javascript" >
+	//$(function(){   });
+	window.onload = function() 
+	{
+		var mime = 'text/x-mariadb';
+		 window.editor = CodeMirror.fromTextArea(document.getElementById('sql'), {
+				mode: mime,
+				lineNumbers: true,
+				autofocus: true
+		  });
+	}
+</script>
+</head>
+<body>
+ SQL  :  <textarea   id="sql"> select table_name from information_schema.TABLES where table_schema='db_name'  </textarea>
+   
+
+</body> 

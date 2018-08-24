@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	
+	
+	<link type="text/css" rel="stylesheet" href="css/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="css/shThemeDefault.css"/>
+	<script type="text/javascript" src="js/shCore.js" ></script>
+	<script type="text/javascript" src="js/shBrushJava.js" ></script>
+	<script type="text/javascript">
+		SyntaxHighlighter.all() 
+	</script>
+
+</head>
+<body>
+
+<h2>这是开始</h2>
+<!--  auto-links: true; collapse: false; first-line: 1; gutter: true; html-script: false; light: false; ruler: false; smart-tabs: true; tab-size: 4; toolbar: true; -->	
+<pre class="brush: java;">
+/**
+ * 
+ */
+package com.sugon.activemq.test;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import java.io.FileInputStream;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
+
+/**
+ * @author WangMing
+ * 
+ */
+public class QueueSendMessage {
+	public static void main(String[] args) {
+		ConnectionFactory cf = new ActiveMQConnectionFactory("tcp://10.0.31.40:61616");
+		Connection conn = null;
+		Session session = null;
+		MessageProducer producer = null;
+		try {
+			conn = cf.createConnection();
+			session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Destination destination = new ActiveMQQueue("messageQueue");
+			producer = session.createProducer(destination);
+			producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);//不持久化消息
+			TextMessage message = session.createTextMessage("这是发送到队列\"messageQueue\"的消息!");
+			conn.start();
+			long starttime = System.currentTimeMillis();
+			producer.send(message);
+			long endtime = System.currentTimeMillis();
+			System.out.println("消息发送成功!\t所用时间为:"+(endtime-starttime)+"毫秒");
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null || conn!=null || producer!=null){
+				try {
+					producer.close();
+					session.close();
+					conn.close();
+				} catch (JMSException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+
+	}
+}
+</pre>
+<h2>这是结束</h2>
+</body>
+</html>

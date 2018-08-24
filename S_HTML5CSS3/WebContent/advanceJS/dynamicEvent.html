@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function dynamicAddEvent()
+{
+	var myLabe=document.getElementById("myLabel");
+	if(window.addEventListener) //Firefox,Chrome 执行顺序11->12
+	{
+		//element.addEventListener(type,listener,useCapture);
+		myLabe.addEventListener('click',function(){alert('Firefox,Chrome 11')}, false);//这是click
+		myLabe.addEventListener('click',function(){alert('Firefox,Chrome 12')}, false);
+	}else//IE 执行顺序22 -> 21
+	{
+		myLabe.attachEvent('onclick', function(){alert('IE 21');});//这是onclick
+		myLabe.attachEvent('onclick', function(){alert('IE 22');});
+	}
+}
+
+
+function batchFunction()
+{
+	for(var i=0;i<5;i++) 
+	{ 
+	    var f= function(i)//function可在另一个function中
+	   {   
+	        return function()
+			{   
+	                alert(i);   
+	        }//可以return 一个函数
+	  	} 
+	    // document.getElementById("btn"+i).onclick = Function("alert('hello');");//非动态,JS通用的,大写F,可用eval
+	   if(window.addEventListener)
+	   {
+			document.getElementById("btn"+i).addEventListener("click",f(i),false);
+			//document.getElementById("btn"+i).addEventListener("click",new Function("abc("+i+")"),false); //大写Function
+	   }else
+	   {
+		   document.getElementById("btn"+i).attachEvent("onclick",f(i));
+		   //document.getElementById("btn"+i).attachEvent("onclick",new Function("abc("+i+")")); //大写F
+	   }
+	    
+	}
+}
+function abc(i)
+{
+    alert(i);
+}
+
+</script>
+</head>
+<body>
+	<label id="myLabel">要被动态增加事件的对象</label>
+	<input type="button" value="为label加单击事件" onclick="dynamicAddEvent()">
+	
+	<input type="button" value="一般按钮0" id="btn0">
+	<input type="button" value="一般按钮1" id="btn1">
+	<input type="button" value="一般按钮2" id="btn2">
+	<input type="button" value="一般按钮3" id="btn3">
+	<input type="button" value="一般按钮4" id="btn4">
+	<input type="button" value="一般按钮5" id="btn5">
+	<br/>
+	<input type="button" value="为  一般按钮 加单击事件"  onclick="batchFunction()"/>
+</body>
+</html>

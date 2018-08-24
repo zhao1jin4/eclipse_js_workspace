@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+<style>
+#idParentDiv{width:100%;padding:6px;background-color:buttonshadow;}
+#idDiv1{color:#FFFFFF;padding:4px;clear:none;}
+#idDiv2{width:150px;height:40px;background-color:#FF6633;color:#FFFFFF;padding:4px;float:none;}
+#idCodeDiv{width:100%;padding:4px;font-family:verdana,tahoma;margin:12px 0px 0px 0px;background-color:#EEEEEE;font-weight:bold;}
+</style>
+
+<script>
+function rdl_change(target){
+	var oCodeDiv=document.getElementById("idCodeDiv");
+	var oDiv1=document.getElementById("idDiv1");
+	var oDiv2=document.getElementById("idDiv2");
+	var sValue1="none",sValue2="none";
+	if(target.id=="idSel1")
+	{	with (document.getElementById("idSel1"))
+		{
+			if (selectedIndex!=0) 
+				 sValue1=options[selectedIndex].value;
+			else 
+				 sValue1="none";//用with,条件成立也会执行else????????
+		}
+	}else if(target.id=="idSel2")
+	{	
+		var sel=document.getElementById("idSel2");
+		if (sel.selectedIndex!=0) 
+			sValue2=sel.options[sel.selectedIndex].value;
+		else
+			sValue2="none"; 
+	}
+	oDiv1.style.clear=sValue1;
+	oDiv2.style.styleFloat=sValue2;
+	oCodeDiv.innerHTML="#idDiv1 { clear : "+sValue1+" ; }"+"<br>"+"#idDiv2 { float : "+sValue2+" ; }";
+}
+</script>
+
+
+</head>
+<body>
+只IE有效
+
+<div id=idParentDiv>
+	<div id=idDiv2>我的ID是<b> idDiv2 </b>。请选择我的<b> float </b>属性的值。</div>
+	<div id=idDiv1>我的ID是<b> idDiv1 </b>。请从下方的第一个选择框内选择我的<b> clear </b>属性的值。从第二个选择框内选择<b> idDiv2 </b>的<b>  float </b>属性的值。</div>
+</div>
+<br>
+
+<select id="idSel1" onchange="rdl_change(this);">
+<option value="null" style="font-weight:bold;">---clear---
+<option value="none">none
+<option value="left">left
+<option value="right">right
+<option value="both">both
+</select>
+
+<select id="idSel2" onchange="rdl_change(this);">
+<option value="null" style="font-weight:bold;">---float---
+<option value="none">none
+<option value="left">left
+<option value="right">right
+</select>
+
+<div id=idCodeDiv>#idDiv1 { clear : none ; }<br>#idDiv2 { float : none ; }</div>
+
+
+</body>
+</html>

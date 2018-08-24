@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">    
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+<link rel="icon" href="assets/bing.ico" /> <!--地址栏图标使用 .ico文件  -->
+<link rel="icon" href="assets/animated_favicon.gif" type="image/gif" ><!-- 地址栏动画图标使用 .gif文件  -->
+<!-- Chrome必须在HTTP服务器中可见,不能播放动画,IE无效??? -->
+ 
+<link rel="StyleSheet"  type="text/css" href="css/test.css" />
+<style type ="text/css"> 
+	body {cursor: all-scroll;}
+</style>
+<!--<script type="text/javascript" src="js/jquery-1.9.1.js"></script>不能使用 <script src="" /> 的简单形式-->
+<script type="text/javascript">
+
+	//onerror 事件捕获网页中的错误,三个参数来调用：msg（错误消息）、url（发生错误的页面的 url）、line（发生错误的代码行）。)
+	//如果返回值为 false，则在控制台 (JavaScript console) 中显示错误消息
+	onerror=handleErr;
+	function handleErr(msg,url,line)
+	{
+		alert('网页中有错误,行号:'+line+',原因:'+msg);
+		return false;
+	}
+	/*
+	try{
+		abc
+	}catch(e)
+	{
+		alert(e);
+	}
+	*/
+	//多浏览器
+	function whichBrowser()
+	{
+		//alert( navigator.userAgent);
+		if(navigator.userAgent.indexOf("MSIE")>0) 
+		{ 
+			 alert("MSIE"); 
+		}else if(isFirefox=navigator.userAgent.indexOf("Firefox")>0)
+		{ 
+			alert("Firefox"); 
+		}else if(isSafari=navigator.userAgent.indexOf("WebKit")>0)
+		{ 
+			 alert("WebKit ,is Safari or Chrome"); 
+		} 
+	}
+	document.oncontextmenu=new Function("return false;");//禁止网页右键
+</script>
+</head>
+
+
+ <!--禁止选择和复制,只对IE有效
+<BODY  onselect="document.selection.empty()" oncopy="document.selection.empty()"> -->
+ <!--<body   onselectstart="return   false"><!-- 禁止选择 <BODY>-->
+ <BODY >
+
+	<!--对IE,Chrome有效,Firefox无效 -->
+	<RUBY>
+		基准文本
+		<RT>注音文本(如拼音)
+	</RUBY>
+	
+	<br/>
+	<input type="button" value="浏览器的判断" onclick="whichBrowser()">
+	
+	<br/>
+	<a href=javascript:history.back()>返回</a>
+	
+	<br/>
+	<a href="#" style="cursor: crosshair;">设置光标</a>
+	
+	<br/>
+	<!-- .CUR或*.ANI文件是动画" 可以使用 AWiconsPro 工具来做  -->
+	<a href="#" style="cursor:url(assets/rose.cur)">光标CUR</a> <!-- 只对IE 有效 -->
+	<br/>
+	<a href="#" style="cursor:url(assets/smoke.ani)">光标ANI动画</a> <!-- 只对IE 有效 -->
+	
+	<br/>双引号:&quot;
+	<br/>大于号:&gt;
+	<br/>单引号:&#39; <!-- 是单引号 -->
+	
+	
+	<br/>
+	只能输入半角
+	<input type="text" onkeyup="value=value.replace(/[^\u0000-\u00FF]/g,'')"  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u0000-\u00FF]/g,''))"/>
+
+	<br/>
+	
+	<hr/> 以下无效????
+	<br/>
+	<a href="#" style="cursor:hand" >  设为主页</a>
+	
+	<br/>
+	<a href="#" >添加到收藏夹</a>
+	
+	
+</body>
+</html>

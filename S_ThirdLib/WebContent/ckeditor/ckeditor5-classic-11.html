@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>test  CKEditor5-classic 11 version</title>
+
+<script type="text/javascript" src="classic/ckeditor.js"></script>
+<script type="text/javascript" src="classic/zh-cn.js"></script>
+</head>
+<body>
+ CKEditor5-classic 11 version <br/>
+<textarea name="content" id="editor">
+    &lt;p&gt;Here goes the initial content of the editor.&lt;/p&gt;
+</textarea>
+
+<script type="text/javascript"> <!-- 要放在<textarea id="editor">后面 -->
+ClassicEditor.create( document.querySelector( '#editor' ) )
+	.then( editor => {
+	    console.log( editor );
+	} )
+	.catch( error => {
+	    console.error( error );
+	} );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+#CACHE MANIFEST第一行,是必须出现的,表示下面列出第一次请求后就缓存
+CACHE MANIFEST
+/assets/img_log.gif       
+#/theme.css
+#/logo.gif
+#/main.js 
+
+
+#表示下面列出从来不要红缓存,支持*
+NETWORK:		
+#login.asp
+/HTML5Test.html
+/problemHTML5.html
+/CSS3Test.html
+
+#如果网面不能仿问,把offline.html存放到/html5库(目录)下,分两列
+FALLBACK:		
+/html5/ /HTML5Test.html

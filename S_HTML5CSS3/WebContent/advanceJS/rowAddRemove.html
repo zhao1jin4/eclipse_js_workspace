@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<script language="javascript">
+/*
+动态添加table.将table中的text的值存入另一text中，在后台得到另一text的值
+注意：1。OnChanged将“text的值存入另一text中”。如果此事件写入后台代码，将得不到。因为被postback掉了。
+  故先存，再运行后台代码。
+  2。在html中有一table，名字为filetb。
+如果需要动态修改，在table里添加literal.text.
+*/
+var allCount;
+   allCount=0;
+function addAttachment() {
+    allCount++;
+    var Num,p,myrow,indexnewrow,c1,c2,c3;
+    var rown=filetb.rows.length;
+   
+    myrow=filetb.insertRow();
+    myrow.id="tdt"+allCount;
+    myrow.name="tdt"+allCount;
+    myrow.className="smallFont";
+    c1=myrow.insertCell();
+    c1.width="100";
+    c1.align="right";
+    c1.innerHTML="<p align=right>代码" + (allCount) + "：";
+   
+    c2=myrow.insertCell();
+    c2.align="left";
+    c2.innerHTML="<INPUT type='text' onchange='return GetValue()' style='width:200'  class=t1 name=txtCode"+(allCount)+" MaxLength='50'>";
+    c3=myrow.insertCell();
+    c3.align="left";
+    c3.innerHTML="&nbsp;&nbsp;&nbsp;<a href='javascript:removeatt(" + allCount + ");'>删除</a>";
+   
+   }
+   function GetValue()
+   {
+    var id;
+    var a;
+    var b;
+    for(i=0;i<filetb.rows.length;i++)
+    {
+     a = filetb.rows(i).cells(0).innerText;
+     a = a.substring(2,3);
+     id = "txtCode" + a;
+     document.all("txt").value += document.all(id).value;
+    }
+   }
+  /* function removeatt(ln)
+   {
+    var i
+    var tdname
+    var tdln
+    var line=ln;
+    if (line>0) {
+     for (i=0;i<filetb.rows.length;i++) {
+      tdname=filetb.rows[i].name;
+      tdln=tdname.substring(3,tdname.length);
+      if (tdln==line) {
+       filetb.deleteRow(i);
+       break;
+      }
+     }
+    }
+   }
+*/
+
+    function removeatt(ln)
+   {
+  //  var i
+  
+   //  for (i=0;i<filetb.rows.length;i++) {
+  
+    
+    alert(ln);
+       filetb.deleteRow(ln-1);
+     //  break;
+      
+     
+   //}
+   }
+</script>
+</head>
+<body>
+<form id="form1" name="form1" method="post" action="" runat="server">
+<input type=button onclick="addAttachment()" id=btnNew value=click />
+<input type=button onclick="GetValue()" id=btnGet value=GetValue />
+<input type="text" id=txt />
+<table id=filetb></table>
+ 
+</form>
+</body>
+</html> 

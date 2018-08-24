@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	/* .class 选择器 */
+	.theClass
+	{
+		background-color:yellow;
+	}
+	/* #Id 选择器 */
+	#theId
+	{
+		background-color:yellow;
+	}
+	#theDivallSub *
+	{ 
+		background-color:yellow;
+	}
+	/* 覆盖 上面的 ,  所有的input子级元素 */ 
+	#theDivallSub input
+	{ 
+		background-color:red;
+	}
+	span
+	{ 
+		background-color:yellow;
+	}
+	
+	/* 同时多个起做用  */
+	h1,h2
+	{ 
+		background-color:yellow;
+	}
+	ul li{list-style-type:none;}   /*  <li></li>不要前面的点*/
+	
+	/* 选取父元素是 <div> 元素的每个 <p> 元素，并设置其背景色：*/
+	div>span
+	{ 
+		background-color:pink;
+	}
+	/* 选择紧接在 <div> 元素之后的所有 <button> 元素   */
+	div+button
+	{ 
+		background-color:yellow;
+	}
+	/* 选择a带有 href 属性所有元素 ,也可只[href]*/
+	a[href]  
+	{ 
+		background-color:red;
+	}
+	a[target=_top]
+	{ 
+		background-color:green;
+	}
+	/* 选择 title 属性包含单词 "name" 的所有元素,即两边有空格*/
+	tr td[title~=name]
+	{ 
+		background-color:green;
+	}
+	/* 选择 title 属性以 "Row"开头 的所有元素,不能有空格也不能紧接 ,-可以 */
+	tr td[title|=Row]
+	{ 
+		background-color:red;
+	}
+	 
+	
+	
+	/* 对 a 未仿问过的*/
+	#theBaidu:link
+	{ 
+		background-color:yellow;
+	}
+	/* 对 a  仿问过的*/
+	#theBaidu:visited
+	{ 
+		background-color:red;
+	}
+	/* 对 a  鼠标滑上 */
+	#theBaidu:hover
+	{ 
+		background-color:pink;
+	}
+	/* 对 a  点击时 */
+	#theBaidu:active
+	{ 
+		background-color:white;
+	}
+	/* 对input  得到光标时 */
+	#theTextField:focus
+	{ 
+		background-color:pink;
+	}
+	
+	p:first-letter
+	{ 
+	font-size:200%;
+	color:#8A2BE2;
+	}
+	p:first-line
+	{ 
+		color:red;
+	}
+	/* 选择li父元素的第一个子元素的每个li元素  */
+	li:first-child
+	{
+		background:yellow;
+	}
+	h1:before
+	{
+		content:"===";
+		background-color:blue;
+		color:red;
+		font-weight:bold;
+	}
+	h1:after
+	{
+		content:"===";
+		background-color:blue;
+		color:red;
+		font-weight:bold;
+	}
+	/* :lang 选择器*/
+	#theLang:lang(en)
+	{ 
+		background:pink;
+	}
+	/* ----------------------------CSS 3 ----------- */
+	 /* p同级, p 元素之后的所有span 元素设置背景 */
+	p~span
+	{
+		background:#ff0000;
+	}
+	 /*  class 属性值以 "test" 开头的 */
+	div[class^="test"]
+	{
+		background:#ffff00;
+	}
+	 /*  class 属性值以 "test" 结尾的 */
+	div[class$="Test"]
+	{
+		background:#ffff00;
+	}
+	
+	/*  class 属性中有 "Menu" 的 */
+	div[class*="Menu"]
+	{
+		background:#ffff00;
+	}
+	 /* h5父元素的所有子级,嵌套子级元素 最前一个 h5 元素的背景色 */
+	#firtOfTypeDiv h5:first-of-type
+	{
+		background:#ff0000;
+	}
+	/* h5父元素的的所有子级,嵌套子级元素  最后一个 h5 元素的背景色  */
+	#firtOfTypeDiv h5:last-of-type
+	{
+		background:#00ff00;
+	}
+	
+	/*  <aside> 父元素 的子元素中只有一个(不能多个)<aside>类型的元素 (可有其它类型的)  */
+	 aside:only-of-type
+	{
+		background:#ff0000;
+	}
+	/* <article>父元素的子元素中只有一个(不能多个)<article>元素(不可有其它类型的)。 */
+	 article:only-child
+	{
+		background:#0000ff;
+	}
+	
+	/* <output>父元素的子元素中 第2个元素必须为<output>*/
+	#nthChildDiv output:nth-child(2)
+	{
+		background:#ffff00;
+	}
+	/* 奇数 第一个是 1   */
+	#nthDiv output:nth-child(odd)  
+	{
+		background:pink;
+	} 
+	
+	/* 同 odd 
+	#nthDiv  output:nth-child(2n+1)
+	{
+		background:pink;
+	}
+	*/
+	#nthDiv  output:nth-child(even)
+	{
+		background:#0000ff;
+	}
+	
+	
+	/* 同nth-child ,只是从后向前数,也可以用n,odd,even*/
+	#nthLastDiv output:nth-last-child(2)
+	{
+		background:#ff0000;
+	}
+	
+	/* 其父元素的第2个output 元素 (前面可有多于2个其它的无素),也可用n,odd,event*/
+	#nthTypeDiv	output:nth-of-type(2)
+	{
+		background:#ff0000;
+	}
+	
+	#nthTypeDivN output:nth-of-type(even)
+	{
+		background:#00ff00;
+	}
+	#nthTypeDivN output:nth-of-type(2n+1)
+	{
+		background:#00ffff;
+	}
+	/* 也有  :nth-last-of-type(n) */
+	#nthLastTypeDiv output:nth-last-of-type(1)
+	{
+		background:#00ffff;
+	}
+	
+	
+	
+</style>
+</head>
+<body>
+
+<h1>CSS 1-2 版本的功能</h1>
+<h2> ----------  CSS 1 版本的功能 </h2>
+
+
+<p class="theClass">.class 选择器</p>
+<p id="theId">
+	#Id 选择器    first-letter first-line
+	<br>第二行
+</p>
+<span> 标签选择器</span>
+
+
+<a href="http://www.baidu.com" id="theBaidu"> 链接 link hover</a>
+
+
+
+
+<h2> ---------- CSS 2 版本的功能 </h2>
+<div id="theDivallSub">
+	<a> * 选择所有 </a>
+	<input type="text" id="theTextField" value="父级 的 子级 ,得到光标" ></input>
+    <button> 按钮</button> 
+</div>
+
+<div>
+	<span>所有 父级 > 子级  1</span> <input type="button"  value="按钮"></input>
+	<span>所有 父级 > 子级  2</span> <input type="button"  value="按钮"></input>
+</div>
+<button> 紧接   父标签div 按钮</button> 
+<button> 非紧接父标签div 按钮</button>
+
+<a href="http://www.baidu.com">baidu.com  带有属性选择器</a>
+<a href="http://www.baidu.com" target="_top"> 属性选择器的值</a>
+
+<table>
+	<tr>
+		<td title="fist name">fistname</td>
+		<td title="last name">lastname</td>
+	</tr>
+	<tr>
+		<td title="Row-firstName">fistname</td>
+		<td title="Row-lastName">lastname</td>
+	</tr>
+</table>
+
+<ul>
+	<li>第一项  first-child</li>
+	<li>第二项</li>
+</ul>
+<ol>
+  <li>咖啡   first-child  </li>
+  <li>茶</li>
+  <li>可口可乐</li>
+</ol>
+
+<p lang="en" id="theLang"> : lang 选择器</p>
+
+
+
+<h1>CSS 3 版本的功能</h1>
+
+
+  
+<p> p~span 之前的  </p>
+<span>p~span 表示p同级,p 之后的所有的 span</span>  -- 
+<span>第二个 span </span>
+
+<div class="testData">[class^="test"] 样式以test开头  </div>
+<div class="endTest">[class$="test"] 样式以test开头  </div>
+<div class="leftMenuItem">[class*="Menu"] 样式中有 Menu 的 </div>
+
+
+<div id="firtOfTypeDiv">
+	<a>not first line,如果是first-child h5 不会被选中</a>
+	<span>
+		<h5> first-of-type match in child  </h5>
+		<h5> last-of-type match h5 in child </h5>
+	</span>
+	<h5> first-of-type match   </h5>
+	<h5> last-of-type match </h5> 
+	 <a>last line</a>
+</div>
+ 
+
+<br/>
+<div>
+	<article contenteditable="true" >
+		article和div 好像很类似啊  aside和div好像很类似(contenteditable)      only-child
+	</article>
+</div>
+
+<div>
+	<a> mix something</a>
+	<aside>aside和div好像很类似  only-of-type </aside>
+</div>
+
+<div>
+	<aside>aside和div好像很类似啊     not match only-of-type </aside>
+	<aside>aside和div好像很类似啊     not match only-of-type </aside>
+</div>
+
+<div id="nthChildDiv">
+	<figure>1111</figure>
+	<output id="result"> nth-child(2)  </output>
+</div>
+
+<br/>
+<div id="nthDiv">
+	<output> output nth-child(odd)  	从1开始 </output>  
+	<output> output nth-child(even)  		 </output> 
+	<output> output nth-child(3n+0)   从1开始        </output> 
+	<output> output nth-child(even)  		 </output> 
+</div>
+
+<div id="nthLastDiv">
+	<a>11</a>
+	<a>222</a>
+	<output> nth-last-child(2)  </output>  
+	<output> nth-last-child   </output> 
+</div>
+<div id="nthTypeDiv">
+	<a>11</a>
+	<a>222</a>
+	<output> nth-of-type </output>  
+	<output> nth-of-type(2)  </output> 
+</div>
+
+
+
+<div id="nthTypeDivN">
+	<a>11</a>
+	<a>222</a>
+	<output> nth-of-type odd  </output>  
+	<output> nth-of-type even  </output> 
+	<output> nth-of-type(3)  </output>  
+	<output> nth-of-type(4)  </output> 
+	<output> nth-of-type(5)  </output> 
+	<a>11</a>
+	<a>222</a> 
+</div>
+<div id="nthLastTypeDiv">
+	<a>11</a>
+	<a>222</a>
+	<output> nth-last-of-type    </output>  
+	<output> nth-last-of-type   </output> 
+	<a>11</a>
+	<a>222</a> 
+</div>
+ 
+
+
+</body>
+</html>

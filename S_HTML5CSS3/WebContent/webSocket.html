@@ -1,0 +1,87 @@
+﻿
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript">
+function WebSocketTest()
+{
+  if ("WebSocket" in window)
+  {
+     alert("WebSocket is supported by your Browser!");
+     // Let us open a web socket
+     var ws = new WebSocket("ws://localhost:8080/S_HTML5CSS3/webSocket");//tomcat支持
+     ws.onopen = function()
+     {
+        // Web Socket is connected, send data using send()
+        ws.send("Message to send");
+        alert("Message is sent...");
+     };
+     ws.onmessage = function (evt) 
+     { 
+        var received_msg = evt.data;
+        alert("Message is received...");
+     };
+     ws.onclose = function()
+     { 
+        // websocket is closed.
+        alert("Connection is closed..."); 
+     };
+  }
+  else
+  {
+     // The browser doesn't support WebSocket
+     alert("WebSocket NOT supported by your Browser!");
+  }
+}
+
+/*
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
+import org.apache.catalina.websocket.MessageInbound;
+import org.apache.catalina.websocket.WsOutbound;
+
+public class MyWebSocket extends MessageInbound {
+    protected void onOpen(WsOutbound outbound) {
+        System.out.println("connect....");
+        CharBuffer buffer = CharBuffer.wrap("hello,welcome to connect!");
+        try {
+            this.getWsOutbound().writeTextMessage(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void onClose(int status) {
+        System.out.println("close.....");
+    }
+	protected void onBinaryMessage(ByteBuffer arg0) throws IOException {
+		
+	}
+	protected void onTextMessage(CharBuffer arg0) throws IOException {
+	}
+}
+
+@WebServlet("/webSocket")
+public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketServlet {
+	protected StreamInbound createWebSocketInbound(String arg0,
+			HttpServletRequest arg1) {
+	     return new MyWebSocket();
+	}
+} 
+*/
+
+
+</script>
+</head>
+<body>
+<div id="sse">
+   <a href="javascript:WebSocketTest()">Run WebSocket</a>
+   tomcat支持 WebSocket协议 ,ws://
+ 
+
+</div>
+</body>
+</html>

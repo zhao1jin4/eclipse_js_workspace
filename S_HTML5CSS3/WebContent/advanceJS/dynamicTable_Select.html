@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function addTableRow()
+{
+	var tableId=document.getElementById("myTableId");
+	
+	//var myrow=tableId.insertRow();//只对IE
+	var myrow= document.createElement("tr");
+	
+	//var c1=myrow.insertCell();//只对IE
+	var c1=document.createElement("td");
+	var c2=document.createElement("td");
+	var c3=document.createElement("td");
+	myrow.appendChild(c1);
+	myrow.appendChild(c2);
+	myrow.appendChild(c3);
+	tableId.appendChild(myrow);
+	
+	c1.innerHTML="<font color='blue'>22</font>";
+	c2.innerHTML="<font color='blue'>lisi</font>";
+	c3.innerHTML='<input type="button" value="删除" onclick="deleteRowItem(this)">';
+}
+function deleteRowItem(btn)
+{
+	var tr=btn.parentElement.parentElement;//btn.parentNode;
+	tr.parentElement.removeChild(tr);
+}
+
+
+function deleteAllTableRow()
+{
+	var tableId=document.getElementById("myTableId");
+	while(tableId.hasChildNodes())
+	{
+		tableId.removeChild(tableId.lastChild);
+	}
+}
+function createSelect()
+{
+	var mySelect=document.getElementById("mySelect");
+	
+	var oOption = document.createElement("OPTION");
+	oOption.text ='工工工工';
+	oOption.value = '1';
+	mySelect.options.add(oOption);//用 options.add()
+}
+function deleteOptions()
+{
+	var mySelect=document.getElementById("mySelect");
+	mySelect.options.length=0;//清空
+}
+</script>
+</head>
+<body>
+
+<table id="myTableId" >
+	<tr>
+		<td>id</td>
+		<td>name</td>
+		<td>operator</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>lisi</td>
+		<td><input type="button" value="删除" onclick="deleteRowItem(this)"></td>
+	</tr>
+</table>
+
+<br/>
+<input type="button" value="表删表所有行" onclick="deleteAllTableRow()"/>
+<input type="button" value="表加新行" onclick="addTableRow()"/>
+<select id="mySelect" >
+</select>
+<input type="button" value="建立select" onclick="createSelect()"/>
+<input type="button" value="删options" onclick="deleteOptions()"/>
+
+
+</body>
+</html>

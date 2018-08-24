@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function parseXML()
+{
+	var xmlDoc;
+	if (window.ActiveXObject)//IE
+	{
+	  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+	}
+	else if (document.implementation.createDocument)//Firefox
+	{
+	  xmlDoc=document.implementation.createDocument("","",null);
+	//document.implementation.createDocument (namespaceURI, qualifiedNameStr, DocumentType);
+	}
+	else
+	{
+	  alert('Your browser cannot handle this script');
+	}
+	xmlDoc.async=false;
+	xmlDoc.load("../assets/cd_catalog.xml");
+
+	/*
+	var txt=document.getElementById("xmlData").value;//<textarea>
+	var parser=new DOMParser();//只对Firefox
+	var xmlDoc=parser.parseFromString(txt,"text/xml");//返回一个Document 对象
+	*/
+	
+	var allCD=xmlDoc.getElementsByTagName("cd");
+	for(var i=0;i<allCD.length;i++)
+	{
+		alert(allCD[i].firstChild.nodeValue+",attribute price="+allCD[i].getAttribute("price"));
+	}
+	
+}
+
+function e4x()
+{
+	/*var order = new XML();//浏览器都不认XML
+	order='<order id="555">'+
+	'<date>2005-08-01</date>'+
+	'<customer>'+
+	'   <lastname>Johnson</lastname>'+
+	'</customer>'+
+	'</order>';
+	alert(order.@id);
+	alert(order.customer.lastname)
+	*/
+}
+
+</script>
+</head>
+<body>
+
+	<textarea id="xmlData" rows="10" cols="50">
+		<cds>
+		   <cd price="20">张学友专辑</cd>
+		   <cd price="30">刘德华专辑</cd> 
+		</cds>
+	</textarea>
+	<input type="button" onclick="parseXML()" value="解析XML">
+	
+	<br/>
+	
+	<input type="button" onclick="e4x()" value="测试E4X">
+	
+</body>
+</html>

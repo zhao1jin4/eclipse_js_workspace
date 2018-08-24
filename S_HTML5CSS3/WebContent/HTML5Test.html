@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html manifest="demo.appcache"> <!-- 为离线用的,如做游戏 ,推荐扩展名用.appcache,MIME是text/cache-manifest,
+									如要更新cache,要使cahce文件有修改日期,否则不会从网络仿问新的内容 -->
+									
+<!-- demo.appcache文件内容的格式,第一字符是#,表示注释
+
+#CACHE MANIFEST第一行,是必须出现的,表示下面列出第一次请求后就缓存
+CACHE MANIFEST       
+/theme.css
+/logo.gif
+/main.js 
+
+
+#表示下面列出从来不要红缓存,支持*
+NETWORK:		
+login.asp
+
+
+#如果网面不能仿问,把offline.html存放到/html5库(目录)下,分两列
+FALLBACK:		
+/html5/ /offline.html
+
+-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	<style type="text/css">
+		#div1 {width:350px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+	</style>
+</head>
+<body>
+	w3school 网上的教程
+	<hr/>
+	
+	mp4 格式
+	<video src="assets/movie.ogg" width="320" height="240" controls="controls">
+	你的浏览器不支持HTML5,或者mp4 格式
+	</video>
+	
+	ogg格式
+	<video src="assets/movie.ogg" width="320" height="240" controls="controls" loop="loop" preload="preload" autoplay="autoplay" >
+	你的浏览器不支持HTML5,或者OGG格式
+	</video>
+	
+	webm格式
+	<video src="assets/movie.webm" width="320" height="240" controls="controls" >
+	你的浏览器不支持HTML5,或者webm格式
+	</video>
+	
+	使用第一个支持的格式
+	<video width="320" height="240" controls="controls">
+	  <source src="assets/movie.ogg" type="video/ogg" />
+	  <source src="assets/movie.mp4" type="video/mp4" />
+	  <source src="assets/movie.webm" type="video/webm" />
+		Your browser does not support the video tag.
+	</video> 
+	
+	播放音乐
+	<audio controls="controls">
+	  <source src="assets/horse.ogg" type="audio/ogg" />
+	  <source src="assets/horse.mp3" type="audio/mpeg" />
+	Your browser does not support the audio element.
+	</audio>
+		
+	
+	
+	<hr/>
+	拖放 Drop Drag
+	<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+	</div>
+	<img id="drag1" src="assets/img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69" />
+		
+	<script type="text/javascript">
+	//为拖放
+	function allowDrop(ev)
+	{
+		ev.preventDefault();
+	}
+	
+	function drag(ev)
+	{
+		ev.dataTransfer.setData("Text",ev.target.id);
+	}
+	
+	function drop(ev)
+	{
+		ev.preventDefault();
+		var data=ev.dataTransfer.getData("Text");
+		ev.target.appendChild(document.getElementById(data));
+	}
+	
+</script>
+	
+	<hr/>
+	画布
+	<img id="scream" src="assets/the_scream.jpg" alt="The Scream" width="220" height="277" />
+	
+	<canvas id="myCanvas" width="800" height="300" style="border:1px solid #000000;"></canvas> 
+	
+	<script type="text/javascript">
+	//为画布
+	var c=document.getElementById("myCanvas");
+	var ctx=c.getContext("2d");
+	ctx.fillStyle="#FF0000";
+	ctx.fillRect(0,0,150,75);
+	
+	ctx.fillStyle="#FFFFFF";
+	ctx.moveTo(0,0);
+	ctx.lineTo(300,150);
+	ctx.stroke();
+	
+	
+	ctx.beginPath();
+	ctx.arc(95,50,40,0,2*Math.PI);
+	ctx.stroke();
+	
+	ctx.fillStyle="#00FF00";
+	ctx.font="30px Arial";
+	ctx.fillText("Hello World中",10,30);
+	
+	ctx.strokeText("Hello World中",10,70);
+	
+	
+	
+	var grd=ctx.createLinearGradient(0,0,200,0);//开始,结束坐标
+	grd.addColorStop(0.1,"red");//位置从0到1
+	grd.addColorStop(0.8,"blue");
+	grd.addColorStop(1,"white");
+	// Fill with gradient
+	ctx.fillStyle=grd;
+	ctx.fillRect(100,100,150,80);//和createLinearGradient的坐标是有关的
+	
+	
+	var radial=ctx.createRadialGradient(75,250,5,90,260,100);//(x0,y0,r0,x1,y1,r1);
+	radial.addColorStop(0.1,"red");//位置从0到1
+	radial.addColorStop(0.8,"blue");
+	radial.addColorStop(1,"white");
+	ctx.fillStyle=radial;
+	ctx.fillRect(100,200,150,80);//和createRadialGradient的坐标是有关的
+	
+	var img=document.getElementById("scream");
+	ctx.drawImage(img,250,50);
+	</script> 
+
+	<hr/>
+	SVG的示例,SVG图形以对象保存,如果属性被JS修改,浏览器自动更新,Canvas是以像素到像素的渲染,适用于游戏
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="190">
+	  <polygon points="100,10 40,180 190,60 10,60 160,180"
+	  style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;" />
+	</svg>
+	
+	<hr/>
+	全球定位 经伟度   ,latitude 纬度,longitude 经度
+	<p id="demo">Click the button to get your coordinates:</p>
+	<button onclick="getLocation()">getLocation   </button>
+	<script>
+	var x=document.getElementById("demo");
+	function getLocation()
+	{
+	  if (navigator.geolocation)
+	  {
+	    navigator.geolocation.getCurrentPosition(showPosition,showError);//还有一个 watchPosition,对手机的GPRS
+	  }
+	  else{
+		  	x.innerHTML="Geolocation is not supported by this browser.";
+		}
+	}
+	
+	function showPosition(position)
+	  {
+	  x.innerHTML="Latitude: " + position.coords.latitude + 
+	  "<br />Longitude: " + position.coords.longitude;	
+	  }
+
+	function showError(error)
+	  {
+	  switch(error.code) 
+	  {
+	    case error.PERMISSION_DENIED:
+	      x.innerHTML="User denied the request for Geolocation."
+	      break;
+	    case error.POSITION_UNAVAILABLE:
+	      x.innerHTML="Location information is unavailable."
+	      break;
+	    case error.TIMEOUT:
+	      x.innerHTML="The request to get user location timed out."
+	      break;
+	    case error.UNKNOWN_ERROR:
+	      x.innerHTML="An unknown error occurred."
+	      break;
+	    }
+	  }
+	</script>
+	
+	getCurrentPosition()的其它返回值 coords.speed 速度  x米/秒
+
+	<hr/>
+	存储
+	<script type="text/javascript">
+	function testStore()
+	{
+		if(typeof(Storage) =="undefined")
+		  {
+			aler('你的浏览器不支持');
+			return;
+		  }
+		if (localStorage.clickcount)
+		 {
+		 localStorage.clickcount=Number(localStorage.clickcount)+1;
+		 }
+		else
+		 {
+		 localStorage.clickcount=1;
+		 }
+		document.getElementById("local_result").innerHTML="You have clicked the button " + localStorage.clickcount + " time(s).";
+		
+		
+		if (sessionStorage.clickcount)
+		  {
+		  sessionStorage.clickcount=Number(sessionStorage.clickcount)+1;
+		  }
+		else
+		  {
+		  sessionStorage.clickcount=1;
+		  }
+		document.getElementById("session_result").innerHTML="You have仿问 " + sessionStorage.clickcount + " time(s) in this session."; 
+	}
+
+	
+	</script>
+	<div id="local_result">000</div>
+	<div id="session_result">000</div>
+	<input type="button" value="测试store" onclick="testStore()"/>
+	
+	
+	<hr/>
+	Worker的使用,为后台处理,像线程
+	
+	<p>Count numbers: <output id="result"></output></p>
+	<button onclick="startWorker()">Start Worker</button> 
+	<button onclick="stopWorker()">Stop Worker</button>
+	<br /><br />
+	<script>
+	var w;
+	function startWorker()
+	{
+	if(typeof(Worker)!=="undefined")
+	  {
+	  if(typeof(w)=="undefined")
+	  {
+	  	w=new Worker("js/demo_workers.js");
+	  }
+	  w.onmessage = function (event) {
+	    document.getElementById("result").innerHTML=event.data;
+	    };
+	  }
+	else
+	  {
+	  document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
+	  }
+	}
+	
+	function stopWorker()
+	{ 
+		w.terminate();
+	}
+	</script>
+	
+	<hr/>
+	
+</body>
+</html>

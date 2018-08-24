@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+
+
+<script type="text/javascript">
+function copyOption()
+{
+	var select=document.getElementById("select");
+	var select_form=document.getElementById("select_form");
+	select.options.length=0;
+	for(var i=0;i<2;i++)  
+	{
+   		var op=document.createElement("option");
+   		op.value=10+i;;
+   		op.innerHTML="val"+i;
+   		select.appendChild(op);				   		
+	}
+	
+	
+	/*  
+   	//IE 8 的Bug 
+	select_form.innerHTML="<option selected value=1>"; //IE 这个不能被识别
+	alert(select_form.innerHTML);
+   	select_form.innerHTML=select.innerHTML;//IE 为什么会少<option>
+   	alert(select_form.innerHTML);
+   	*/
+   	
+	
+	//select_form.options=select.options; //IE report not implement,Firefox not effect
+	
+   	
+   	/* */
+	//OK
+	var c=select.cloneNode(true); //
+	select_form.parentNode.replaceChild(c,select_form);//new,old   ;firefox用parentNode,IE 用parentElement
+	 
+   	
+
+	/*  
+	var c=select.cloneNode(true);
+	select_form.appendChild(c.options);//IE8 为什么会多<select> ,Bug或者实现错误 ,Firefox 报错
+   	alert(select_form.innerHTML);
+   	*/
+   	
+   	//select_form.appendChild(c.childNodes);//appendChild可以是options不可以是childNodes
+  
+  
+   	/*
+   	//OK
+   	select_form.options.lenth=0;
+	var len=select.options.length;//2
+	for(var  i=0;i<len;i++)
+	{
+		select_form.appendChild(select.options[i].cloneNode(true)); 
+		//注意这里appendChild是把原来的c.options移动到select_form下面,原来的c.options会少了一项,要cloneNode
+	}
+   	*/
+   	
+}  	
+</script>
+<body>
+
+<input type="button" onclick="copyOption()" value="copyOption"/>
+
+<select id="select">
+</select>
+
+<select id="select_form">
+</select>
+
+
+<br>
+
+
+</body>
+</html>

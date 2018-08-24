@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>Insert title here</title>
+<style type="text/css">
+.headline 
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 30px;
+	font-weight: bold;
+	color: cccccc;
+}
+</style>
+</head>
+
+<script type="text/javascript">
+
+var  root="/S_HTML5CSS3"; 
+
+var xmlHttp;
+function ajaxFunction()
+{
+	alert("hello");
+	try
+	{
+		// Firefox, Opera 8.0+, Safari
+		xmlHttp = new XMLHttpRequest();
+	} catch (e)
+	{
+		// Internet Explorer
+		try
+		{
+			xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e)
+		{
+			try
+			{
+				xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e)
+			{
+				alert("Your browser does not support AJAX!");
+				return false;
+			}
+		}
+	}
+	xmlHttp.onreadystatechange = show;
+
+	xmlHttp.open("post",root+"/hello", true);
+	xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xmlHttp.send("name=zhangsan&password=1234");
+
+}
+function show()
+{
+	if (xmlHttp.readyState == 4 && xmlHttp.status == "200")
+	{
+		var x = xmlHttp.responseXML;
+		var name = x.firstChild.nodeValue();
+		var pass = x.getElementByName("password").nodeValue();
+		document.getElementById("myspan").innerHTML = name + pass;
+
+	}
+}
+</script>
+<body>
+	<input type="button" value="提交" onclick="ajaxFunction()" />
+	<span id="myspan"></span>
+
+	<a class="headline" href="/J_AjaxServer/hello?name=good&password=12345">HelloSerlet</a>
+</body>
+</html>

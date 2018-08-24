@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script  type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+
+<input class="Wdate" type="text" onClick="WdatePicker()">
+<br/>
+
+<input type="text"   readonly="readonly"  onClick="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+中文,日期格式,可选择时间
+
+<br/>
+<input type="text"   readonly="readonly" onClick="WdatePicker({lang:'en-us',dateFmt:'yyyy-MM'})" />
+可 只显示月份
+
+<br/>
+<input class="Wdate" type="text"  onClick="WdatePicker({lang:'zh-cn',firstDayOfWeek:1})"/>
+自定义星期的第一天
+
+<br/>
+<input   type="text" onClick="WdatePicker({isShowWeek:true})"/>
+显示是第几周
+
+<br/>
+<input   type="text" onClick="WdatePicker({minDate:'1950-01-01 00:00:00',maxDate:'2050-12-31 23:59:59'})"/>
+选择范围
+
+<br/>
+My97 DatePicker 4.8 Beta2
+说明:calendar.js必须也要有的
+
+</body>
+</html>

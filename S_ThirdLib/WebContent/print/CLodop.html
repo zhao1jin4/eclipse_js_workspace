@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CLodop Print</title>
+
+<script src="jquery.min.js"></script>
+<script src="clodop.js"></script>
+
+<script>
+function prn_Preview(){
+	LODOP = getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));
+	if(LODOP.webskt && LODOP.webskt.readyState==1 && LODOP.VERSION){
+		var top = 50;
+		$($("div[id*='mycode']")).each(function(i){
+			i = i + 1;
+			LODOP.ADD_PRINT_TEXT(top-30,320,520,160,"远成集团车标码");
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+			LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+			LODOP.ADD_PRINT_BARCODE(top,110,520,160,"128A",$.trim($(this).text()));
+			LODOP.ADD_PRINT_TEXT(top+170,310,520,160,$.trim($("#myvehicleno").text()));
+			LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+			top = top + 110 + 150;
+			if(i % 4 == 0){
+				LODOP.NewPageA();
+				top = 50;
+			}
+		});
+		LODOP.PREVIEW();
+	} else {
+		alert("打印插件没准备好，请刷新页面后重试！");
+	}
+}
+
+</script>
+</head>
+<body>
+
+ 
+<object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0 pluginspage="install_lodop32.exe"></embed>
+</object>
+<div id="mycode1">
+	这是打印内容 
+</div>
+<div id='myvehicleno'>车牌号</div>
+
+ <button onclick="prn_Preview()">打印 </button>
+				
+
+</body>
+</html>

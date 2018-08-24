@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript">  
+	//---------------------------------------- 
+	/*	var rain = 1;  
+        function rainman(){  
+            var man = 2;  
+            function inner(){  
+                var innerVar = 4;  
+                alert(rain);  //1
+            }  
+            inner();    //调用inner函数  
+        }  
+       //rainman();    //调用rainman函数  
+   */  
+       //----------------------------------------
+	 	/*
+       function rainman()//JavaScript没有块级作用域。
+		{  
+            // rainman函数体内存在三个局部变量 i j k  
+            var i = 0;  
+            if ( 1 ) {  
+                var j = 4;  
+                for(var k = 0; k < 3; k++) {  
+                    alert( k );    //分别弹出 0 1 2  
+                }  
+                alert( k );        //弹出3  
+            }
+			var j;
+            alert( j );            //弹出4  
+        }
+       
+        rainman();
+        */
+       //------------------------------------------- 
+       /* var x = 1;  
+        function rain(){  
+            alert( x );        //弹出 'undefined'，而不是1  ,
+            var x = 'rain-man';  
+            alert( x );        //弹出 'rain-man'  
+        }  
+       rain(); 
+       //x在整个函数体内都有定义（ var x= 'rain-man'，进行了声明），所以在整个rain函数体内隐藏了同名的全局变量x。这里之所以会弹出'undefined'是因为，第一个执行alert(x)时，局部变量x仍未被初始化。
+      */
+       //-------------------------------------------  
+       /*
+       	//未使用var关键字定义的变量都是全局变量。
+         function rain(){  
+	        x = 100;    //声明了全局变量x并进行赋值  
+	    }  
+	    rain();  
+	    alert( x );    //会弹出100  
+	    */
+	  //-------------------------------------------  
+	  /*
+	  // 全局变量都是window对象的属性
+	    var x = 100 ;  
+	    alert( window.x );//弹出100  
+	    alert(x);  
+	  */
+	//-------------------------------------------    
+	   
+	   
+	   
+	   
+    </script>  
+	</head>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html > 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	 
+</style>
+
+
+</head>
+<body>
+	w3school 网上的教程
+	 
+	<hr/>
+	服务器推消息  
+	<div id="server_send_result"></div>
+<script>
+	if(typeof(EventSource)!=="undefined")
+	{
+		var source=new EventSource("html5_server-send-event.jsp");
+		//server要 response.addHeader("Content-Type", "text/event-stream");response.addHeader("Cache-Control", "no-cache");
+		//response.addHeader("Cache-Control", "no-cache");
+		//消息要以data:开头
+		source.onmessage=function(event)
+				  {
+				  	document.getElementById("server_send_result").innerHTML+=event.data + "<br />";
+				  };
+	}
+	else
+	{
+		document.getElementById("server_send_result").innerHTML="Sorry, your browser does not support server-sent events...";
+	}
+	
+</script>
+	
+</body>
+</html>

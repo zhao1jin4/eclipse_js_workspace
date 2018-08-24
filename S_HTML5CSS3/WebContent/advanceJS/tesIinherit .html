@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript">  
+		//面向对象，prototype
+		function Parent()
+		{
+			this.p="child";
+		}
+		function Child()
+		{
+			this.c="child";
+		}
+		Child.prototype=new Parent(); //继承
+		var obj=new Child();
+		alert(obj.p);
+
+    </script>  
+	</head>
+</html>

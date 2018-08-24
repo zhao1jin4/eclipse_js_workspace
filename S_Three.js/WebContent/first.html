@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+<!-- 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<script type="text/javascript" src="js/three.min.js"></script> 
+<style>
+	canvas { width: 100%; height: 100% } 
+</style>
+</head>
+	<body>
+	 <script type="text/javascript"> <!-- three.js的脚本放在<body>中 -->
+	 	console.log("Three.js的版本是:"+THREE.REVISION);//Firefox,Chrome都支付,IE要运行提示的ActiveX
+	 
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		//PerspectiveCamera(fov, aspect, near, far) fov=Field of View 视场 
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );//是分辨率,不是宽高
+		document.body.appendChild( renderer.domElement );
+	
+		var geometry = new THREE.CubeGeometry(1,1,1);
+		var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+		var cube = new THREE.Mesh(geometry, material);//Mesh 把材质赋于物体
+		scene.add(cube);//放原点
+
+		camera.position.z = 5;
+
+		var render = function () {
+			requestAnimationFrame(render);//动画记录开始,每秒50帧(次) ,当用户切换到其它网页时会暂停
+
+			cube.rotation.x += 0.1;
+			cube.rotation.y += 0.1;
+
+			renderer.render(scene, camera);//动画记录结束,会不停的做记录的动画
+		};
+
+		render();
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,38 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript">
+		var reg_phone =/^0{0,1}(13[0-9]|15[0-9])[0-9]{8}$/i;
+		var one_phone="13011112222";
+		//alert(reg_phone.test(one_phone));//true
+		
+		var reg_mail =/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-z]{2,3})$/;
+		var one_mail="abc@test.com";
+		//alert(reg_mail.test(one_mail));//true
+		 
+	
+		var regs =/(13[0-9]|15[0-9])[0-9]{8},/ig; //g,用match方法时返回数组
+		var many="13011112222,13811112222,";
+		var matched;
+		matched=many.match(regs);
+		//alert(matched[0]);
+		//alert(matched[1]);
+		
+		var item;
+		while ((item = regs.exec(many)) != null)
+	       alert(item.index + "-" + item[0]);
+
+/*
+	    var src = "The rain .";
+	    var re = /\w+/g;
+	    var arr;
+	    while ((arr = re.exec(src)) != null)
+	       alert(arr.index + "-" + arr);
+*/
+
+	</script>
+	</head>
+	<body>
+	
+	</body>
+</html>
