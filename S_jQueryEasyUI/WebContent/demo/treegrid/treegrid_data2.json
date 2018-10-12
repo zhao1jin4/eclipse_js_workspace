@@ -1,0 +1,24 @@
+{"total":7,"rows":[
+
+	{"myid":"1","name":"All Tasks","begin":"3/4/2010","end":"3/20/2010","progress":60,"iconCls":"icon-ok" },
+
+	{"myid":"2","name":"Designing","begin":"3/4/2010","end":"3/10/2010","progress":100,"_parentId":"1","state":"closed" },
+
+	{"myid":"21","name":"Database","persons":2,"begin":"3/4/2010","end":"3/6/2010","progress":100,"_parentId":"2" },
+
+	{"myid":"22","name":"UML","persons":1,"begin":"3/7/2010","end":"3/8/2010","progress":100,"_parentId":"2" },
+
+	{"myid":"23","name":"Export Document","persons":1,"begin":"3/9/2010","end":"3/10/2010","progress":100,"_parentId":"2"},
+
+	{"myid":"3","name":"Coding","persons":2,"begin":"3/11/2010","end":"3/18/2010","progress":80 },
+	{"myid":"24","name":"Java","persons":1,"begin":"3/9/2010","end":"3/10/2010","progress":100,"_parentId":"3" },
+
+	{"myid":"4","name":"Testing","persons":1,"begin":"3/19/2010","end":"3/20/2010","progress":20 },
+	{"myid":"25","name":"LoadRunner","persons":1,"begin":"3/9/2010","end":"3/10/2010","progress":100,"_parentId":"4" }
+
+],"footer":[
+
+	{"name":"Total Persons:","persons":7,"iconCls":"icon-sum"}
+
+]}
+

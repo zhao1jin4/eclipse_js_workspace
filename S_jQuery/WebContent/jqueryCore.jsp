@@ -56,6 +56,55 @@
 				alert('39 右方向键');
 			}
 		 });
+		 
+			
+			function testCopyArray()
+			{
+				var array=[{id:123,name:'wang'}];
+				 
+				//var newArray=$(array).clone(); //jQuery clone报错
+				/*
+				var newArray=$.map( array, function(obj){
+					return $.extend(true,{},obj);//返回对象的深拷贝
+					});
+				*/
+				newArray[0].name='lisi';
+				alert(array[0].name);
+				
+			}
+			
+			//表单快速得到值
+			$.fn.serializeObject=function()
+			{
+				var obj={};
+				var arrayField=$(this).serializeArray();
+				$.each(arrayField,function()
+				{
+					if(obj[this.name])//重复出现放数组
+					{
+						if(!obj[this.name].push)
+							obj[this.name]=[ obj[this.name] ]; //第一次建数组 ,存原来的值 
+						 //在存新值 
+						 obj[this.name].push(this.value); 
+					}else
+						obj[this.name]=this.value;
+					
+				});
+				return obj;
+			}
+			function getFormObject()
+			{ 
+				console.log($("#myForm").serializeObject());
+			}
+			
+			function checkItem(value)
+			{
+				$("input[name=manager]" ).each(function(i){ //type radio
+					if($(this).val()==value)
+						$(this).prop("checked",true); //attr第三次调用就不行了???? 可能要和 removeAttr一起用,用 prop
+				});
+
+			}
 	</script>
 </head>
 <body>
@@ -81,6 +130,24 @@
 	<p id="myPrepend">I would like to say: </p>
 
 	<p  > 按左键 按右键 有响应 </p>
+	
+	<button  onclick="testCopyArray()" >数组复制 JS 无方法？？？</button>
+	
+	<form id="myForm">
+		username : <input type='text' name="username"/> <br/>
+		password : <input type='password' name="password"/> <br/>
+		sex : man <input type='radio' name="sex" value="man" checked="checked" /> <br/>
+			  woman <input type='radio' name="sex" value="woman"/> <br/>
+		favor :  <select name="favor" multiple="multiple">
+					<option value="football" selected="selected">足球</option>	
+					<option value="basketball" selected="selected">篮球</option>	
+				 </select> <br/>
+		up manager : wang <input type='checkbox' name="manager" value="wang" /> <br/>
+				    li <input type='checkbox' name="manager" value="li"  /> <br/>
+				  
+	</form>
+    <button  onclick="getFormObject()" >表单快速得到值</button>
+    <button  onclick="checkItem('li')" >选中manger li</button>
 </body>
 </html>
 

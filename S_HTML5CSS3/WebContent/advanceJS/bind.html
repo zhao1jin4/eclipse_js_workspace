@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">   
+//还有call，apply方法   在faceObject.html里 
+
+this.a = 1;
+var module = {
+    a : 2,
+    getA:function() {
+    return this.a;    
+    }
+};
+module.getA();//2
+
+var getA1 = module.getA;
+// getA在外部调用，此时的this指向了全局对象
+getA1();//1
+
+// 再把getA1方法绑定到module环境上
+var getA2 = getA1.bind(module);
+getA2();
+
+</script>
+</head>
+<body > 
+</body> 
+ 
+</html>

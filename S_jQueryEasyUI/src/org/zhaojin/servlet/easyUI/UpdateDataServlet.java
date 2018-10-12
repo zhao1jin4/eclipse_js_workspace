@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
  
 
-@WebServlet("/easyUI/updateData")//extension use
+@WebServlet("/easyUI/updateData")//extension£¬myDatagrid use
 public class UpdateDataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -29,7 +29,9 @@ public class UpdateDataServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		request.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
 		JsonBuilderFactory bf = Json.createBuilderFactory(null); 
 		String command= request.getParameter("command");
 		if ("extensionSaveNew".equals(command) || "extensionSaveEdit".equals(command))
@@ -64,8 +66,8 @@ public class UpdateDataServlet extends HttpServlet {
 			long newId=500+(long)(400*Math.random());//500-900
 			root.add("additionObject",newId);
 		}
-		System.out.println(root.toString());
-		response.getWriter().write(root.toString());
+		System.out.println(root.build().toString());
+		response.getWriter().write(root.build().toString());
 	}
 
 }

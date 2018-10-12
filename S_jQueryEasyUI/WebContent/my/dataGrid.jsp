@@ -17,7 +17,11 @@
 	<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="../js/easyui-lang-zh_CN.js"></script>
 	
-		
+	<style type="text/css">
+		/* 日期 选择后  文本框 右对齐  */
+		.datebox input.textbox-text{text-align:right;}
+		 
+	</style>
 	
 	<script type="text/javascript">
 		var mytoolbar = [{
@@ -31,9 +35,9 @@
 			iconCls:'icon-reload',
 			handler:function(){alert('刷新')}
 		}];
-
+		
 		var myLanguages=${myLanguages};
-		/*
+	/*	var myLanguages=
 			[{
 		      	 langValue:"C",
 		      	 langLabel:"C 语言"
@@ -46,7 +50,7 @@
 		      	 langValue:"PLSQL",
 		      	 langLabel:"PLSQL 语言"
 	      	 }];
-			*/
+		*/	 
 		$(function(){ 
 			$('#dg').datagrid({
 				queryParams: {
@@ -96,7 +100,7 @@
 							updateActions(index);
 						}
 
-						$.messager.alert('提示','操作成功','info');
+						$.messager.alert('提示','操作成功','info');//可用的有 error,question,info,warning.
 						/* jQueryUI
 					 	$("<div>操作成功</div>").dialog({
 							 modal: true,
@@ -135,6 +139,7 @@
 		}
 		function mySaveUpdateRow(target){
 			$('#dg').datagrid('endEdit', getRowIndex(target));//调用  onAfterEdit:myAfterEdit
+			
 		}
 		function myCancelUpdateRow(target){
 			$('#dg').datagrid('cancelEdit', getRowIndex(target));//调用   onCancelEdit:myCancelEdit
@@ -147,7 +152,7 @@
 			} else {
 				index = 0;
 			}
-			$('#dg').datagrid('insertRow', {
+			$('#dg').datagrid('insertRow', {//也有appendRow
 				index: index,
 				row:{
 					isMan:"true",
@@ -195,7 +200,7 @@
 		function myActionFormatter(value,row,index)
 		{
 			if (row.editing){//加  class="easyui-linkbutton"没效果 ???
-				var s = '<a href="#" onclick="mySaveUpdateRow(this)">Save</a> ';
+				var s = '<a href="#"  onclick="mySaveUpdateRow(this)">Save</a> ';
 				var c = '<a href="#" onclick="myCancelUpdateRow(this)">Cancel</a>';
 				return s+c;
 			} else {
@@ -204,9 +209,32 @@
 				return e+d;
 			}
 		}
+		function myLangFormatter(value,row,index)
+		{
+			for(var i in myLanguages)
+			{
+				if(myLanguages[i].langValue==value)
+					return myLanguages[i].langLabel;
+			} 
+		}
+		function mycomboBoxItemFormatter(row)
+		{
+		 	var opts = $(this).combobox('options');
+			var val=row[opts.valueField];
+			var text=row[opts.textField];
+			if(val=='C')
+			{
+				//$(this).css('background-color','red');
+				return '<span style="background-color: red;color: yellow">--'+text+'---</span>';
+			}
+			else
+				return text;
+		}
 		function mySearch()
 		{
+			var selectedArray=['init','run','done','success','fail'];
 			 $('#dg').datagrid('load',{
+				 selectStatus: selectedArray ,//可传数组，服务端用request.getParameterValues("selectStatus[]")
 				 date_from: $('#date_from').datebox('getValue'),//日期类型得值 
 				 date_to: $('#date_to').datebox('getValue'),
 				 lang:$('#lang').val(),
@@ -228,6 +256,8 @@
 		function myBarSave() // 同 mySaveUpdateRow
 		{
 			$('#dg').datagrid('endEdit',myIndex); 
+			var changes=$('#dg').datagrid('getChanges');//得到变化的,可传第二个参数 type,可选值 为inserted,deleted,updated 
+			console.log(changes);
 		}
 		function myBarUndo() //同  myCancelUpdateRow
 		{
@@ -263,17 +293,22 @@
 			$('#dg').datagrid('reload');
 		}
 		
+		
 	</script>
 </head>
 <body>
+
+<span style="background-color: red;color: yellow">test color</span> <br/>
+
+
 	<div class="icon-tip" style="width:16px;height:16px"></div>
 	<div>分页  工具栏 in DataGrid.</div>
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="margin-bottom:5px">
-			<a href="#" class="easyui-linkbutton" iconCls="icon-add"  onclick="myInsert()"></a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="myBarEdit()"></a><!-- 加 plain="true" 按钮没有立体感 -->
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add"  onclick="myInsert()">增加一行</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="myBarEdit()">编辑</a><!-- 加 plain="true" 按钮没有立体感 -->
 			
-			<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="myBarSave()">编辑保存</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="myBarSave()">保存</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="myBarUndo()">编辑撤消</a>
 			
 			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="myBarRemove()">删除高亮选中行</a>
@@ -317,7 +352,7 @@
 				toolbar:'#tb'"> <!-- toolbar:mytoolbar 读全局变量  mytoolbar ,toolbar:'#tb' 引用 DIV   -->
 		<thead>
 			<tr> <!-- 老版本的   <th field="id">是不行的   -->
-				<th data-options="checkbox:true"></th> <!-- 选择的复选框 -->
+				<th data-options="field:'x',checkbox:true"></th> <!-- 选择的复选框 -->
 				<th  width="80" data-options="field:'id'" 	>ID</th> <!-- field的值是JSON对象的属性名 -->
 				<th  width="100" data-options="field:'username',editor:{type:'validatebox',options:{required:true}}">用户名</th>
 				<th width="100" data-options="field:'language',editor:{
@@ -326,9 +361,14 @@
 								valueField:'langValue',
 								textField:'langLabel',
 								data:myLanguages,
-								required:true
+								required:true,
+								formatter: mycomboBoxItemFormatter,
 							}
-						}">用语言</th>
+						},styler: function(value,row,index){
+							if(value=='C')
+								return 'background-color:#ffee00;color:red;';
+						},formatter:myLangFormatter					
+						">用语言</th>
 				<th width="80"  data-options="field:'salary',editor:{type:'numberbox',options:{precision:1,required:true}}">工资</th> <!--editor:'numberbox'  -->
 				<th width="80" data-options="field:'isMan',formatter:myGenderFormatter,editor:{type:'checkbox',options:{on:'true',off:'false'}}">是否为男</th>
 				<th width="90"  data-options="field:'birthday',editor:{type:'datebox',options:{required:true}}">生日</th>
@@ -342,8 +382,88 @@
 		<option value="0">Single Row</option>
 		<option value="1">Multiple Rows</option>
 	</select><br/>
-	SelectOnCheck: <input type="checkbox" checked onchange="$('#dg').datagrid({selectOnCheck:$(this).is(':checked')})"><br/>
+	SelectOnCheck(没用？): <input type="checkbox" checked onchange="$('#dg').datagrid({selectOnCheck:$(this).is(':checked')})"><br/>
 	CheckOnSelect: <input type="checkbox" checked onchange="$('#dg').datagrid({checkOnSelect:$(this).is(':checked')})">
 		
+	<br/>
+	
+	 <a  class="easyui-linkbutton" onclick="editDate()">编辑表格(如要进入页就是可以编辑代码移位置),样式发生变化，不对齐表格（对全部的编辑情况）？？？ 方案二 单击时 onClickCell 修改这行</a>
+	 <a   class="easyui-linkbutton" onclick="readDate()">保存时读取输入的日期</a>
+	<table id="myForm" 	style="width:700px;height:500px" 
+		data-options="
+				rownumbers:true,
+				singleSelect:true,
+				autoRowHeight:false,
+				">
+		<!--  
+		 <thead>
+			<tr>
+				<th  data-options="field:'mileStone',width:100" >里程碑</th>
+				<th  data-options="field:'startDate',editor:{type:'datebox'},width:100" >开始日期</th> 
+				<th  data-options="field:'enDate',editor:{type:'datebox'},width:100">结束日期</th>
+			</tr>
+		</thead>
+		-->
+	</table>
+		<script type="text/javascript"> 
+		$("#myForm").datagrid({
+		   columns:[[
+		        {field:'mileStone',title:'里程碑',width:200},
+		        {field:'startDate',title:'开始日期',width:200,editor:'datebox'},
+		        {field:'endDate',title:'结束日期',width:200,align:'right',editor:'datebox'}
+		    ]],
+		    
+			data:[
+				{mileStone:"M1",startDate:'',endDate:''},
+				{mileStone:"M2",startDate:'',endDate:''},
+				{mileStone:"M3",startDate:'',endDate:''} 
+				]
+		,onClickCell:myClickCell
+			
+		});
+		
+		var nowEditRow=undefined;
+		function myClickCell(index,field,value)
+		{
+			if(nowEditRow!=undefined)
+			{   //先结束其它的编辑
+				if($(this).datagrid('validateRow',nowEditRow))
+				{
+					$(this).datagrid('endEdit',nowEditRow);
+					nowEditRow=undefined;
+				}else
+				{
+					return; //验证失败不可编辑其它的
+				}
+			}  
+			//开始编辑
+			$(this).datagrid('selectRow',index);
+			$(this).datagrid('beginEdit',index );
+			nowEditRow=index;
+		}
+	 	function editDate( )
+		{
+			var rows=$("#myForm").datagrid('getRows');
+			$(rows).each(function(i)
+			{
+				 $("#myForm").datagrid('beginEdit',i);
+			});
+			   
+		}
+		function readDate()
+		{
+			var rows=$("#myForm").datagrid('getRows');
+			$(rows).each(function(i) 
+			{
+				 $("#myForm").datagrid('endEdit',i);
+			});
+			
+			var jsonData=$("#myForm").datagrid('getRows');//只是最初始的数据，如修改了要保存才行
+			console.log(jsonData); 
+		}
+		
+		
+		
+		</script>
 </body>
 </html>

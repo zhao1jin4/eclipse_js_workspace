@@ -46,7 +46,7 @@
 		</thead>
 	</table>
 	
- 所有的iconCls 的取值在icon.css中,icon出不来？？？
+ 所有的iconCls 的取值在icon.css中 
 	<div id="tb"  >
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">Append</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">Remove</a>

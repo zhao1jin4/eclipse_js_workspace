@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,7 +23,7 @@ function rdl_change(target){
 			if (selectedIndex!=0) 
 				 sValue1=options[selectedIndex].value;
 			else 
-				 sValue1="none";//用with,条件成立也会执行else????????
+				 sValue1="none";
 		}
 	}else if(target.id=="idSel2")
 	{	
@@ -34,7 +34,8 @@ function rdl_change(target){
 			sValue2="none"; 
 	}
 	oDiv1.style.clear=sValue1;
-	oDiv2.style.styleFloat=sValue2;
+	oDiv2.style.styleFloat=sValue2;//兼容IE
+	oDiv2.style.cssFloat =sValue2;//兼容火狐
 	oCodeDiv.innerHTML="#idDiv1 { clear : "+sValue1+" ; }"+"<br>"+"#idDiv2 { float : "+sValue2+" ; }";
 }
 </script>
@@ -42,22 +43,22 @@ function rdl_change(target){
 
 </head>
 <body>
-只IE有效
-
 <div id=idParentDiv>
 	<div id=idDiv2>我的ID是<b> idDiv2 </b>。请选择我的<b> float </b>属性的值。</div>
 	<div id=idDiv1>我的ID是<b> idDiv1 </b>。请从下方的第一个选择框内选择我的<b> clear </b>属性的值。从第二个选择框内选择<b> idDiv2 </b>的<b>  float </b>属性的值。</div>
 </div>
 <br>
 
+div1
 <select id="idSel1" onchange="rdl_change(this);">
 <option value="null" style="font-weight:bold;">---clear---
 <option value="none">none
 <option value="left">left
 <option value="right">right
 <option value="both">both
-</select>
+</select> <br/>
 
+div2
 <select id="idSel2" onchange="rdl_change(this);">
 <option value="null" style="font-weight:bold;">---float---
 <option value="none">none
@@ -66,6 +67,16 @@ function rdl_change(target){
 </select>
 
 <div id=idCodeDiv>#idDiv1 { clear : none ; }<br>#idDiv2 { float : none ; }</div>
+<hr>
+
+横向ul ,li变圆,间距相等<br/>
+<ul style="list-style-type:none;display:flex;justify-content:space-between;width:100px">
+	<li><div style="border-radius:50%;background:blue;color:white;width:20px;height:20px;text-align:center;line-height:20px" >1</div></li>
+	<li><div style="border-radius:50%;background:blue;color:white;width:20px;height:20px;text-align:center;line-height:20px" >2</div></li>
+	<li><div style="border-radius:50%;background:blue;color:white;width:20px;height:20px;text-align:center;line-height:20px" >3</div></li> 
+</ul>  <br/>
+
+
 
 
 </body>

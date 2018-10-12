@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="pragma" content="no-cache">
@@ -50,6 +50,25 @@
 		} 
 	}
 	document.oncontextmenu=new Function("return false;");//禁止网页右键
+	
+	
+	function testCopyArray()
+	{
+		var array=[{id:123,name:'wang'}];
+		
+		//var newArray=array;
+		 
+		//var newArray=$(array).clone(); //jQuery clone报错
+		/*
+		var newArray=$.map( array, function(obj){
+			return $.extend(true,{},obj);//返回对象的深拷贝
+			});
+		*/
+		
+		newArray[0].name='lisi';
+		alert(array[0].name);
+		
+	}
 </script>
 </head>
 
@@ -90,7 +109,7 @@
 	<input type="text" onkeyup="value=value.replace(/[^\u0000-\u00FF]/g,'')"  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u0000-\u00FF]/g,''))"/>
 
 	<br/>
-	
+	<button  onclick="testCopyArray()" >数组复制 JS 无方法？？？</button>
 	<hr/> 以下无效????
 	<br/>
 	<a href="#" style="cursor:hand" >  设为主页</a>
@@ -98,6 +117,20 @@
 	<br/>
 	<a href="#" >添加到收藏夹</a>
 	
+	<style>
+        a.disabled {
+            pointer-events: none;
+            filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+            -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+            opacity: 0.5; /*其他，透明度50%*/
+        }
+    </style>
+ 	
+ 	<br/>
+	如果想禁用a标签，如下，class调用disabled就可以了
+	<br/>
+	<a class="disabled">禁用a标签</a> <br/>
+
 	
 </body>
 </html>

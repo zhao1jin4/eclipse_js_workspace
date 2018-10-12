@@ -1,0 +1,122 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+< 
+<script type="text/javascript">
+//-----------function
+	function howManyArgs() {
+	  console.log(arguments.length);//function中的arguments
+	  console.log(arguments[0]);
+	}
+
+	howManyArgs("string", 45);
+	howManyArgs();
+	howManyArgs(12);
+	
+	
+	/*
+	function sayHi(sName, sMessage) {
+		alert("Hello " + sName + sMessage);
+	}*/
+	//大写的Function 定义函数 同上
+	var sayHi  =  new Function("sName", "sMessage", "console.log(\"Hello \" + sName + sMessage);");
+	sayHi('lisi ',' good afternon');
+	
+	function doAdd(iNum) {
+		alert(iNum + 10);
+	 }
+	//function有length
+	console.log(doAdd.length);	//输出 "1"
+	
+	console.log(doAdd.toString());//toString函数的源代码
+	//可以被重写
+	Function.prototype.toString = function() {
+		  return "Function code hidden";
+		}
+	console.log(doAdd.toString()); 
+	//----------- 
+	
+	
+/* 
+	2009 年 12 月，ES5 发布
+2015 年 6 月，ES6（ES2015）发布
+ECMAScript2016-2018
+	
+	//chrom downlaod url
+	https://www.google.cn/chrome/ 
+	
+	ECMA Script 2018 the 9th edition
+	https://www.ecma-international.org/publications/standards/Ecma-262.htm
+	
+	
+	https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_Next_support_in_Mozilla
+	
+	https://csspod.com/new-in-ecmascript-2016-2017-and-2018/
+
+*/ 
+
+
+
+/*
+		class Square extends Polygon {
+		  constructor(length) {
+			// Here, it calls the parent class' constructor with lengths
+			// provided for the Polygon's width and height
+			super(length, length);
+			// Note: In derived classes, super() must be called before you
+			// can use 'this'. Leaving this out will cause a reference error.
+			this.name = 'Square';
+		  }
+
+		  get area() {
+			return this.height * this.width;
+		  }
+		}
+		
+	
+ class myDate extends Date {
+  constructor() {
+    super();
+  }
+
+  getFormattedDate() {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return this.getDate() + "-" + months[this.getMonth()] + "-" + this.getFullYear();
+  }
+}
+ 
+
+
+class nullExtends extends null {
+  constructor() {
+	super();
+  }
+}
+
+Object.getPrototypeOf(nullExtends); // Function.prototype
+Object.getPrototypeOf(nullExtends.prototype) // null
+
+new nullExtends(); //ReferenceError: this is not defined
+
+
+const set1 = new Set([1, 2, 3, 4, 5]);
+
+console.log(set1.has(1));
+// expected output: true
+
+console.log(set1.has(5));
+// expected output: true
+
+console.log(set1.has(6));
+// expected output: false
+*/
+	
+</script>
+<body>
+
+</body>
+
+</html>

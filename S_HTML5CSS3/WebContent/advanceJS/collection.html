@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript"> 
+//==============Map
+	var myMap = new Map();
+	 
+	var keyObj = {},
+	keyFunc = function () {},
+    keyString = "a string";
+	 
+	// 添加键
+	myMap.set(keyString, "和键'a string'关联的值");
+	myMap.set(keyObj, "和键keyObj关联的值");
+	myMap.set(keyFunc, "和键keyFunc关联的值");
+	 
+	myMap.size; // 3
+	 
+	// 读取值
+	myMap.get(keyString);    // "和键'a string'关联的值"
+	myMap.get(keyObj);       // "和键keyObj关联的值"
+	myMap.get(keyFunc);      // "和键keyFunc关联的值"
+	 
+	myMap.get("a string");   // "和键'a string'关联的值"
+	                         // 因为keyString === 'a string'
+	myMap.get({});           // undefined, 因为keyObj !== {}
+	myMap.get(function() {}) // undefined, 因为keyFunc !== function () {}
+	
+	
+	myMap.set(NaN, "not a number");
+	
+	myMap.get(NaN); // "not a number"
+	for (var [key, value] of myMap) {
+	  console.log(key + " = " + value);
+	}
+	for (var key of myMap.keys()) {
+	  console.log(key);
+	}
+	for (var value of myMap.values()) {
+	  console.log(value);
+	}
+	for (var [key, value] of myMap.entries()) {
+	  console.log(key + " = " + value);
+	}
+	
+	myMap.forEach(function(value, key) {
+	  console.log(key + " = " + value);
+	}, myMap)
+	
+	var kvArray = [["key1", "value1"], ["key2", "value2"]];
+	var myMap = new Map(kvArray);
+	//console.log(uneval([...myMap])); //uneval只对firefox有效，结果为 [["key1", "value1"], ["key2", "value2"]]
+	//console.log(uneval([...myMap.keys()])); 
+	
+	//keys() 返回一个新的 Iterator 对象,有next()
+	
+//===========WeakMap
+//key 只能是 Object 类型。 原始数据类型 是不能作为 key 的
+//WeakMap中,每个键对自己所引用对象的引用是 "弱引用"
+	var wm1 = new WeakMap(),
+    wm2 = new WeakMap(),
+    wm3 = new WeakMap();
+var o1 = {},
+    o2 = function(){},
+    o3 = window;
+
+wm1.set(o1, 37);
+wm1.set(o2, "azerty");
+wm2.set(o1, o2); // value可以是任意值,包括一个对象
+wm2.set(o3, undefined);
+wm2.set(wm1, wm2); // 键和值可以是任意对象,甚至另外一个WeakMap对象
+wm1.get(o2); // "azerty"
+wm2.get(o2); // undefined,wm2中没有o2这个键
+wm2.get(o3); // undefined,值就是undefined
+
+wm1.has(o2); // true
+wm2.has(o2); // false
+wm2.has(o3); // true (即使值是undefined)
+
+wm3.set(o1, 37);
+wm3.get(o1); // 37
+
+wm3.get(o1); // undefined,wm3已被清空
+wm1.has(o1);   // true
+wm1.delete(o1);
+wm1.has(o1);   // false
+
+//=========Set
+const set1 = new Set([1, 2, 3,3, 4, 5]);
+
+console.log(set1.has(1));//true
+console.log(set1.has(6));//false
+
+let mySet = new Set();
+
+mySet.add(1); // Set(1) {1}
+mySet.add(5); // Set(2) {1, 5}
+mySet.add(5); // Set { 1, 5 }
+mySet.add("some text"); // Set(3) {1, 5, "some text"}
+var o = {a: 1, b: 2};
+mySet.add(o);
+
+mySet.add({a: 1, b: 2}); // o 指向的是不同的对象，所以没问题
+
+mySet.has(1); // true
+mySet.has(3); // false
+mySet.has(5);              // true
+mySet.has(Math.sqrt(25));  // true
+mySet.has("Some Text".toLowerCase()); // true
+mySet.has(o); // true
+
+mySet.size; // 5
+
+mySet.delete(5);  // true,  从set中移除5
+mySet.has(5);     // false, 5已经被移除
+
+mySet.size; // 4, 刚刚移除一个值
+console.log(mySet); // Set {1, "some text", Object {a: 1, b: 2}, Object {a: 1, b: 2}}
+
+//迭代整个set
+//按顺序输出：1, "some text" 
+for (let item of mySet) console.log(item);
+
+//按顺序输出：1, "some text" 
+for (let item of mySet.keys()) console.log(item);
+
+//按顺序输出：1, "some text" 
+for (let item of mySet.values()) console.log(item);
+
+//按顺序输出：1, "some text" 
+//(键与值相等)
+for (let [key, value] of mySet.entries()) console.log(key);
+
+ 
+
+//转换Set为Array (with Array comprehensions)
+//var myArr = [v for (v of mySet)]; // [1, "some text"] // firefox 62不能执行？？？
+//替代方案(with Array.from)
+var myArr = Array.from(mySet); // [1, "some text"]
+
+//如果在HTML文档中工作，也可以：
+mySet.add(document.body);
+mySet.has(document.querySelector("body")); // true
+
+//Set 和 Array互换
+mySet2 = new Set([1,2,3,4]);
+mySet2.size; // 4
+[...mySet2]; // [1,2,3,4] 用...(展开操作符)操作符将Set转换为Array
+
+ 
+set2 = new Set([ 2,4,6]);
+
+//intersect can be simulated via 
+var intersection = new Set([...set1].filter(x => set2.has(x)));
+
+//difference can be simulated via
+var difference = new Set([...set1].filter(x => !set2.has(x)));
+
+//用forEach迭代
+mySet.forEach(function(value) {
+	console.log(value);
+});
+
+for (var elem of mySet) {
+	console.log(elem);
+}
+
+
+
+//===========WeakSet
+//只能存放对象引用, 不能存放值,而 Set 对象都可以.
+//如果没有其他的变量或属性引用这个对象值, 则这个对象值会被当成垃圾回收掉. 正因为这样, WeakSet 对象是无法被枚举的, 没有办法拿到它包含的所有元素
+var ws = new WeakSet();
+var obj = {};
+var foo = {};
+
+ws.add(window);
+ws.add(obj);
+
+ws.has(window); // true
+ws.has(foo);    // false, 对象 foo 并没有被添加进 ws 中 
+
+ws.delete(window); // 从集合中删除 window 对象
+ws.has(window);    // false, window 对象已经被删除了
+ 
+
+</script>
+</head>
+<body >
+<p id="demo"></p>
+
+</body>
+<script type="text/javascript">
+
+//==============Array
+//forEach
+var demoP = document.getElementById("demo"); 
+
+function myFunction(value, index) {
+  demoP.innerHTML = demoP.innerHTML + "index[" + index + "]: " + value + "<br>"; 
+}  
+
+var arr=["one","two"];
+(function (array){
+	 array.forEach( myFunction);//Array 的 forEach
+})(arr); //像匿名内部函数 
+
+//===ArrayBuffer  Int32Array
+var buffer = new ArrayBuffer(8); //原始二进制数据缓冲区
+console.log(buffer.byteLength);
+var view   = new Int32Array(buffer);
+
+//===SharedArrayBuffer
+//======Atomics 对象提供了一组静态方法用来对 SharedArrayBuffer 对象进行原子操作
+//==== TypedArray()指的是以下的其中之一： 
+/*
+Int8Array(); 
+Uint8Array(); 
+Uint8ClampedArray();
+Int16Array(); 
+Uint16Array();
+Int32Array(); 
+Uint32Array(); 
+Float32Array(); 
+Float64Array();
+*/
+
+//设置和使用标准数组语法
+var int16 = new Int16Array(2);
+int16[0] = 42;
+console.log(int16[0]); // 42
+
+// Indexed properties on prototypes are not consulted (Fx 25)
+Int8Array.prototype[20] = "foo";
+(new Int8Array(32))[20]; // 0
+// even when out of bound
+Int8Array.prototype[20] = "foo";
+(new Int8Array(8))[20]; // undefined
+// or with negative integers
+Int8Array.prototype[-1] = "foo";
+(new Int8Array(8))[-1]; // undefined
+
+// Named properties are allowed, though (Fx 30)
+Int8Array.prototype.foo = "bar";
+(new Int8Array(32)).foo; // "bar"
+
+
+
+//==DataView
+//视图是一个可以从 ArrayBuffer 对象中读写多种数值类型的底层接口
+var buffer = new ArrayBuffer(16);
+var dv = new DataView(buffer, 0);
+//DataView(buffer [, byteOffset [, byteLength]])
+
+dv.setInt16(1, 42);
+dv.getInt16(1); //42
+
+
+var littleEndian = (function() {
+	  var buffer = new ArrayBuffer(2);
+	  new DataView(buffer).setInt16(0, 256, true /* 设置值时使用小端字节序 */);
+	  // Int16Array 使用系统字节序，由此可以判断系统是否是小端字节序
+	  return new Int16Array(buffer)[0] === 256;
+	})();
+console.log(littleEndian); // true or false
+
+</script>
+</html>

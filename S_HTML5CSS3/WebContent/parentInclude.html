@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Parent Page</title>
+<link rel="import" href="childPage.html" id="page1">  <!-- 无效？？？ -->
+ 
+ <script type="text/javascript"  >
+ var ctx="/S_HTML5CSS3/";
+ //JS 直接用 src引用及可以
+ 	 /*
+ 	 <!-- #include file = "childPage.html" -->
+	 <!-- #include virtual = "/S_HTML5CSS3/childPage.html" --> 
+ 	 */
+  </script>
+</head>
+
+
+<body> 
+	
+	<!-- #include file = "childPage.html" --> <!-- 无效？？？ -->
+	 <p>
+ 		Parent Page,
+ 		HTML include 其它html 方式
+ 		<ul>
+ 			<li>#include 无效？？？</li>
+ 			<li> link 标签  无效？？？</li>
+ 			<li>iframe UI组件有限制 </li>
+ 			<li>ajax innerHTML 不安全    (jQuery load，bootstrap的panel组件，或者easyui的window组件)</li>
+ 			<li>服务端技术 jsp , freemarker... </li>
+ 			<li>object插件 ，要安装</li>
+ 		</ul> 
+ 	</p>
+ 	 object 无效 <br/>
+ 	<object style="border:0px" type="text/x-scriptlet" data="childPage.html" width=100% height=150>
+    </object>
+    
+    <div id="page1"></div>
+     <script>
+          $("#page1").load("childPage.html");
+     </script>
+
+</body>
+</html>

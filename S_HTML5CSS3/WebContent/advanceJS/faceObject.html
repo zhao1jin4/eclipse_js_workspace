@@ -5,22 +5,22 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 //建立对象几种方式
-/*
+ 
 //1.
 var json={name:"json"};
-alert(json.name);
+console.log(json.name);
 
 //2.
 var obj=new Object();
 obj.name="Object";
-alert(obj.name);
+console.log(obj.name);
 
 //3.	
 function Person()
 {
 	this.name="function->this";
 	this.getInfo=function(){
-		alert(this.name);
+		console.log(this.name);
 		}
 }
 var p=new Person();
@@ -32,13 +32,13 @@ function Man()
 }
 Man.prototype.name="function->prototype";
 var m=new Man();
-alert(m.name);
+console.log(m.name);
 //全部可以用.prototype加
 
-*/
 
 
-/*
+
+ 
 //继承方式1 prototype
 function Parent()
 {
@@ -50,8 +50,8 @@ function Child()
 }
 Child.prototype=new Parent(); //prototype来做
 var obj=new Child();
-alert(obj.p);
-alert(obj.c);
+console.log(obj.p);
+console.log(obj.c);
 
 
 //继承方式2 ,function
@@ -59,7 +59,7 @@ function People(username)
 {
 	this.username=username;
 	this.sayhello=function(){
-		alert(this.username);
+		console.log(this.username);
 		}
 }
 function Man(username,password)
@@ -70,7 +70,7 @@ function Man(username,password)
 	
 	this.password=password;
 	this.sayhello=function(){
-		alert(this.password);
+		console.log(this.password);
 		}
 }
 var m=new Man("Man","Man123");
@@ -80,14 +80,14 @@ m.sayhello();
 function Animal(username)
 {
 	this.username=username;
-	this.sayhello=function(){alert(this.username);}
+	this.sayhello=function(){console.log(this.username);}
 }
 function Cat(username,password)
 {
 	Animal.call(this,username);//传参方法,第一参数传子类this,后面是父类的参数
 	this.password=password;
 	this.sayhello=function(){
-		alert(this.password);
+		console.log(this.password);
 		}
 }
 var ca=new Cat("Cat","Cat123");
@@ -97,29 +97,29 @@ ca.sayhello();
 function Water(username)
 {
 	this.username=username;
-	this.sayhello=function(){alert(this.username);}
+	this.sayhello=function(){console.log(this.username);}
 }
 function Cola(username,password)
 {
 	Animal.apply(this,new Array(username));//apply参数以数组传
 	this.password=password;
 	this.sayhello=function(){
-		alert(this.password);
+		console.log(this.password);
 		}
 }
 var co=new Cola("Cola","Cola123");
 co.sayhello();
 
-*/
+ 
 
 //多种混合使用
-/*
+ 
 function Paper(hello)
 {
 	this.hello=hello;
 }
 Paper.prototype.sayhello=function(){
-		alert(this.hello);
+		console.log(this.hello);
 	}
 function Book(hello,world)
 {
@@ -128,42 +128,44 @@ function Book(hello,world)
 }
 Book.prototype=new Paper();//继承父类
 Book.prototype.sayworld=function(){
-	alert(this.world);
+	console.log(this.world);
 }
 var book=new Book("hi","this is a book");
 book.sayhello();
 book.sayworld();
 
-*/
+ 
 //-----------------闭包
-/*
+ /*
 function f1(){
 	var n=999; //函数内部声明变量的时候，一定要使用var命令
 }
-alert(n); // error
-*/
+console.log(n); // firfox undefined  
+ 
 
 //---
-/*
+
 function f1(){
 　　　　n=999;
 }
 f1();
-alert(n); // 999
-*/
+console.log(n); // firfox undefined  
+*/ 
+
+
 //---
-/*
+/* */
 function f1()
 {
 　　　　n=999;
 　　　　function f2(){
-　　　　　　alert(n);
+　　　　　　console.log(n);
 　　　　}
 　　　　return f2;
 }
 var result=f1();
 result(); // 999
-*/
+
 
 //--这些变量的值始终保持在内存中
 function f1(){
@@ -173,7 +175,7 @@ function f1(){
 　　　　nAdd=function(){n+=1}//nAdd没有使用var关键字，因此 nAdd是一个全局变量
 
 　　　　function f2(){
-　　　　　　alert(n);
+　　　　　　console.log(n);
 　　　　}
 
 　　　　return f2;
@@ -200,7 +202,7 @@ var object = {
 		};
 　　　}   
 };  
-alert(object.getNameFunc()());  //The Window ,最后一次(),是return function()
+console.log(object.getNameFunc()());  //The Window ,最后一次(),是return function()
 
 
 </script>

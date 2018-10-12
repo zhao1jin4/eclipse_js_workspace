@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body> 
+
+
+
+<script type="text/javascript">
+//var url = "http://localhost:8080/S_HTML5CSS3/js/remote.js";
+var url = "http://127.0.0.1:8080/S_HTML5CSS3/js/remote.js";
+
+var localHandler = function(data){
+    alert('我是本地函数，可以被跨域的remote.js文件调用，远程js带来的数据是：' + data.result);
+};
+
+//  方式二  动态创建<script>
+var script = document.createElement('script');
+script.setAttribute('src', url); 
+document.getElementsByTagName('head')[0].appendChild(script); 
+
+//方式三 jQuery jsonp
+</script>
+  
+<!-- 浏览器如是localhost,用127.0.0.1就是跨域
+  //凡是拥有"src"这个属性的标签都拥有跨域的能力，比如<script>、<img>、<iframe>，Websocket跨域
+方式一
+<script type="text/javascript" src="http://127.0.0.1:8080/S_HTML5CSS3/js/remote.js"></script>
+ <script type="text/javascript" src="http://localhost:8080/S_HTML5CSS3/js/remote.js"></script>
+  -->
+
+</body>
+</html>

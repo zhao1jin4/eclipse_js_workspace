@@ -27,6 +27,8 @@ public class QueryJsonDataServlet extends PageServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		
+		String[] selectStatus=request.getParameterValues("selectStatus[]");//收easyUI的数组
+		System.out.println("easyUI  array param:"+selectStatus);
 		String user=request.getParameter("user");
 		String date_from=request.getParameter("date_from");
 		String date_to=request.getParameter("date_to");
