@@ -84,7 +84,7 @@
 		console.log(updated);
 		
 		//treegrid是getData，datagrid是getRows
-		var newData=$("#myTreegrid").treegrid('getData' );//是修改后的值
+		var newData=$("#myTreegrid").treegrid('getData' );//是修改后的值 
 		//即使数据格式是　_parentId,这里得到的数据也是children格式,每一项数据也多加(如源数据没用)_parentId
 		console.log(newData);
 	}

@@ -3,7 +3,6 @@
 									如要更新cache,要使cahce文件有修改日期,否则不会从网络仿问新的内容 -->
 									
 <!-- demo.appcache文件内容的格式,第一字符是#,表示注释
-
 #CACHE MANIFEST第一行,是必须出现的,表示下面列出第一次请求后就缓存
 CACHE MANIFEST       
 /theme.css
@@ -11,7 +10,7 @@ CACHE MANIFEST
 /main.js 
 
 
-#表示下面列出从来不要红缓存,支持*
+#表示下面列出从来不要缓存,支持*
 NETWORK:		
 login.asp
 
@@ -19,11 +18,10 @@ login.asp
 #如果网面不能仿问,把offline.html存放到/html5库(目录)下,分两列
 FALLBACK:		
 /html5/ /offline.html
-
 -->
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8"> <!-- HTML5 -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- HTML4 -->
 	<title>Insert title here</title>
 	<style type="text/css">
 		#div1 {width:350px;height:70px;padding:10px;border:1px solid #aaaaaa;}
@@ -148,6 +146,22 @@ FALLBACK:
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="190">
 	  <polygon points="100,10 40,180 190,60 10,60 160,180"
 	  style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;" />
+	  <path d="M37,17v15H14V17H37z" fill="#ff0000"/>
+	  <!-- 字母大写绝对坐标，小写相对坐标 (屏幕左上角为0,0)
+	  	M代表moveTo 
+	  	L代表lineTo 	v垂直画线   	h水平画线
+	  	z关闭
+	   -->
+	   
+	    <!-- 把所有需要再次使用的引用元素定义在defs元素里面。这样做可以增加SVG内容的易读性和可访问性  -->
+	   <defs>
+		    <linearGradient id="Gradient01">
+		      <stop offset="20%" stop-color="#39F" />
+		      <stop offset="90%" stop-color="#F3F" />
+		    </linearGradient>
+		  </defs>
+		 <rect x="0" y="0" width="60" height="10"   fill="url(#Gradient01)"  />
+	 
 	</svg>
 	
 	<hr/>
@@ -236,10 +250,11 @@ FALLBACK:
 	
 	<hr/>
 	Worker的使用,为后台处理,像线程
-	
-	<p>Count numbers: <output id="result"></output></p>
-	<button onclick="startWorker()">Start Worker</button> 
-	<button onclick="stopWorker()">Stop Worker</button>
+	<form>
+		<p>Count numbers: <output id="result"></output></p>
+		<button  type="button" onclick="startWorker()">Start Worker</button>  如button 未加 type 值时,放在form中点击会提交表单
+		<button type="button" onclick="stopWorker()">Stop Worker</button>
+	</form>
 	<br /><br />
 	<script>
 	var w;

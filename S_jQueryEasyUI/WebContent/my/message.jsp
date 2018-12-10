@@ -70,11 +70,36 @@ function showDialog()
 			}
 		});
  }
- 
+ function showConfirm()
+ {
+	 $.messager.confirm({
+			title: 'My Title',
+			msg: 'Are you confirm this?',
+			fn: function(r){
+				if (r){
+					alert('confirmed: '+r);
+				}
+			}
+		});
+ }
+ function showPrompt()
+ {
+	 $.messager.prompt({
+			title: 'Prompt',
+			msg: 'Please enter your name:',
+			fn: function(r){
+				if (r){
+					alert('Your name is:' + r);
+				}
+			}
+		});
+ }
 	</script>
 </head>
 <body>
         <a onclick="showAlert()" class="easyui-linkbutton"  >showAlert</a> <br/>
+         <a onclick="showConfirm()" class="easyui-linkbutton"  >showConfirm</a> <br/>
+          <a onclick="showPrompt()" class="easyui-linkbutton"  >showPrompt</a> <br/>
          <a onclick="showDialog()" class="easyui-linkbutton"  >showDialog2</a>  要初始化 $(function (){ 才能正常显示  <br/>
          <a onclick="showToast()" class="easyui-linkbutton"  >showToast 显示 中心</a> <br/>
      <div style="margin:20px 0;">

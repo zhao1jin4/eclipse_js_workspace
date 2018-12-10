@@ -69,6 +69,7 @@
 		alert(array[0].name);
 		
 	}
+	
 </script>
 </head>
 
@@ -131,6 +132,52 @@
 	<br/>
 	<a class="disabled">禁用a标签</a> <br/>
 
+	<hr/>
+	像jQuery的选择器
 	
+	<div id="myIdDiv">the myIdDiv</div>
+	<p> P tag 1 </p>
+	<p> P tag 2 </p>
+	<p class="example">class="example" 的段落 </p>
+	<p class="example">class="example" 的段落2 </p>
+	 
+	<div class="myClassDiv" >the  myClassDiv 1</div>
+	<div class="myClassDiv" >the  myClassDiv 2</div>
+	
+	<a  target="_blank">属性selector</a>
+	<a  target="_blank">属性selector2</a>
+	
+	<h2> h2 元素</h2>
+	<h3> h3 元素</h3> 
+ <div class="user-panel main"> 
+	 <input name="login"/>
+</div>
+	<script type="text/javascript">
+
+
+		//---------像jQuery的选择器
+		var div=document.querySelector("#myIdDiv");//也要在执行前存在元素（即 不在方法中就要在HTML后）
+		console.log(div.innerHTML);
+		
+	 	// <p> 元素的第一个
+		 document.querySelector("p").style.backgroundColor = "red";
+		
+	 	// class="myClassDiv" 元素的第一个
+	 	document.querySelector(".myClassDiv").style.backgroundColor = "yellow";
+     
+	     // <p class="example" > 的第一个元素 
+	      document.querySelector("p.example").style.backgroundColor = "blue";
+	     
+	     //<a> 元素中有 "target" 属性的第一个 
+	      document.querySelector("a[target]").style.border = "10px solid red";
+	     
+	     //h2,h3 中文档中先找到哪一个
+	      document.querySelector("h2,h3").style.backgroundColor = "red";
+	     
+	     //<div class="user-panel main"> 下的 <input name="login"/>
+	      var el = document.querySelector("div.user-panel.main input[name='login']");
+	      el.value="找到的值";
+	     
+	</script>
 </body>
 </html>

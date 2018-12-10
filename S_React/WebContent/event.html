@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> Event</title>
+     <!--
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
+     -->
+     <script src="react-16.6.1/react.development.js"></script>
+     <script src="react-16.6.1/react-dom.development.js"></script>
+      <script src="babel.min.js"></script>
+   <script src="jquery-3.2.1.min.js"></script> 
+    <style type="text/css">
+  .box{
+    width:200px;
+    height: 200px;
+    background: #CCC;
+    position: absolute;
+  }
+  </style>
+  </head>
+  <body>
+     
+    <script  type="text/babel" >
+	 
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+ 
+    // 这边绑定是必要的，这样 `this` 才能在回调函数中使用
+    this.handleClick = this.handleClick.bind(this);
+  }
+ 
+  handleClick() {
+    this.setState(prevState => ({ //传一个函数，一个参数是老的state，返回对象
+      isToggleOn: !prevState.isToggleOn
+    }));
+  }
+ 
+  render() {
+    return (
+	//onClick命名是驼峰式, 这里handleClick后不能加()表示绑定this
+      <button onClick={this.handleClick}>   
+        {this.state.isToggleOn ? 'ON' : 'OFF'}
+      </button>
+    );
+  }
+}
+ 
+ReactDOM.render(
+  <Toggle />,
+  document.getElementById('example')
+);
+
+
+
+class LoggingButton extends React.Component {
+  // 这个语法确保了 `this` 绑定在  handleClick 中 
+  handleClick = () => {
+    console.log('this is:', this);
+  }
+ 
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        Click me
+      </button>
+    );
+  }
+}
+ReactDOM.render(
+  <LoggingButton />,
+  document.getElementById('btn1')
+);
+
+
+class LoggingButton2 extends React.Component {
+  handleClick() {
+    console.log('this is:', this);
+  }
+ 
+  render() {
+    //  这个语法确保了 `this` 绑定在  handleClick 中
+	//每次渲染的时候都会创建一个不同的回调函数
+    return (
+      <button onClick={(e) => this.handleClick(e)}>
+        Click me
+      </button>
+    );
+  }
+}
+ReactDOM.render(
+  <LoggingButton2 />,
+  document.getElementById('btn2')
+);
+
+
+class Popper extends React.Component{
+    constructor(){
+        super();
+        this.state = {name:'Hello world!'};
+    }
+    
+    preventPop(name, e){    //事件对象e要放在最后
+        e.preventDefault();
+        alert(name);
+    }
+    deleteRow(id)
+	{
+ 		alert('delete'+id);
+	}
+    render(){
+        return (
+            <div>
+                <p>hello</p>
+                {/* 通过 bind() 方法传递参数。 */}
+                <a href="https://reactjs.org" onClick={this.preventPop.bind(this,this.state.name)}>Click</a>
+				<br/>				
+				<button onClick={(e) => this.deleteRow(2, e)}>Delete Row</button>   //事件对象e要放在最后
+          
+			</div>
+        );
+    }
+}
+
+ReactDOM.render(
+  <Popper />,
+  document.getElementById('passVar')
+);
+
+ 
+class MyDrag extends React.Component{
+    constructor(...args) //...args
+    {
+        super(...args);//...args
+        this.state={
+          x:0,
+          y:0
+        }; 
+    }
+	render()
+	{
+    //return 必须要有字符
+		return  (<div style={{
+                background:'blue',
+                top:this.state.y  ,//+'px'
+                left:this.state.x  //+'px'
+                }} className="box"  onMouseDown={this.myMouseDown.bind(this)} >123</div>
+             );
+	}
+	myMouseDown(evt)//evt是被封装过的
+	{
+	 	console.log(evt.target);
+		console.log(evt.pageX);
+    var disX=evt.pageX;  //-this.state.x
+    var disY=evt.pageY;//-this.state.y
+   // $(document).onmousemove(function(e){ 
+    //})
+    var _this=this;
+    document.onmousemove=function (ev){
+      _this.setState({
+        x:ev.pageX-disX,
+        y:ev.pageY-disY
+      });
+    }
+    document.onmouseup=function (ev){
+      document.onmousemove=null;
+      document.onmouseup=null;
+    }
+
+	}
+ }
+
+ $(function (){
+
+  ReactDOM.render(
+    <MyDrag />,
+     $('#dragDiv')[0] 
+  );
+ })
+
+//阻止事件冒泡(从里向外传递事件) evt.nativeEvent.stopImmediatePropagation()
+ 
+class MyPop extends React.Component{
+    constructor( )  
+    {
+        super( );  
+    }
+    componentDidMount(){
+        document.onclick=this.documentClick;
+    }
+    documentClick(){
+        alert('document');
+    }
+
+    parentClick(evt){
+      alert('parent'); 
+    }
+    childClick(evt){
+      alert('child');
+      //return false;//没用
+      //evt.cancelBubble = true;//原始JS方法 没用
+	   //以下两相可以同时用
+       evt.stopPropagation();//原始JS方法可以阻止父级DIV,但不能阻止document
+       evt.nativeEvent.stopImmediatePropagation();//react 可以阻止document事件,不能阻止父级DIV
+    }
+    render()
+    { 
+      return   <div onClick={this.parentClick.bind(this)}>
+                parentDIV
+               <div onClick={this.childClick.bind(this)}> childDiv</div>
+      </div>
+    } 
+ }
+
+ $(function (){
+
+  ReactDOM.render(
+    <MyPop />,
+    $('#popDiv')[0] 
+  );
+ })
+
+
+    </script>
+     <div id="example"></div> 
+     <div id="btn1"></div>
+     <div id="btn2"></div>
+     <div id="passVar"></div> 
+     <div id="dragDiv"></div> 
+     <div id="popDiv"></div>
+  </body>
+</html>

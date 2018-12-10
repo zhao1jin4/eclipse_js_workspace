@@ -9,6 +9,12 @@
 #idDiv1{color:#FFFFFF;padding:4px;clear:none;}
 #idDiv2{width:150px;height:40px;background-color:#FF6633;color:#FFFFFF;padding:4px;float:none;}
 #idCodeDiv{width:100%;padding:4px;font-family:verdana,tahoma;margin:12px 0px 0px 0px;background-color:#EEEEEE;font-weight:bold;}
+
+p:before 
+{ 
+	content:"台词："; /*在<p>标签前加的内容*/
+}
+
 </style>
 
 <script>
@@ -78,6 +84,38 @@ div2
 
 
 
+<!-- 
+display: flex;
+flex-direction: column;" 容器中的组件按列排
+align-items: center 垂直（纵轴）居中对齐
+justify-content: center 水平居中对齐
+  -->
+ <div style="width:300px;height:200px;display: flex;flex-direction: column;justify-content: center;align-items: center"  > 
+ 	<a >链接1</a>
+ 	<a >链接2</a>
+ </div> 
+ 
+ <p>p的内容</p>
 
+	<div style="width:200px;height:200px;background: linear-gradient(0deg, blue , green 20% ,yellow ); ">
+		表示0度，按左下角为中心圆角度画线做为开始，图形的20%处开始为绿色
+	</div>
+	<div style="width:200px;height:200px;background: linear-gradient(to left top,yellow 40%, blue 60%, red 85%); ">
+		to left top 表示左上角是终点，%只是递增
+	</div>
+	
+	<br/>
+	
+	<div id="panelDiv" >
+		<button type="button" onclick="alert('点示了')">点示有事件</button>
+	</div><br/>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.display='none'">display 隐藏 占位消失</button>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.display='block'">display显示 </button>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.visibility='hidden'">visibility隐藏隐藏 占位还在</button>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.visibility='visible'">visibility显示 </button>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.opacity=0">opacity隐藏 里面的按钮还点</button>
+	<button type="button" onclick="document.querySelector('#panelDiv').style.opacity=1">opacity显示 </button>
+	 
+	
 </body>
 </html>

@@ -43,60 +43,99 @@ function getXML()
 				alert("Problem retrieving XML data");//js和服务不在一项目中,firefox有错,IE 是OK
 			 	return;
 			}
-		/*
+		 
 			//---firefox OK， <?xml　和　response.setContentType("text/xml;charset=UTF-8");　　都可有可无
 			var doc=xmlHttp.responseXML.documentElement;//IE 一定不能有<?xml，也 OK
 			var status=doc.getElementsByTagName("status");
 			alert(status[0].textContent);//firefox是textContent
-		*/
-		
-				
+		 
 				
 			//----IE 测试OK  一定不能有<?xml . 要服务端一定要有　response.setContentType("text/xml;charset=UTF-8");
 						
 			var objXml=xmlHttp.responseXML;
-			//objXml.childNodes[0].firstChild.textContent;//firefox 是的结果是OK
-			//objXml.getElementsByTagName("status")[0].textContent;//firefox 是的结果是OK
-			//objXml.childNodes[0].firstChild.text;//IE的结果是OK
-			//objXml.getElementsByTagName("status")[0].text;//IE的结果是OK
+			//Firefox textContent;
+			var first=objXml.childNodes[0].firstChild.textContent;//firefox 是的结果是\n (如是格式化的XML)  
+			status=objXml.getElementsByTagName("status")[0].textContent;//firefox 是的结果是OK
+			if(status=="OK")
+			{
+				var des=objXml.getElementsByTagName("description")[0].textContent;
+				var decode=decodeURI(des);
+				document.getElementById("result").innerHTML=decode;
+			}
+			
+			//IE text,Edge没有text;
+			//first=objXml.childNodes[0].firstChild.text;//IE的结果是OK
+			//status=objXml.getElementsByTagName("status")[0].text;//IE的结果是OK
 			
 			var xmlDoc;
 			if (window.ActiveXObject)
 			  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
 			else if (document.implementation.createDocument)
-			  xmlDoc=document.implementation.createDocument("","",null);
+			
+			  xmlDoc=document.implementation.createDocument("","",null);//Edge ,Firefox,Chrome
 			else
 			  alert('Your browser cannot handle this script');
 			xmlDoc.async=false;
-			xmlDoc.load(objXml); //xmlDoc有一个parseError.reason属性
-			alert(xmlDoc.getElementsByTagName("status")[0]);
-			var status=xmlDoc.getElementsByTagName("status")[0].text;//IE 是text属性
-			if(status=="OK")
-			{
-				var des=xmlDoc.getElementsByTagName("description")[0].text;
-				var decode=decodeURI(des);
-				document.getElementById("result").innerHTML=decode;
-			}
-
+			//xmlDoc.load(objXml); //过时的，Edge 报错 , Chrome 报错   
 	};	
 	
-	/*
-	//firefox true is OK,false not work
-	//IE true,false OK,
+	/* 
 	xmlHttp.open("GET", "xmlServlet?username="+encodeURI(encodeURI('李')), true);//是否异步,true 异步,false同步
 	xmlHttp.send(null);//GET 用null  发送
 	*/
 	
 	xmlHttp.open("POST", root+"/xmlServlet", true);//是否异步,true 异步,false同步
 	xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded")//open方法后 调用 ;
-	xmlHttp.send("username="+encodeURI(encodeURI('李')));
+	//xmlHttp.send("username="+encodeURI(encodeURI('李')));
+	xmlHttp.send("username="+ encodeURI('李') );
+	//js两次encodeURI，java一次URLDecoder.decode  (不做req.setCharacterEncoding("UTF-8"))
+	//js一次encodeURI， java不用 URLDecoder.decode 做req.setCharacterEncoding("UTF-8") 
+	
+	
 }
 
 
 
-
 </script>
+
 <input type="button" id="mybtn" value="getXML(IE)" onclick="getXML();"/>
 <div id="result"></div>
+
+
+<ul id="ul">
+</ul>
+<script type="text/javascript">
+	var element  = document.getElementById('ul'); 
+	var fragment = document.createDocumentFragment();//创建文档fragment
+	var browsers = ['Firefox', 'Chrome', 'Opera', 
+	    'Safari', 'Internet Explorer'];
+	
+	browsers.forEach(function(browser) {
+	    var li = document.createElement('li');
+	    li.textContent = browser;
+	    fragment.appendChild(li);
+	});
+	element.appendChild(fragment);
+	
+	//----DOMParser (String->dom)
+	var strXml="<root><status>OK</status><description>%E4%B8%AD%E6%96%87</description></root>";
+	let parser = new DOMParser(),
+	myDoc = parser.parseFromString(strXml, "application/xml");
+	des=myDoc.getElementsByTagName("description")[0].textContent;
+	var decode=decodeURI(des);
+	console.log(decode);
+	//--XMLSerializer  (dom->String)
+	var s = new XMLSerializer(); 
+	 var str = s.serializeToString(myDoc);
+	 console.log(str);
+	//---
+	//doc = document.implementation.createDocument(namespaceURI, qualifiedNameStr, documentType); 返回 XMLDocument
+	var doc = document.implementation.createDocument ('http://www.w3.org/1999/xhtml', 'html', null);
+	var body = document.createElementNS('http://www.w3.org/1999/xhtml', 'body');
+	body.setAttribute('id', 'abc');
+	doc.documentElement.appendChild(body);
+	alert(doc.getElementById('abc')); // [object HTMLBodyElement]
+	
+</script>
 </body>
 </html>

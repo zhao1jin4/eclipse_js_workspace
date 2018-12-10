@@ -24,7 +24,7 @@
                     fitColumns: true,
                     url: 'treegrid_data2.json',
                     method: 'get',
-                    idField: 'id',
+                    idField: 'myid',
                     treeField: 'name'
                 ">
             <thead>

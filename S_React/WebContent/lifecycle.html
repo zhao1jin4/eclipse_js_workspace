@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> lifecycle </title>
+     
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
+      <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+     
+    <script  type="text/babel" >
+//setState()并不一定是同步的，为了提升性能React会批量执行state和DOM	   
+//setState()总是会触发一次组件重绘，除非在shouldComponentUpdate()返回false
+
+ 
+class Counter extends React.Component{
+  constructor(props) {
+      super(props);
+      this.state = {clickCount: 0};
+      this.handleClick = this.handleClick.bind(this);
+  }
+  
+  handleClick() {
+    this.setState(function(state) {
+      return {clickCount: state.clickCount + 1};
+    });
+  }
+  render () {
+    return (<h2 onClick={this.handleClick}>点我！点击次数为: {this.state.clickCount}</h2>);
+  }
+}
+ReactDOM.render(
+  <Counter />,
+  document.getElementById('example')
+);
+ 
+
+
+
+
+
+class Hello extends React.Component {
+ 
+  constructor(props) {
+      super(props);
+      this.state = {opacity: 1.0};
+  }
+ 
+  componentDidMount() {
+    this.timer = setInterval(function () {
+      var opacity = this.state.opacity;
+      opacity -= .05;
+      if (opacity < 0.1) {
+        opacity = 1.0;
+      }
+      this.setState({
+        opacity: opacity
+      });
+    }.bind(this), 100);
+  }
+ 
+  render () {
+    return (
+      <div style={{opacity: this.state.opacity}}>
+        Hello {this.props.name}
+      </div>
+    );
+  }
+}
+ 
+ReactDOM.render(
+  <Hello name="world"/>,
+ // document.body
+  document.getElementById('flashDiv')
+);
+
+
+
+
+class Button extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = {data: 0};
+      this.setNewNumber = this.setNewNumber.bind(this);
+  }
+  
+  setNewNumber() {
+    this.setState({data: this.state.data + 1})
+  }
+  render() {
+      return (
+         <div>
+            <button onClick = {this.setNewNumber}>INCREMENT</button>  {/*方法调用{}中不能加() */}  
+            <Content myNumber = {this.state.data}></Content>
+         </div>
+      );
+    }
+}
+ 
+ 
+//forceUpdate()  方法调用后，会引发render()调用，跳过shouldComponentUpdate(),只有在在render()该用中读this.props 和 this.state时调用这 个方法 
+//当state 发生变化时会调用组件内部的render()方法
+
+/* 生命周期
+
+UNSAFE_componentWillMount()
+componentDidMount() //可以在里面调用 setState() 
+UNSAFE_componentWillReceiveProps(nextProps)
+shouldComponentUpdate(nextProps, nextState) 默认返回true
+UNSAFE_componentWillUpdate(nextProps, nextState)
+componentDidUpdate(prevProps, prevState, snapshot)
+componentWillUnmount()
+
+
+*/
+
+class Content extends React.Component {
+  componentWillMount() {
+      console.log('Component WILL MOUNT!')
+  }
+  componentDidMount() {
+       console.log('Component DID MOUNT!')
+  }
+  componentWillReceiveProps(newProps) {
+        console.log('Component WILL RECEIVE PROPS!')
+  }
+  shouldComponentUpdate(newProps, newState) {
+        return true;
+  }
+  componentWillUpdate(nextProps, nextState) {
+        console.log('Component WILL UPDATE!');
+  }
+  componentDidUpdate(prevProps, prevState) {
+        console.log('Component DID UPDATE!')
+  }
+  componentWillUnmount() {
+         console.log('Component WILL UNMOUNT!')
+  }
+ 
+    render() {
+      return (
+        <div>
+          <h3>{this.props.myNumber}</h3>
+        </div>
+      );
+    }
+}
+ 
+
+ReactDOM.render(
+   <div>
+      <Button />
+   </div>,
+  document.getElementById('lifecycleDiv')
+);
+
+//ReactDOM.unmountComponentAtNode( document.getElementById('lifecycleDiv'));
+
+
+
+class UserGist extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = {username: '', lastGistUrl: ''};
+  }
+ 
+ 
+  componentDidMount() {
+    this.serverRequest = $.get(this.props.source, function (result) {
+      var lastGist = result[0];
+      this.setState({
+        username: lastGist.owner.login,
+        lastGistUrl: lastGist.html_url
+      });
+    }.bind(this));
+  }
+ 
+  componentWillUnmount() {
+    this.serverRequest.abort();
+  }
+ 
+  render() {
+    return (
+      <div>
+        {this.state.username} 用户最新的 Gist 共享地址：
+        <a href={this.state.lastGistUrl}>{this.state.lastGistUrl}</a>
+      </div>
+    );
+  }
+}
+ 
+ReactDOM.render(
+  <UserGist source="https://api.github.com/users/octocat/gists" />,
+  document.getElementById('ajaxDiv')
+);
+
+
+
+  </script>
+     <div id="example"></div>   
+     <div id="flashDiv"></div>  
+     <div id="lifecycleDiv"></div>  
+     <div id="ajaxDiv"></div>  
+     
+  </body>
+</html>

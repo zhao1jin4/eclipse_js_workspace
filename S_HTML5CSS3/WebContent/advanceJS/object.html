@@ -97,7 +97,7 @@ function MyClass() {
      SuperClass.call(this);
      OtherSuperClass.call(this);
 }
-
+/*
 // 继承一个类
 MyClass.prototype = Object.create(SuperClass.prototype);
 // 混合其它
@@ -109,7 +109,7 @@ MyClass.prototype.myMethod = function() {
      // do a thing
 };
 //Object.assign 是在 ES2015 引入的
-
+*/
 //---propertyObject
 var o;
 
@@ -164,6 +164,7 @@ for (var prop in o) {
 delete o.p
 //false
 
+
 //创建一个可写的,可枚举的,可配置的属性p
 o2 = Object.create({}, {
   p: {
@@ -173,6 +174,49 @@ o2 = Object.create({}, {
     configurable: true 
   } 
 });
+
+
+//----object 的方法
+
+//https://msdn.microsoft.com/zh-cn/library/dn858229(v=vs.94).aspx
+
+
+var obj = { pasta: "spaghetti", length: 10 }; 
+Object.freeze(obj); 
+// Try to add a new property, and then verify that it is not added. 
+obj.newProp = 50;//不会报错，但是不成功
+console.log(obj.newProp);//undefined
+
+console.log(Object.isFrozen(obj));//true
+
+ 
+
+const object1 = {
+  property1: 42
+};
+
+Object.seal(object1); //现有属性如可以，就可以修改，但不能加，删
+object1.property1 = 33;
+console.log(object1.property1);
+// expected output: 33
+
+delete object1.property1; // 不会报错，但是不成功
+console.log(object1.property1);
+// expected output: 33
+
+object1.property2 = 44;//不会报错，但是不成功
+console.log(object1.property2);//undefined
+
+console.log(Object.isSealed(object1));
+
+
+
+
+
+
+
+
+
 
 
 

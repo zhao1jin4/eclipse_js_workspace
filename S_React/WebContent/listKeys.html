@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> list Keys</title>
+     
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
+      <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+     
+    <script  type="text/babel" >
+	  
+function NumberList(props) 
+{
+
+/*  const numbers = props.numbers; 
+ const listItems = numbers.map((number,index) =>  //第二个参数index可选
+    <li >
+      index:{index},value: {number}
+    </li>
+  );
+  return (
+      <ul>{listItems}</ul> 
+  );
+ */
+//方式二
+ var numbers;    //声明在外面是因为 {} 中不能出现var,const,let等这种关键字
+    return (
+    <ul>
+      {
+        numbers = props.numbers,   //注意这里要加逗号
+        numbers.map((number,index) =>
+        <li >
+      		index:{index},value: {number}
+    	</li>
+      )}
+    </ul>
+    );
+}
+ 
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('example')
+);
+
+
+ 
+function Blog(props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map((post) =>
+        <li key={post.id}>
+          {post.title}
+        </li>
+      )}
+    </ul>
+  );
+  const content = props.posts.map((post) =>
+    <div key={post.id}>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+    </div>
+  );
+  return (
+    <div>
+      {sidebar}
+      <hr />
+      {content}
+    </div>
+  );
+}
+ 
+const posts = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
+ReactDOM.render(
+  <Blog posts={posts} />,
+  document.getElementById('example2')
+);
+
+
+
+
+
+
+
+
+
+ 
+    </script>
+     <div id="example"></div>   
+     <div id="example2"></div>   
+  </body>
+</html>

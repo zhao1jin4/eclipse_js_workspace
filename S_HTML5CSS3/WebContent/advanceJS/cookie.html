@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cookie test</title>
+<script type="text/javascript">
+
+	function addCookie()
+	{ 
+		document.cookie = "name=oeschger";
+		document.cookie = "favorite_food=tripe";
+		
+		var exdate=new Date();
+		exdate.setDate(exdate.getDate()+2);
+		document.cookie="loginId=lisi;expires="+exdate.toGMTString()  ;
+		
+		showCookies();
+		
+	}
+	function showCookies()
+	{ 
+		document.getElementById("logDiv").innerText =  document.cookie ;
+	}
+	 
+	function clearCookies()
+	{
+		var exdate=new Date();
+		exdate.setDate(exdate.getDate()-2);
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) 
+		{
+			var key=ca[i].split('=')[0];
+			document.cookie= key+"=; expires="+exdate ;//删Cookie 日期设置当前时间以前
+		}
+		  
+		document.getElementById("logDiv").innerText=" cleared !!!";
+	}
+</script>
+</head>
+<body>
+
+	只可访问本域的cookie<br/>
+
+	<input type="button" value="增加测试Cookie" onclick="addCookie()"/> <br/>
+	<input type="button" value="显示cookie数" onclick="showCookies()"/> <br/>
+	<div id="logDiv"></div>
+	<input type="button" value="清cookie " onclick="clearCookies()"/> <br/>
+</body>
+</html>

@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-< 
+<title>ECMAScript</title>
+ 
+
 <script type="text/javascript">
 //-----------function
 	function howManyArgs() {
@@ -55,44 +56,54 @@ ECMAScript2016-2018
 	https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_Next_support_in_Mozilla
 	
 	https://csspod.com/new-in-ecmascript-2016-2017-and-2018/
-
+	 
+	http://javascript.ruanyifeng.com/advanced/ecmascript6.html
+	 
 */ 
 
+	class Polygon 
+	{
+		constructor(w,h) {
+			this.width=w;
+			this.height=h;
+		}
+	}
 
+	class Square extends Polygon 
+	{
+	  constructor(length) {
+		super(length, length);//子类构造器中必须先调用super  
+		this.name = 'Square';
+	  }
+	  get area() { 
+		return this.height * this.width;
+	  }
+	 
+	}
+	
+	var squ=new Square(20); 
+	console.log(squ.area ); 
+	console.log(squ.name); 
+			 
+	 class myDate extends Date 
+	 {
+	  	constructor() {
+		    super();
+		  }
+		
+		  getFormattedDate() {
+		    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		    return this.getDate() + "-" + months[this.getMonth()] + "-" + this.getFullYear();
+		  }
+	}
+	 console.log(new myDate().getFormattedDate()); 
+	 
 
 /*
-		class Square extends Polygon {
-		  constructor(length) {
-			// Here, it calls the parent class' constructor with lengths
-			// provided for the Polygon's width and height
-			super(length, length);
-			// Note: In derived classes, super() must be called before you
-			// can use 'this'. Leaving this out will cause a reference error.
-			this.name = 'Square';
-		  }
-
-		  get area() {
-			return this.height * this.width;
-		  }
-		}
-		
-	
- class myDate extends Date {
-  constructor() {
-    super();
-  }
-
-  getFormattedDate() {
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return this.getDate() + "-" + months[this.getMonth()] + "-" + this.getFullYear();
-  }
-}
- 
-
 
 class nullExtends extends null {
   constructor() {
-	super();
+	super();//报错
   }
 }
 
@@ -100,21 +111,599 @@ Object.getPrototypeOf(nullExtends); // Function.prototype
 Object.getPrototypeOf(nullExtends.prototype) // null
 
 new nullExtends(); //ReferenceError: this is not defined
-
-
-const set1 = new Set([1, 2, 3, 4, 5]);
-
-console.log(set1.has(1));
-// expected output: true
-
-console.log(set1.has(5));
-// expected output: true
-
-console.log(set1.has(6));
-// expected output: false
 */
+
+const set1 = new Set([1, 2, 3, 4, 5]);//同C
+//const set1 = new Set([1, 2, 3]);//报错
+
+{
+	let name="111";//let只在代码块中有效
+	var name2="222";
+}
+console.log(name);//空串
+console.log(name2);
+
+
+function add(...values) { //rest运算符（…）
+   let sum = 0;
+
+   for (var val of values) { //of
+      sum += val;
+   }
+
+   return sum;
+}
+
+add(2, 5, 3) // 10
+
+
+
+function push(array, ...items) { 
+  items.forEach(function(item) {
+    array.push(item);
+    console.log(item);
+  });
+}
+ 
+var a = [];
+push(a, "a1", "a2", "a3", "a4"); 
+
+
+
+
+
+
+function f(s1, s2, s3, s4, s5) {
+ 	console.log(s1 + s2 + s3 + s4 +s5);
+}
+
+var a = ["a2", "a3", "a4", "a5"];
+
+f("a1", ...a)
+// a1a2a3a4a5
+
+
+// ES5
+console.log(Math.max.apply(null, [14, 3, 77]))
+
+// ES6
+console.log(Math.max(...[14, 3, 77]))
+
+// 等同于
+console.log(Math.max(14, 3, 77));
+
+
+//任意对象只要部署了next方法，就可以作为遍历器，但是next方法必须返回一个包含value和done两个属性的对象
+
+function makeIterator(array){
+    var nextIndex = 0;
+    
+    return {
+       next: function(){
+           return nextIndex < array.length ?
+               {value: array[nextIndex++], done: false} :
+               {done: true};
+       }
+    }
+}
+
+var it = makeIterator(['a', 'b']);
+
+console.log(it.next().value) // 'a'
+console.log(it.next().value) // 'b'
+console.log(it.next().done)  // true
+
+
+//ECMAScript 6草案定义的generator函数，需要在function关键字后面，加一个星号。然后，函数内部使用yield语句，定义遍历器的每个成员
+function* helloWorldGenerator() {
+    yield 'hello'; //暂停执行
+    yield 'world';
+}
+var hw = helloWorldGenerator();
+console.log(hw.next())
+//{ value: 'hello', done: false }
+
+console.log(hw.next())
+//{ value: 'world', done: false }
+console.log(hw.next())
+//{ value: undefined, done: true }
+
+console.log(hw.next())
+ //{ value: undefined, done: true }
+
+
+
+//遍历器的本质，其实是使用yield语句暂停执行它后面的操作
+
+function* f() {
+  for(var i=0; true; i++) {
+    var reset = yield i; //第一次next()到这返回0，第二次next()从后面开始执行，reset是方法有参数值
+    if(reset) { i = -1; }
+  }
+}
+
+var g = f();
+
+console.log(g.next()); // { value: 0, done: false }
+console.log(g.next()); // { value: 1, done: false }
+console.log(g.next(true)); // { value: 0, done: false }
+
+// 
+
+
+function* fibonacci() {
+	var previous = 0, current = 1; 
+	//while (true)  
+		//二选一
+	for (;;)
+	{ 
+		/*
+		var temp = previous; 
+		previous = current; 
+		current = temp + current; 
+		*/
+		//以上三句可简写成一句
+		[previous, current] = [current, previous + current];
+		
+		yield current; 
+		if(current>100)
+			break;
+	} 
+} 
+
+for (var i of fibonacci()) { //不是next()，再调一次也可
+	console.log(i); 
+} 
+ 
+console.log("abc".repeat(3)); // "abcabcabc"
+
+
+console.log(Array.from(document.querySelectorAll('*'))) //  [ html, head, meta, meta, title, script ]
+console.log(Array.of(1, 2, 3)) // Similar to new Array(...), but without special one-arg behavior
+console.log([0, 0, 0].fill(7, 1)) //从下标1开始到尾修改为7 [0,7,7]
+console.log([0, 0, 0,0].fill(7,1,2))// [0,7,0,0]
+console.log([1,2,3].findIndex(x => x == 2)) // 1
+
+
+var array1 = [1, 2, 3, 4, 5];
+console.log(array1.copyWithin(0, 3, 4))//把下标为3到下标为4前(不包括下标 4,即只下标3的值4)复制到下标为0开始
+// [4, 2, 3, 4, 5]
+ 
+ array1 = ['A', 'B', 'C', 'D','E'];
+ console.log(array1.copyWithin(1, 3)); //把下标为3开始到结尾(下标5前,即DE) 复 制到下标为1开始（BC）
+ //[ "A", "D", "E", "D", "E" ]
+ 
+ 
+ 
+ 
+let iter=["a", "b", "c"].entries()  // iterator [0, "a"], [1,"b"], [2,"c"]
+for (var val of iter) {
+	console.log(val);
+}
+iter=["a", "b", "c"].keys()  // iterator 0, 1, 2
+for (var val of iter) {  
+	console.log(val);
+}
+iter=["a", "b", "c"].values()  // iterator "a", "b", "c"
+for (var val of iter) {  
+	console.log(val);
+}
+
+ 
+
+class Point
+{
+	constructor(x,y) {
+		this.x=x;
+		this.y=y;
+	}
+}
+var first = { name: "Bob" };
+var last = { lastName: "Smith" };
+
+// https://msdn.microsoft.com/zh-cn/library/dn858229(v=vs.94).aspx
+
+var person = Object.assign(first, last); //object.html做继承
+//(target, ...sources );将来自一个或多个源对象中的值复制到一个目标对象。
+console.log(person);
+
+//0b和0o表示  二进制和八进制  
+console.log(0b111110111 === 503) // true
+console.log(0o767 === 503) // true
+
+var birth=new Date();
+var Person = {
+	  name: '张三',
+	  //等同于birth: birth
+	  birth,
+	  // 等同于hello: function ()...
+	  hello() { console.log('我的名字是', this.name); }
+	};
+console.log(Person.birth);
+
+var f = v => v; //（=>）定义函数。
+//上面的箭头函数等同于：
+var f1 = function(v) {
+    return v;
+};
+console.log(f(20));
+console.log(f1(20));
+
+
+var sum1 = (num1, num2) => num1 + num2;//多参数用() 同scala
+//等同于
+var sum2 = function(num1, num2) {
+ return num1 + num2;
+};
+console.log(sum1(1,2));
+console.log(sum2(1,2));
+
+
+
+//如果箭头函数直接返回一个对象，必须在对象外面加上括号。
+var getTempItem = id => ({ id: id, name: "Temp" });
+console.log(getTempItem(20));
+
+
+
+//正常函数写法
+[1,2,3].map(function (x) {
+  return x * x;
+});
+
+var arr=[1,2,3];
+var arrRes=arr.map(function (x) {
+	  x=x+1;
+	  return x;
+	});//是复制的形式，修改的是返回新的数组，原数组不变,用for of []可以修改原数据
+	
+// 箭头函数写法
+[1,2,3].map(x => x * x);
+
+
+var handler = {
+	    id: "123456",
+	    init: function() {
+	        document.addEventListener("click",
+	                event => this.doSomething(event.type), false);//this都绑定handler对象
+	    },
+	    doSomething: function(type) {
+	        console.log("Handling " + type  + " for " + this.id);
+	    }
+	};
+handler.init();
+
+
+function Point1(x = 0, y = 0) {//函数参数的默认值
+   this.x = x;
+   this.y = y;
+}
+
+var p = new Point1(); 
+
+//--模板字符串 
+// 多行字符串
+var str=`In JavaScript this is
+ not legal.`
+
+ console.log(str);
+
+// 字符串中嵌入变量
+var name = "Bob", time = "today";
+`Hello ${name}, how are you ${time}?`
+
+var x = 1;
+var y = 2;
+console.log(`${ x } + ${ y } = ${ x + y}`) 
+// "1 + 2 = 3"
+
+
+//for…in循环读取键名，for…of循环读取键值。
+
+var engines = new Set(["Gecko", "Trident", "Webkit", "Webkit"]);
+for (var e of engines) {
+    console.log(e);
+}
+// Gecko
+// Trident
+// Webkit
+
+var es6 = new Map();
+es6.set("edition", 6);
+es6.set("committee", "TC39");
+es6.set("standard", "ECMA-262");
+for (var [name, value] of es6) {
+  console.log(name + ": " + value);
+}
+// edition: 6
+// committee: TC39
+// standard: ECMA-262
+
+ //数组推导
+var a1 = [1, 2, 3, 4];
+//var a2 = [i * 2 for (i of a1)];//不支持???
+//console.log(a2) // [2, 4, 6, 8]
+ 
+//字符串推导不支持???
+//[c for (c of 'abcde') if (/[aeiou]/.test(c))].join('') // 'ae' 
+
+//多变量赋值
+var [a, b, c] = [1, 2, 3];
+
+var [foo, [[bar], baz]] = [1, [[2], 3]]
+
+var [,,third] = ["foo", "bar", "baz"]
+
+var [head, ...tail] = [1, 2, 3, 4]
+
+console.log(tail);// [2,3,4]
+
+
+var [missing = true] = [];
+console.log(missing)
+// true
+
+var { x = 3 } = {};
+console.log(x)
+// 3
+
+
+var { foo, bar } = { foo: "lorem", bar: "ipsum" };
+
+console.log(foo) // "lorem"
+console.log(bar) // "ipsum"
+ 
+//从函数返回多个值
+function example() {
+    return [1, 2, 3];
+}
+
+var [a, b, c] = example();
+
+
+
+
+function f2({p1=1, p2, p3}) {//默认值 
+	console.log(p1)
+ } 
+f2({ p2:2,p3:2});
+
+//-----------ECMAScript 2016
+var array1 = [1, 2, 3];
+console.log(array1.includes(2));
+// expected output: true
+var pets = ['cat', 'dog', 'bat'];
+console.log(pets.includes('cat'));
+// expected output: true
+console.log(pets.includes('at'));
+// expected output: false
+
+const uint8 = new Uint8Array([10, 20, 30, 40, 50]);
+console.log(uint8.includes(20));
+// expected output: true
+// check from position 3
+console.log(uint8.includes(20, 3));
+// expected output: false
+
+console.log(new Uint8Array([NaN]).includes(NaN)); // false, since the NaN passed to the constructor gets converted to 0
+console.log(new Float32Array([NaN]).includes(NaN)); // true;
+console.log(new Float64Array([NaN]).includes(NaN)); // true;
+
+//-----------ECMAScript 2017
+var an_obj = { 100: 'a', 2: 'b', 7: 'c' };
+console.log(Object.values(an_obj)); // ['b', 'c', 'a']
+
+// getFoo is property which isn't enumerable
+var my_obj = Object.create({}, { getFoo: { value: function() { return this.foo; } } });
+my_obj.foo = 'bar';
+console.log(Object.values(my_obj)); // ['bar']
+
+// non-object argument will be coerced to an object
+console.log(Object.values('foo')); // ['f', 'o', 'o']
+
+
+
+
+
+//array like object with random key ordering
+const anObj = { 100: 'a', 2: 'b', 7: 'c' };
+console.log(Object.entries(anObj)); // [ ['2', 'b'], ['7', 'c'], ['100', 'a'] ]
+
+//getFoo is property which isn't enumerable
+const myObj = Object.create({}, { getFoo: { value() { return this.foo; } } });
+myObj.foo = 'bar';
+console.log(Object.entries(myObj)); // [ ['foo', 'bar'] ]
+
+//non-object argument will be coerced to an object
+console.log(Object.entries('foo')); // [ ['0', 'f'], ['1', 'o'], ['2', 'o'] ]
+
+//returns an empty array for any primitive type, since primitives have no own properties
+console.log(Object.entries(100)); // [ ]
+
+//iterate through key-value gracefully
+const obj = { a: 5, b: 7, c: 9 };
+for (const [key, value] of Object.entries(obj)) {
+console.log(`${key} ${value}`); // "a 5", "b 7", "c 9"
+}
+
+//Or, using array extras
+Object.entries(obj).forEach(([key, value]) => {
+console.log(`${key} ${value}`); // "a 5", "b 7", "c 9"
+});
+
+
+//Object to a Map
+const obj11 = { foo: 'bar', baz: 42 }; 
+const map11 = new Map(Object.entries(obj11));
+console.log(map11); // Map { foo: "bar", baz: 42 }
+
+
+
+
+
+const str1 = 'Breaded Mushrooms';
+console.log(str1.padEnd(25, '.'));//targetLength [, padString])
+// expected output: "Breaded Mushrooms........"
+
+const str2 = '200';
+console.log(str2.padEnd(5));
+// expected output: "200  "
+
+console.log('abc'.padEnd(6, "123456")); // "abc123"
+
+
+console.log('abc'.padStart(6,"123465")); // "123abc"
+
+const fullNumber = '2034399002125581';
+const last4Digits = fullNumber.slice(-4);//5581
+const maskedNumber = last4Digits.padStart(fullNumber.length, '*');//************5581
+
+console.log(maskedNumber);
+
+const object12 = {
+  property1: 42
+};
+
+const descriptors1 = Object.getOwnPropertyDescriptors(object12);
+console.log(descriptors1.property1.writable);
+// expected output: true
+console.log(descriptors1.property1.value);
+// expected output: 42
+
+
+
+//--Promise 		
+var promise1 = new Promise(function(resolve, reject) {
+setTimeout(function() {
+  resolve('foo');
+}, 300);
+});
+
+promise1.then(function(value) {
+console.log(value);
+// expected output: "foo"
+});
+
+console.log(promise1);
+//expected output: [object Promise]
+
+
+//---async
+
+function resolveAfter2Seconds() {
+  return new Promise(resolve => { 
+    setTimeout(() => {
+      resolve('resolved');//调用 resolve参加函数 表示返回值，后面可能语句 
+    }, 2000);
+  });
+}
+
+async function asyncCall() { //如resolved  返回一个Promise，如rejected 抛异常
+  console.log('calling');
+  var result = await resolveAfter2Seconds();
+  //await表示同步等待执行结束,只能用于async函数内
+  console.log(result);
+  // expected output: 'resolved'
+}
+
+asyncCall();
+//----- 看 async.html
+
+//--带参数
+function resolveAfter2Seconds(x) {
+	  return new Promise(resolve => {
+	    setTimeout(() => {
+	      resolve(x); 
+	    }, 2000);
+	  });
+	};
+var add = async function(x) { // async function expression assigned to a variable
+  var a = await resolveAfter2Seconds(20);//只有完全执行后才会继续向下执行,/同步执行
+  var b = await resolveAfter2Seconds(30);
+  return x + a + b;
+};
+
+add(10).then(v => {
+  console.log(v);  // prints 60 after 4 seconds.
+});
+ 
+//-- await后 可写值 并发执行
+(async function(x) { // async function expression used as an IIFE
+  var p_a = resolveAfter2Seconds(20);//已经启动定时器， 并发执行
+  var p_b = resolveAfter2Seconds(30);
+  return x + await p_a + await p_b; // 
+})(10).then(v => {
+  console.log(v);  // prints 60 after 2 seconds.
+});
+ 
+ 
+function resolveAfter2Seconds(x) {
+	  return new Promise(resolve => {
+	    setTimeout(() => {
+	      resolve(x);
+	    }, 2000);
+	  });
+	}
+
+var AsyncFunction = Object.getPrototypeOf(async function(){}).constructor //特别
+var a = new AsyncFunction('a', 
+                          'b', 
+                          'return await resolveAfter2Seconds(a) + await resolveAfter2Seconds(b);');
+a(10, 20).then(v => {
+  console.log(v); // prints 30 after 4 seconds
+});
+
+
+
+async function f2() {
+  var y = await 20;
+  console.log(y); // 20   Chrome 会调用两次这里？？？
+}
+f2();
+
+	 
+async function f3() {
+  try {
+    var z = await Promise.reject(30);
+  } catch(e) {
+    console.log(e); // 30
+  }
+}
+f3();
+ 
+
+//var response = await promisedFunction().catch((err) => { console.log(err); });
+// response will be undefined if the promise is rejected
+
+
+
+//可以逗号结尾,不用于JSON	JSON.parse('{"foo" : 1, }');报错
+var arr = [
+  1, 
+  2, 
+  3, 
+];
+var object = { 
+		  foo: "bar", 
+		  baz: "qwerty",
+		  age: 42,
+		};
+ /* chrome 不支持
+class C {
+	  one(a,)//参数逗号不能有...p
+	  {},
+	  two(a, b,) {},
+	}
+ */
+Math.max(10, 20,);
+	
+ 
+
 	
 </script>
+<script type="text/javascript" src="js/mySymbol.js"></script>
+<script type="text/javascript" src="js/myStrict.js"></script>
+ 
 <body>
 
 </body>

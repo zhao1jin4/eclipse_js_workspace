@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> clock unmount </title>
+     
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
+      <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+     
+    <script  type="text/babel" >
+	function FormattedDate(props) {// props 是不可变的
+  		return <h2>现在是 {props.date.toLocaleTimeString()}.</h2>;
+	}
+    class Clock extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {date: new Date()};
+      }
+      
+ 	 componentDidMount() { //在render后执行
+
+		 /*
+		this.timerID = setInterval(
+			  () => this.tick(),
+			  1000
+		 );
+		*/
+		//方式二
+		let that = this;
+		this.timerID = setInterval(function () {
+		  return that.tick();
+		},1000);
+
+	  }
+	 
+	  componentWillUnmount() {
+		clearInterval(this.timerID);
+	  }
+	 
+	  tick() {
+		//只需更新组件的 state，然后根据新的 state 重新渲染用户界面
+		this.setState({
+		  date: new Date()
+		});
+	  }
+
+      render() { //在constructor后执行
+        return (
+          <div>
+            <h1>Hello, world!</h1>
+            <h2>现在是 {this.state.date.toLocaleTimeString()}.</h2>
+   			<FormattedDate date={this.state.date} />
+          </div>
+        );
+      }
+    }
+     
+    ReactDOM.render(
+      <Clock />,
+      document.getElementById('example')
+    );
+
+//每当 Clock 组件第一次加载到 DOM 中的时候，我们都想生成定时器，这在 React 中被称为挂载。
+//同样，每当 Clock 生成的这个 DOM 被移除的时候，我们也会想要清除定时器，这在 React 中被称为卸载。
+
+//order , ReactDOM.render 未完成->Clock构构器-> render->componentDidMount
+
+
+
+function App() {
+  return (
+    <div>
+      <Clock />
+      <Clock />
+      <Clock />
+    </div>
+  );
+}
+ReactDOM.render(<App />, document.getElementById('appDiv'));
+
+
+
+
+
+class HelloMessage extends React.Component {
+  render() {
+    return (
+      <h1>Hello, {this.props.name}</h1>
+    );
+  }
+}
+ 
+HelloMessage.defaultProps = { // defaultProps属性设置默认属性
+  name: 'Runoob'
+};
+ 
+const element = <HelloMessage/>;
+ 
+ReactDOM.render(
+  element,
+  document.getElementById('propsDiv')
+);
+
+
+
+
+class WebSite extends React.Component {
+  constructor() {
+      super();
+ 
+      this.state = {
+        name: "菜鸟教程",
+        site: "https://www.runoob.com"
+      }
+    }
+  render() {
+    return (
+      <div>
+        <Name name={this.state.name} />
+        <Link site={this.state.site} />
+      </div>
+    );
+  }
+}
+ 
+ 
+ 
+class Name extends React.Component {
+  render() {
+    return (
+      <h1>{this.props.name}</h1>
+    );
+  }
+}
+ 
+class Link extends React.Component {
+  render() {
+    return (
+      <a href={this.props.site}>
+        {this.props.site}
+      </a>
+    );
+  }
+}
+ 
+ReactDOM.render(
+  <WebSite />,
+  document.getElementById('webDiv')
+);
+
+    </script>
+     <div id="example"></div>
+     appDiv<br/>
+     <div id="appDiv"></div>
+     
+     props<br/>
+     <div id="propsDiv"></div>
+     
+     
+      props<br/>
+     <div id="webDiv"></div>
+  </body>
+</html>

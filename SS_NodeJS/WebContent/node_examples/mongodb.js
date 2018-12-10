@@ -1,4 +1,4 @@
-//npm install -g mongodb //安装为一个全局使用的模块,设置NODE_PATH环境变量为C:\Users\zhaojin.li\AppData\Roaming\npm\node_modules
+//npm install -g mongodb //安装为一个全局使用的模块,设置NODE_PATH环境变量为C:\Users\zh\AppData\Roaming\npm\node_modules
 //npm install mongodb   //在线安装到当前目录,当前js文件同目录下要有node_modules\mongodb 
 
 /*

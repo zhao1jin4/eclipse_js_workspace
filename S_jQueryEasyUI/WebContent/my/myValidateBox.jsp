@@ -39,7 +39,12 @@
 		});
 		
 		function submitForm(){
-			$('form').form('submit');
+			$('form').form('submit', 
+				{   onSubmit:function()
+					{
+	                    return $(this).form('enableValidation').form('validate');
+	                }
+           		 });
 		}
 		var editable=true;
 		function toggleDisable()

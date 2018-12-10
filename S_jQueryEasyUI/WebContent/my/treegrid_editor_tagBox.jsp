@@ -297,15 +297,24 @@ function isChar(str){
                pagination: true,
                pageSize: 10,
                pageList: [2,10,20],
-               checkbox: true,
+              // checkbox: true,
+               
+               checkbox: function(row) //条件是否有复选框
+               {
+	           		 if(row.myid%2==0)
+	           			 return true;
+	           		 else 
+	           			 return false;
+	           	},
+	            
                idField: 'myid',
                treeField: 'name2',
                onDblClickRow:myOnDblClickRow,
                onClickRow:myOnClickRow,
                columns:[[
                    {field:'name',title:'name',width:250,editor:"SelectUser"},
-                   {field:'name2',title:'name2',width:150,align:'right'},
-                   {field:'quantity',title:'quantity',width:100,editor:"numberspinner"},
+                   {field:'name2',title:'name2',width:250 },
+                   {field:'quantity',title:'quantity',width:100,align:'right',editor:"numberspinner"},
                    {field:'price',title:'price',width:100, formatter:formatDollar , editor:"numberbox"},
                    {field:'total',title:'total',width:100, formatter:formatDollar }  
                ]]

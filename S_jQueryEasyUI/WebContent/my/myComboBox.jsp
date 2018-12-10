@@ -41,7 +41,6 @@
        <option>bitem2</option>
        <option>bitem3</option>
    </select>  没有下箭头按钮,<br/>
-   动态从服务端取值  ,为何选中后显示的是值 ？？？？ <br/>
 <script type="text/javascript">
   $('#noArrow').combobox({
       //url:'../demo/comboBox/combobox_data1.json',
@@ -62,7 +61,6 @@
      // $('#noArrow').combobox('reload', root+'/easyUI/tagBoxJson?input='+newValue);//XML Parsing Error: no root element found
 	  
      
- 	//动态从网络取onChange ，为何选中后显示的是值 ？？？？  选中后又调用了onChange不影响
  	//中文不按空格时也算输入？？？ 是输入法的问题，用搜狗就可以，用微软就不行
       $.ajax({
 		method:'get',

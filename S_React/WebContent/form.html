@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>form</title>
+     
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
+    
+     <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+   <script  type="text/babel" >
+class HelloMessage extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = {value: 'Hello Runoob!'};
+      this.handleChange = this.handleChange.bind(this);
+  }
+ 
+  handleChange(event) {
+    this.setState({value: event.target.value});//只能用 setState() 方法进行更新。 event.target是原生的
+  }
+  render() {
+    var value = this.state.value;
+    return <div>
+            <input type="text" value={value} onChange={this.handleChange} /> 
+            <h4>{value}</h4>
+           </div>;
+  }
+}
+ReactDOM.render(
+  <HelloMessage />,
+  document.getElementById('example')
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Content extends React.Component {
+  render() {
+    return  <div>
+            <input type="text" value={this.props.myDataProp} onChange={this.props.updateStateProp} /> 
+            <h4>{this.props.myDataProp}</h4>
+            </div>;
+  }
+}
+class HelloMessage2 extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = {value: 'Hello Runoob!'};
+      this.handleChange = this.handleChange.bind(this);
+  }
+ 
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+  render() {
+    var value = this.state.value;
+    return <div>
+            <Content myDataProp = {value} 
+              updateStateProp = {this.handleChange}></Content>   
+			
+			{/*
+                                          函数传递给子组件  
+             */}
+           </div>;
+  }
+}
+ReactDOM.render(
+  <HelloMessage2 />,
+  document.getElementById('form2')
+);
+
+
+
+
+
+
+
+
+
+
+class FlavorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: 'coconut'};
+ 
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+ 
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+ 
+  handleSubmit(event) {
+    alert('Your favorite flavor is: ' + this.state.value);
+    event.preventDefault();
+  }
+ 
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          选择您最喜欢的网站
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="gg">Google</option>
+            <option value="rn">Runoob</option>
+            <option value="tb">Taobao</option>
+            <option value="fb">Facebook</option>
+          </select>
+        </label>
+        <input type="submit" value="提交" />
+      </form>
+    );
+  }
+}
+ 
+ReactDOM.render(
+  <FlavorForm />,
+  document.getElementById('select')
+);
+
+
+
+
+
+
+
+
+
+
+
+
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2,
+	  male:true,
+	 age:18
+    };
+ 
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+ 
+  handleInputChange(event) {
+    const target = event.target;//target是原生的
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+ 
+    this.setState({
+      [name]: value
+    });
+  }
+ 
+  render() {
+    return (
+      <form>
+        <label>
+          是否离开:
+          <input
+            name="isGoing"
+            type="checkbox"
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange} />
+        </label>
+        <br />
+ 
+        <label>
+          访客数:
+          <input
+            name="numberOfGuests"
+            type="number"
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange} />
+        </label><br />
+
+	是否男
+		{ /* 用 checked={this.state.male} 就不可修改，要用 defaultChecked */ }
+ 		<input
+            name="male"
+            type="checkbox"
+            defaultChecked={this.state.male} />
+		<br />
+	年龄：
+		{ /* 用 value={this.state.age}  就不可修改，要用 defaultValue */ }
+		<input
+            name="age"
+            type="text"
+            defaultValue={this.state.age} />
+		<br />	
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Reservation />,
+  document.getElementById('multiForm')
+);
+
+  </script>
+    <div id="example"></div> 
+    <div id="form2"></div> 
+    
+    <div id="select"></div> 
+    <div id="multiForm"></div> 
+  </body>
+</html>

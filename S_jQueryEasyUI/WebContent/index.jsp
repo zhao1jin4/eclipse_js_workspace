@@ -110,7 +110,7 @@
  	<a href="my/sqlView.jsp">sqlView ,table 动态column (在 J_SpringMVC 项目中有 连接DB的) </a> <br/>
  	
  	box<br/>
- 	<a href="my/myValidateBox.jsp">ValidateBox 表单 select可查询,文本框可验证, 得到JSON ，/serializeArray 如果  对 禁用的combobox 和 combobox未选择值 的，这样根本拿不到字段名???? </a> <br/>
+ 	<a href="my/myValidateBox.jsp">ValidateBox 表单 select可查询,文本框可验证,disable, 得到JSON ，/serializeArray 如果  对 禁用的combobox 和 combobox未选择值 的，这样根本拿不到字段名???? </a> <br/>
  	<a href="my/myComboBox.jsp">comboBox 不可输入的 ,没有下箭头按钮,JSONP 输入一半不选还在 自定义onHidePanel的函数或用limitToList, 动态从网络取onChange为何选中后显示的是值 ？？？？,</a> <br/>
  	<a href="my/myTagBoxAutoComplete.jsp">tagBox/tagBoxAutoComplete 输入一半不选还在,limitToList没用???  onHidePanel OK ,onChange没用？？？ </a> <br/>
  

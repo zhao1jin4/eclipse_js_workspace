@@ -1,11 +1,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-	<base href="http://127.0.0.1:8080/test" target="_blank">
+	<meta charset="utf-8"> <!-- HTML5 -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- HTML4 -->
+	<!-- 只对移动  	-->
+	<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1, user-scalable=yes">
 
+	<!-- 
+	<base href="http://127.0.0.1:8080/test" target="_blank">
+ -->
 	<script type="text/javascript">
 	function start()
 	{
@@ -73,13 +76,17 @@
 	document.write("Visits "+sessionStorage.pagecount+" time(s) this session.");
 </script>
 
-<br/>
-firefox 5全部支持HTML5
-<br/>
+<br/>  
 autocomplete:
 <form action="formtest.jsp" method="get" autocomplete="on" id="user_form">
-First name: <input type="text" name="fname" /><br />
-E-mail: <input type="email" name="email" autocomplete="off" /><br />
+
+<section>
+	First name: <input type="text" name="fname" /><br />
+</section>
+<section>
+	E-mail: <input type="email" name="email" autocomplete="off" /><br />
+</section>
+
 url:<input type="url"/>  <br/>
 autofocus : <input type="text" name="user_name"  autofocus="autofocus" /> <br/>
 
@@ -210,6 +217,12 @@ E-mail: <input type="email" name="user_email" />
     <button id="dbtest" onclick=dbtest()>dbtest open db</button>
     <button  onclick=testIndexDB()>testIndexDB</button>
 
+<br/>
+
+a标签download属性 要去base标签 <br/>
+<a href="/S_HTML5CSS3/assets/img_logo.gif"   download="HTML文件名.txt">  链接图片   </a> <br/>  
+<a href="/S_HTML5CSS3/download?fileId=1"   download="HTML文件名.txt"> 服务端存在， 文件名以服务端为Content-Disposition", "attachment;filename=准，要去base标签</a> <br/>  
+<a href="/S_HTML5CSS3/download?fileId=101" download="HTML文件名.txt"> 服务端返回不存在  以download值为文件名 ,如不加则跳转到页面中显示</a>  <br/>
 
 
 </body>

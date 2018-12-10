@@ -1,0 +1,13 @@
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import
+function getJSON(url, callback) {
+  let xhr = new XMLHttpRequest();
+  xhr.onload = function () { 
+    callback(this.responseText) 
+  };
+  xhr.open('GET', url, true);
+  xhr.send();
+}
+
+export function getUsefulContents(url, callback) {
+  getJSON(url, data => callback(JSON.parse(data)));
+}

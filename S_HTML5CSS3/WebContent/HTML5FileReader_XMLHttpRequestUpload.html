@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html  >  
+<head>
+	<meta charset="utf-8">  
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- HTML4 -->
+	<title>FileReader, XMLHttpRequestUpload</title>
+	<style type="text/css">
+		/*edge报错 ,Chrome and Firefox OK */
+		video::cue {
+			font-size: 1rem;   
+	    	background-image: linear-gradient(to bottom, yellow, blue);
+  			color: red;
+	    } 
+	    /* 字幕中的 b 标签样式 chrome有效，Firefox无效  */
+	    video::cue(b) { 
+		  color: orange;
+		} 
+		
+	</style>
+</head>
+<body>
+ 
+	 https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5   <br/>   
+	https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API <br/>  
+	<article>
+		建立浏览器之间点对点（Peer-to-Peer）的连接  ,数据分享和电话会议
+	</article>
+	 <h2> ------ WebRTC   直播 --------  </h2>
+	html5_camera.html 中有部分<br/>
+	<script type="text/javascript">
+	//var rtc =    window.webkitRTCPeerConnection;  //ChromeOK,Edge有这个就去，但不能无参new 
+	// console.log(rtc);
+	// console.log( new rtc());
+	var ff=new RTCPeerConnection ();///ChromeOK, Firefox OK, Edge不能无参new 
+	 console.log(ff);
+	
+	</script>
+	 
+	<h2> ------ Track and WebVTT subtitle 字幕 OK --------  </h2>
+	<video controls width="250"
+	       src="assets/friday.mp4">
+	    <track default kind="captions"
+	           srclang="en"
+	           src="assets/friday_note.vtt"/>
+	    Sorry, your browser doesn't support embedded videos.
+	</video> <br/>
+	
+	<pre>
+		vtt 文件格式，如有中文文件要为UTF-8编码， MIME 类型是 text/vtt 
+		注释行首用NOTE 后面是空格(单行)或者换行符(多行)，注释不能有 --> 或 小于号，可用&lt;
+		字幕样式名字 video::cue 
+		文件第一行要是 WEBVTT 第二行要是空行
+		第三开始，后是而时间 用 -->分隔    
+		 line:80% 表示从上到下第多少行上
+		 position:50% 表示从左到右的位置
+		 vertical:lr 中国古代竖排文件，从左向右
+		 
+		 为何在.vtt文件中下面STYLE无效果？？？
+		STYLE
+		::cue {
+		  background-image: linear-gradient(to bottom, yellow, blue);
+		  color: red;
+		  font-size: 1rem;   
+		}
+		/* style in vtt, css comment */
+		
+		NOTE comment blocks can be used between style blocks.
+		
+		STYLE
+		::cue(b) {
+		  color: orange;
+		}
+	</pre>
+	<article>
+		https://interactive-examples.mdn.mozilla.net/media/examples/friday.vtt <br/>
+	 	https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API <br/>
+		Web Video Text Tracks Format (WebVTT) 也可是Timed Text Markup Language (TTML)格式  https://w3c.github.io/ttml2/index.html  <br/>
+	</article>
+	
+ <!-- 
+	 <h2> ------FileReader  --OK------  </h2>
+	  <input id="userFile" type="file" onchange="previewFile()"><br>
+	   <img id="userImg" src="" height="200" alt="Image preview..."> <br/>
+	   	<br/> 选多个文件<br/>
+	   <input id="browse" type="file" onchange="previewFiles()" multiple>
+	   <div id="preview"></div>
+	   <script type="text/javascript"> 
+		function previewFile() 
+		{
+			  var preview = document.querySelector('#userImg');
+			  var file    = document.querySelector('#userFile').files[0];
+			  var reader  = new FileReader();
+			  
+			  /*  reader.addEventListener("load", function () {
+				    preview.src = reader.result;
+				  }, false);
+
+			  if (file) {
+			     reader.readAsDataURL(file);
+			  }
+			  */
+			   //方式二OK
+			   reader.readAsArrayBuffer(file);
+	  		   reader.onload=function(e){ 
+	  				var bf = this.result;
+	  				var blob = new Blob([bf],{type:"text/plain"});//Blob对象 
+	  				var str = URL.createObjectURL(blob);
+	  				preview.src =str;
+	  			}; 
+		}
+		
+		
+		function previewFiles() 
+		{
+			  var preview = document.querySelector('#preview');
+			  var files   = document.querySelector('#browse').files;
+
+			  function readAndPreview(file)
+			  {
+				    // Make sure `file.name` matches our extensions criteria
+				    if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) 
+				    {
+						var reader = new FileReader();
+						/*
+						reader.addEventListener("load", function () 
+						{
+						   var image = new Image();//动态建img
+						   image.height = 100;
+						   image.title = file.name;
+						   image.src = this.result; //内容是  data:image/jpeg;base64,后面是Base64编码
+						   preview.appendChild( image );
+						 }, false);
+						reader.readAsDataURL(file);
+						*/
+					   //方式二OK
+					   reader.readAsArrayBuffer(file);
+			  		   reader.onload=function(e){ 
+			  				var bf = this.result;
+			  				var blob = new Blob([bf],{type:"text/plain"});//Blob对象 
+			  				var str = URL.createObjectURL(blob);
+			  				
+			  				 var image = new Image();//动态建img
+					        image.height = 100;
+					        image.title = file.name;
+					        image.src = str;
+					        preview.appendChild( image );
+			  			}; 
+				    }
+			  }
+
+			  if (files)
+			  {
+			    [].forEach.call(files, readAndPreview);
+			  }
+
+		 }
+	   </script>
+	  
+	  FileReader 大文件分块读 <br/>
+	  <form>
+        <fieldset>
+            <legend>分度读取文件：</legend>
+            <input type="file" id="File" />
+            <input type="button" value="中断" id="Abort" />
+            <p>
+                <label>读取进度：</label><progress id="Progress" value="0" max="100"></progress>
+            </p>
+            <p id="Status"></p>
+        </fieldset>
+    </form>
+	 <script type="text/javascript"> 
+	
+	var h = {
+    init: function() {
+        var me = this;
+         
+        document.getElementById('File').onchange = me.fileHandler;
+        document.getElementById('Abort').onclick = me.abortHandler;
+         
+        me.status = document.getElementById('Status');
+        me.progress = document.getElementById('Progress'); 
+         
+        me.loaded = 0;
+       
+        me.step = 1024 * 1024;  //每次读取1M
+        me.times = 0;
+    },
+    fileHandler: function(e) {
+        var me = h; 
+        var file = me.file = this.files[0]; 
+        var reader = me.reader = new FileReader(); 
+        me.total = file.size; //文件大小
+         
+        reader.onloadstart = me.onLoadStart;
+        reader.onprogress = me.onProgress;
+        reader.onabort = me.onAbort;
+        reader.onerror = me.onerror;
+        reader.onload = me.onLoad;
+        reader.onloadend = me.onLoadEnd;
+        me.readBlob( 0);  //读取第一块 
+    },
+    onLoadStart: function() {
+        var me = h;
+    },
+    onProgress: function(e) {
+        var me = h;
+         
+        me.loaded += e.loaded;
+        //更新进度条
+        me.progress.value = (me.loaded / me.total) * 100;
+     
+    },
+    onAbort: function() {
+        var me = h;
+    },
+    onError: function() {
+        var me = h;
+         
+    },
+    onLoad: function() {
+        var me = h;
+        if(me.loaded < me.total) {
+            me.readBlob(me.loaded);
+        } else {
+            me.loaded = me.total;
+        }
+        //读到后做其它处理  this.result
+    },
+    onLoadEnd: function() {
+        var me = h;
+         
+    },
+    readBlob: function(start) {
+        var me = h;
+         
+        var blob,
+            file = me.file;
+         
+        me.times += 1; 
+		
+        blob = file.slice(start, start + me.step + 1); //分片
+        
+        me.reader.readAsText(blob);
+    },
+    abortHandler: function() {
+        var me = h;
+         
+        if(me.reader) {
+            me.reader.abort();//停止读
+        }
+    }
+};
+h.init();
+
+ </script>
+	
+ 
+	 <h2> ------ XMLHttpRequestUpload ----OK----  </h2>
+	 <style type="text/css">
+            .container {
+                width: 500px;
+                margin: 0 auto;
+            }
+            .progress-bar {
+                border: 1px solid #000;
+            }
+            .progress {
+                width: 0;
+                background: #DEDEDE;
+                height: 20px;
+            }
+        </style>
+          <div class="container">
+            <p>
+                选择文件:  <input type="file" id="ipt-file"/>
+                <button type="button" id="btn-upload">上传</button>
+            </p>
+            <div class="progress-bar">
+                <div class="progress"  id="progress"></div>
+            </div>
+            <p id="info"></p>
+        </div> 
+	  <script type="text/javascript">
+	  var button = document.querySelector("#btn-upload"),
+	    input = document.querySelector("#ipt-file"),
+	    progress = document.querySelector("#progress"),
+	    info = document.querySelector("#info");
+	 
+	var upload = function()
+	{
+	    if (input.files.length === 0) {
+	        console.log("未选择文件");
+	        return;
+	    }
+	 
+	    var formData = new FormData();//动态建Form
+	    formData.append("attache1", input.files[0]);
+	 
+	    var xhr = new XMLHttpRequest();
+	    console.log(xhr.upload); //是XMLHttpRequestUpload
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            console.log(xhr.responseText);  
+	            info.innerHTML = xhr.responseText;
+	        }
+	    };
+	 	//事件还有loadstart，abort，error，load（结果成功），timeout，loadend（结果成功或失败）
+	 	//会一次性读到浏览器缓存中！！！！
+	    xhr.upload.addEventListener("progress", function(event) {
+	    	console.log(event.loaded);
+	        if(event.lengthComputable){
+	            progress.style.width = Math.ceil(event.loaded * 100 / event.total) + "%";
+	        }
+	    }, false);
+	 
+	   // xhr.open("POST", "./commonsUpload");
+	   xhr.open("POST", "./uploadServlet3");
+	    xhr.send(formData);
+	};
+	 
+	button.addEventListener("click", upload, false);  
+	  
+	 </script>
+	
+
+
+	  <h2> ------ Worker  OK -- html5_test.html中也有 --------  </h2>
+	  https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers <br/>
+	  https://github.com/mdn/simple-web-worker  <br/>
+	    <form>
+      <div>
+        <label for="number1">Multiply number 1: </label>    
+        <input type="text" id="number1" value="0">
+      </div>
+      <div>
+        <label for="number2">Multiply number 2: </label>   
+        <input type="text" id="number2" value="0">
+      </div>
+    </form>
+	<p class="result">Result: 0</p>
+	
+	<script type="text/javascript"> 
+	  var first = document.querySelector('#number1');
+	  var second = document.querySelector('#number2');
+
+	  var result = document.querySelector('.result');
+
+	  if (window.Worker) { // Check if Browser supports the Worker api.
+	  	// Requires script name as input
+	  	var myWorker = new Worker("js/worker.js");
+
+	  // onkeyup could be used instead of onchange if you wanted to update the answer every time
+	  // an entered value is changed, and you don't want to have to unfocus the field to update its .value
+
+	  	first.onchange = function() {
+	  	  myWorker.postMessage([first.value,second.value]); // Sending message as an array to the worker
+	  	  console.log('Main (first.onchange): Message posted to worker');
+	  	}
+
+	  	second.onchange = function() {
+	  	  myWorker.postMessage([first.value,second.value]);
+	  	  console.log('Main (second.onchange): Message posted to worker');
+	  	}
+
+	  	myWorker.onmessage = function(e) {
+	  		result.textContent = e.data;
+	  		console.log('Main (myWorker.onmessage): Message received from worker');
+	  	}
+	  }
+	  	 
+	  </script>
+
+   
+	 <h2> ------Touch--------手机上试 </h2>
+	 https://developer.mozilla.org/en-US/docs/Web/API/Touch_events   <br/>
+	 <canvas id="canvas" width="600" height="600" style="border:solid black 1px;">
+	  Your browser does not support canvas element.
+	</canvas>
+	<br>
+	<button onclick="startup()">Initialize</button>
+	<br>
+	Log: <pre id="log" style="border: 1px solid #ccc;"></pre>
+	
+	 <script type="text/javascript">
+	 function startup() {
+		  var el = document.getElementsByTagName("canvas")[0];
+		  el.addEventListener("touchstart", handleStart, false);
+		  el.addEventListener("touchend", handleEnd, false);
+		  el.addEventListener("touchcancel", handleCancel, false);
+		  el.addEventListener("touchmove", handleMove, false);
+		  console.log("initialized.");
+		}
+	 function handleStart(evt) {
+		  evt.preventDefault();
+		  console.log("touchstart.");
+		  var el = document.getElementsByTagName("canvas")[0];
+		  var ctx = el.getContext("2d");
+		  var touches = evt.changedTouches;
+		        
+		  for (var i = 0; i < touches.length; i++) {
+		    console.log("touchstart:" + i + "...");
+		    ongoingTouches.push(copyTouch(touches[i]));
+		    var color = colorForTouch(touches[i]);
+		    ctx.beginPath();
+		    ctx.arc(touches[i].pageX, touches[i].pageY, 4, 0, 2 * Math.PI, false);  // a circle at the start
+		    ctx.fillStyle = color;
+		    ctx.fill();
+		    console.log("touchstart:" + i + ".");
+		  }
+		}
+	 function handleMove(evt) {
+		  evt.preventDefault();
+		  var el = document.getElementsByTagName("canvas")[0];
+		  var ctx = el.getContext("2d");
+		  var touches = evt.changedTouches;
+
+		  for (var i = 0; i < touches.length; i++) {
+		    var color = colorForTouch(touches[i]);
+		    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+		    if (idx >= 0) {
+		      console.log("continuing touch "+idx);
+		      ctx.beginPath();
+		      console.log("ctx.moveTo(" + ongoingTouches[idx].pageX + ", " + ongoingTouches[idx].pageY + ");");
+		      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+		      console.log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
+		      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+		      ctx.lineWidth = 4;
+		      ctx.strokeStyle = color;
+		      ctx.stroke();
+
+		      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+		      console.log(".");
+		    } else {
+		      console.log("can't figure out which touch to continue");
+		    }
+		  }
+		}
+	 function handleEnd(evt) {
+		  evt.preventDefault();
+		  log("touchend");
+		  var el = document.getElementsByTagName("canvas")[0];
+		  var ctx = el.getContext("2d");
+		  var touches = evt.changedTouches;
+
+		  for (var i = 0; i < touches.length; i++) {
+		    var color = colorForTouch(touches[i]);
+		    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+		    if (idx >= 0) {
+		      ctx.lineWidth = 4;
+		      ctx.fillStyle = color;
+		      ctx.beginPath();
+		      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+		      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+		      ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8);  // and a square at the end
+		      ongoingTouches.splice(idx, 1);  // remove it; we're done
+		    } else {
+		      console.log("can't figure out which touch to end");
+		    }
+		  }
+		}
+	 function handleCancel(evt) {
+		  evt.preventDefault();
+		  console.log("touchcancel.");
+		  var touches = evt.changedTouches;
+		  
+		  for (var i = 0; i < touches.length; i++) {
+		    var idx = ongoingTouchIndexById(touches[i].identifier);
+		    ongoingTouches.splice(idx, 1);  // remove it; we're done
+		  }
+		}
+	 
+	 function colorForTouch(touch) {
+		  var r = touch.identifier % 16;
+		  var g = Math.floor(touch.identifier / 3) % 16;
+		  var b = Math.floor(touch.identifier / 7) % 16;
+		  r = r.toString(16); // make it a hex digit
+		  g = g.toString(16); // make it a hex digit
+		  b = b.toString(16); // make it a hex digit
+		  var color = "#" + r + g + b;
+		  console.log("color for touch with identifier " + touch.identifier + " = " + color);
+		  return color;
+		}
+	 function copyTouch(touch) {
+		  return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY };
+		}
+	 function ongoingTouchIndexById(idToFind) {
+		  for (var i = 0; i < ongoingTouches.length; i++) {
+		    var id = ongoingTouches[i].identifier;
+		    
+		    if (id == idToFind) {
+		      return i;
+		    }
+		  }
+		  return -1;    // not found
+		}
+	 function log(msg) {
+		  var p = document.getElementById('log');
+		  p.innerHTML = msg + "\n" + p.innerHTML;
+		}
+		
+		function onTouch(evt) {
+  evt.preventDefault();
+  if (evt.touches.length > 1 || (evt.type == "touchend" && evt.touches.length > 0))
+    return;
+
+  var newEvt = document.createEvent("MouseEvents");
+  var type = null;
+  var touch = null;
+
+  switch (evt.type) {
+    case "touchstart": 
+      type = "mousedown";
+      touch = evt.changedTouches[0];
+      break;
+    case "touchmove":
+      type = "mousemove";
+      touch = evt.changedTouches[0];
+      break;
+    case "touchend":        
+      type = "mouseup";
+      touch = evt.changedTouches[0];
+      break;
+  }
+
+  newEvt.initMouseEvent(type, true, true, evt.originalTarget.ownerDocument.defaultView, 0,
+    touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+    evt.ctrlKey, evt.altKey, evt.shiftKey, evt.metaKey, 0, null);
+  evt.originalTarget.dispatchEvent(newEvt);
+}
+	</script>
+	 --> 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+</body>
+</html>

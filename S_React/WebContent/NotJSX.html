@@ -2,24 +2,18 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello React!</title>
-    <!-- 
-    <script src="react-16.2.0/react.production.min.js"></script>
-    <script src="react-16.2.0/react-dom.production.min.js"></script>
-     -->
+    <title>No JSX React </title>
      
-     <script src="react-16.5.2/react.production.min.js"></script>
-     <script src="react-16.5.2/react-dom.production.min.js"></script>
-    
-     <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script> 
-     
+     <script src="react-16.6.1/react.production.min.js"></script>
+     <script src="react-16.6.1/react-dom.production.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
   
-  	不使用JSX 
+  	不使用JSX  不用  type="text/babel"  <br/>
     <div id="root"></div>
-    <script type="text/babel">
+     
+    <script  type="text/javascript">
 
 	 const e = React.createElement;
 
@@ -38,7 +32,7 @@
 		e(Hello, {toWhat: 'World'}, null),
 	  document.getElementById('root')
 	);
-	  
+	  //与ReactDOM.render相反的是 ReactDOM.unmountComponentAtNode(div);
     </script>
   </body>
 </html>
