@@ -61,6 +61,7 @@ public class TreeGridPageServlet extends PageServlet
 				obj.add("myid", 10+i+"");
 				obj.add("name","李"+i);
 				obj.add("name2","张"+i);
+				obj.add("hobby",(i%20==0)?"B":"F");
 				if(i%20==0)
 				{
 					obj.add("state","closed");//表示文件夹关闭，否则是普通文件，open

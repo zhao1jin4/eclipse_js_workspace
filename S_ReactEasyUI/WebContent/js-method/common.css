@@ -1,0 +1,9 @@
+/*
+@import '~rc-easyui/dist/themes/default/easyui.css';
+@import '~rc-easyui/dist/themes/icon.css';
+@import '~rc-easyui/dist/themes/react.css';
+*/
+
+@import 'rc-easyui-1.0.18/themes/default/easyui.css';
+@import 'rc-easyui-1.0.18/themes/icon.css';
+@import 'rc-easyui-1.0.18/themes/react.css';

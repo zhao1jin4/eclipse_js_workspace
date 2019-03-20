@@ -110,7 +110,8 @@
 			label: 'c/c++',
 			value: 'cpp'
 		}];
-	  $('#testComboBox').combobox('loadData',data);
+	  $('#testComboBox').combobox('loadData',data);//可用url,method,queryParams请求服务，但返回一定要是数组
+	//见treegrid_servePage.jsp 不支持请求头是json
 	  $('#testComboBox').combobox('select','cpp');
 	  
 	  

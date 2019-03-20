@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
  
 import org.zhaojin.servlet.PageServlet;
 
+/**
+ * 也为tagbox选人组件用 
+ *
+ */
 @WebServlet("/easyUI/tagBoxJson")
 public class TagBoxJsonServlet extends HttpServlet
 {

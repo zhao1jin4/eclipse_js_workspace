@@ -103,7 +103,8 @@
 	my 
  	<hr/>
  	basic <br/>
- 	
+ 	<a href="my/checkbox.jsp"> my checkbox </a> <br/>
+ 	<a href="my/switchButton.jsp"> my switchbuttion </a> <br/>
  	<a href="my/tooltip.jsp"> my tooltip no js  </a> <br/>
  	<a href="my/message.jsp"> Message Alert click invoke function  </a> <br/>
  	<a href="my/layout.jsp">layout </a> <br/>
@@ -112,12 +113,12 @@
  	box<br/>
  	<a href="my/myValidateBox.jsp">ValidateBox 表单 select可查询,文本框可验证,disable, 得到JSON ，/serializeArray 如果  对 禁用的combobox 和 combobox未选择值 的，这样根本拿不到字段名???? </a> <br/>
  	<a href="my/myComboBox.jsp">comboBox 不可输入的 ,没有下箭头按钮,JSONP 输入一半不选还在 自定义onHidePanel的函数或用limitToList, 动态从网络取onChange为何选中后显示的是值 ？？？？,</a> <br/>
- 	<a href="my/myTagBoxAutoComplete.jsp">tagBox/tagBoxAutoComplete 输入一半不选还在,limitToList没用???  onHidePanel OK ,onChange没用？？？ </a> <br/>
+ 	<a href="my/myTagBoxAutoComplete.jsp">tagBox/tagBoxAutoComplete 输入一半不选还在,limitToList没用???  onHidePanel OK ,onChange没用？？？ ,(选人组件)</a> <br/>
  
 	grid<br/>
  	<a href="easyUI/queryPage?action=init">datagrid 表格_分页_工具栏_一行更新_checkBox多选删   </a> <br/>
     <a href="my/treegrid_servePage.jsp"> treegrid 服务端分页 </a> <br/>
- 	<a href="my/treegrid_editor_tagBox.jsp"> treegrid 行内 tagbox编辑 , 删除选中的有问题？？？？？？？？？？？</a> <br/>
+ 	<a href="my/treegrid_editor_tagBox.jsp"> treegrid 行内 tagbox编辑(选人组件), 删除选中的有问题？？？？？？？？？？？</a> <br/>
  	
  	
  <br/>

@@ -73,7 +73,7 @@
 				
 			}
 			
-			//表单快速得到值
+			//表单快速得到值,对checkbox取值没有判断是否选中
 			$.fn.serializeObject=function()
 			{
 				var obj={};

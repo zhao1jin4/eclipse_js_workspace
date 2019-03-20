@@ -75,7 +75,7 @@
 		function myBeforeEdit(index,row)
 		{
 			row.editing = true;//自已新定义的属性
-			updateActions(index);
+			updateActions(index);//进入了edit模式，调用 updateRow 不会刷新format
 		}
 		function myAfterEdit(index,row)
 		{
@@ -97,7 +97,6 @@
 						if(! row.id) //save
 						{
 							row.id=response.additionObject;//newId
-							updateActions(index);
 						}
 
 						$.messager.alert('提示','操作成功','info');//可用的有 error,question,info,warning.
@@ -115,34 +114,36 @@
 				}
 			});
 			row.editing = false;
-			updateActions(index);
+			updateActions(index);//无效
+			editIconVisible(row.id,true); 
 		}
 		function myCancelEdit(index,row)
 		{
 			row.editing = false;
-			updateActions(index);
+			updateActions(index);//无效
+			editIconVisible(row.id,true); 
 		}
-		function updateActions(index)
-		{
-			$('#dg').datagrid('updateRow',{
-				index: index,
-				row:{}
-			});
-		}
+		
 		//--行级的
 		function getRowIndex(target){
 			var tr = $(target).closest('tr.datagrid-row');
 			return parseInt(tr.attr('datagrid-row-index'));
 		}
 		function myEditrow(target){
-			$('#dg').datagrid('beginEdit', getRowIndex(target));//调用 onBeforeEdit:myBeforeEdit
+			var index=getRowIndex(target);
+			$('#dg').datagrid('selectRow',index);
+			var firstSel=$('#dg').datagrid('getSelected');
+			editIconVisible(firstSel.id,false);
+			$('#dg').datagrid('beginEdit', index);//调用 onBeforeEdit:myBeforeEdit
+			console.log('这是调用myBeforeEdit后执行的') ; 
 		}
 		function mySaveUpdateRow(target){
-			$('#dg').datagrid('endEdit', getRowIndex(target));//调用  onAfterEdit:myAfterEdit
-			
+			$('#dg').datagrid('endEdit', getRowIndex(target));//调用  onAfterEdit: myAfterEdit
+			//editIconVisible( ); //myAfterEdit中有 
 		}
 		function myCancelUpdateRow(target){
-			$('#dg').datagrid('cancelEdit', getRowIndex(target));//调用   onCancelEdit:myCancelEdit
+			$('#dg').datagrid('cancelEdit', getRowIndex(target));//调用   onCancelEdit: myCancelEdit
+			//editIconVisible( ); //myCancelEdit 中有 
 		}
 		function myInsert()
 		{
@@ -199,15 +200,45 @@
 		}
 		function myActionFormatter(value,row,index)
 		{
-			if (row.editing){//加  class="easyui-linkbutton"没效果 ???
+			// 加format中加  class="easyui-linkbutton"没效果 ???
+			/*		
+			//进入编辑模式后，再调用 updateRow 方法 调用后也不会触发format ??
+			if (row.editing){
 				var s = '<a href="#"  onclick="mySaveUpdateRow(this)">Save</a> ';
 				var c = '<a href="#" onclick="myCancelUpdateRow(this)">Cancel</a>';
 				return s+c;
-			} else {
-				var e = '<a href="#" onclick="myEditrow(this)">Edit</a> ';
-				var d = '<a href="#" onclick="myDeleterow(this)">Delete</a>';
+			} else { 
+				var e = '<a href="#"  class="easyui-linkbutton" onclick="myEditrow(this)">Edit</a> ';
+				var d = '<a href="#"  class="easyui-linkbutton" onclick="myDeleterow(this)">Delete</a>';
 				return e+d;
 			}
+			*/ 
+			var editBtn   = '<a href="#" id="editBtn'+row.id+'" class="easyui-linkbutton" onclick="myEditrow(this)">Edit</a> &nbsp;';//不可传row除非bind
+			var saveBtm   = '<a href="#" id="saveBtn'+row.id+'" class="easyui-linkbutton" onclick="mySaveUpdateRow(this)" style="display:none" >Save</a>&nbsp; ';
+			var cancelBtn = '<a href="#" id="cancelBtn'+row.id+'" class="easyui-linkbutton" onclick="myCancelUpdateRow(this)" style="display:none" >Cancel</a> &nbsp;';
+			var deleteBtn = '<a href="#" id="deleteBtn'+row.id+'" class="easyui-linkbutton" onclick="myDeleterow(this)">Delete</a>';
+			return editBtn+saveBtm+cancelBtn+deleteBtn; 
+		}		
+		function editIconVisible(id,visiable)
+		{
+			if(visiable)
+			{
+				$("#editBtn"+id).show();
+				$("#saveBtn"+id).hide();
+				$("#cancelBtn"+id).hide();  
+			}else
+			{
+				$("#editBtn"+id).hide();
+				$("#saveBtn"+id).show();
+				$("#cancelBtn"+id).show(); 
+			}
+		}
+		function updateActions(index)
+		{
+			$('#dg').datagrid('updateRow',{
+				index: index,
+				row:{}
+			}); 
 		}
 		function myLangFormatter(value,row,index)
 		{
@@ -217,6 +248,7 @@
 					return myLanguages[i].langLabel;
 			} 
 		}
+	 
 		function mycomboBoxItemFormatter(row)
 		{
 		 	var opts = $(this).combobox('options');
@@ -254,8 +286,8 @@
 			$('#dg').datagrid('beginEdit',myIndex);
 		}
 		function myBarSave() // 同 mySaveUpdateRow
-		{
-			$('#dg').datagrid('endEdit',myIndex); 
+		{			
+			$('#dg').datagrid('endEdit',myIndex); //会自动验证
 			var changes=$('#dg').datagrid('getChanges');//得到变化的,可传第二个参数 type,可选值 为inserted,deleted,updated 
 			console.log(changes);
 		}
@@ -334,7 +366,7 @@
 	</div>
 	
 	<!--  collapsible:true,-->
-	<table id="dg" title="表格数据" style="width:900px;height:500px" 
+	<table id="dg" title="表格数据" style="width:1000px;height:500px" 
 		data-options="
 				rownumbers:true,
 				singleSelect:true,
@@ -369,6 +401,15 @@
 								return 'background-color:#ffee00;color:red;';
 						},formatter:myLangFormatter					
 						">用语言</th>
+					<th width="100" data-options="field:'hobby',editor:{
+							type:'combobox',
+							options:{
+								valueField:'value',
+								textField:'name',
+								url:'/S_jQueryEasyUI/easyUI/comboBoxEditor' 
+							} 
+						}		
+					">业余,URL取下拉</th>
 				<th width="80"  data-options="field:'salary',editor:{type:'numberbox',options:{precision:1,required:true}}">工资</th> <!--editor:'numberbox'  -->
 				<th width="80" data-options="field:'isMan',formatter:myGenderFormatter,editor:{type:'checkbox',options:{on:'true',off:'false'}}">是否为男</th>
 				<th width="90"  data-options="field:'birthday',editor:{type:'datebox',options:{required:true}}">生日</th>

@@ -13,8 +13,13 @@ for(var i=0;i<args.length;i++) {
 }
 
 
-var c = require('./circle.js');
-console.dir(c.perimeter(5));
+var c = require('./circle.js');//在同一目录下OK
+
+var myObject=new c("lisi",25);//针对 module.exports = 
+console.log(myObject.about());
+//---上下二先一
+//console.log(c.perimeter(5));//针对 exports.perimeter =
+//console.log(c.name());//针对module.exports.name =
 
 
 

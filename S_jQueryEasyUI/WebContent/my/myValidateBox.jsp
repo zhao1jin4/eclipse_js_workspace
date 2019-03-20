@@ -27,7 +27,26 @@
 				   		return value == $(param[0]).val();
 				    },
 				    message: '两次输入的密码不相同'
+			    },
+			    maxLength: 
+			    {
+			        validator: function(value, param)
+			        {
+			            return value.length < param[0];
+			        },
+			        message: '最长 {0}个字符.'
+			    },
+			    mustNumber: 
+			    {
+			        validator: function(value, param)
+			        {
+			        	if(value == "")
+			        		return true;
+			        	return /^([0-9])*$/.test(value);  
+			        },
+			        message: '必须是数字'
 			    }
+			    
 	   		});
 		$(function()
 		{
@@ -87,7 +106,7 @@
 			//serializeArray 如果  对 禁用的combobox 和 combobox未选择值 的，这样根本拿不到字段名????
 					
 					
-			//表单快速得到JSON 值 
+			//表单快速得到JSON 值 ,对checkbox取值没有判断是否选中
 			$.fn.serializeObject=function()
 			{
 				var obj={};
@@ -121,11 +140,15 @@
 	    	<table>
 	    		<tr>
 	    			<td>Name:</td>
-	    			<td><input class="easyui-validatebox" type="text" name="name" data-options="required:true"></input></td>
+	    			<td><input class="easyui-validatebox" type="text" name="name" data-options="required:true,validType:'maxLength[30]'"  ></input></td>
 	    		</tr>
 	    		<tr>
 	    			<td>Email:</td>
-	    			<td><input class="easyui-validatebox" type="text" name="email" data-options="required:true,validType:'email'"></input></td>
+	    			<td><input class="easyui-validatebox" type="text" name="email" data-options="required:true,validType:'email'" size="20" maxlength="30"></input></td>
+	    		</tr>
+	    		<tr>
+	    			<td>Age:</td>
+	    			<td><input class="easyui-validatebox" type="text" name="age" data-options="required:true,validType:'mustNumber'" size="20" maxlength="30"></input></td>
 	    		</tr>
 	    		<tr>
 	    			<td>Language:</td>  <!-- 可以输入查询-->

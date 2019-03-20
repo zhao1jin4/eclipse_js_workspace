@@ -108,7 +108,10 @@
 	<br/>
 	只能输入半角
 	<input type="text" onkeyup="value=value.replace(/[^\u0000-\u00FF]/g,'')"  onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u0000-\u00FF]/g,''))"/>
-
+	<br/>
+	限制输入长度30 显示长度20
+	<input type="text" size="20"  maxlength="30"  /> <br/>
+	
 	<br/>
 	<button  onclick="testCopyArray()" >数组复制 JS 无方法？？？</button>
 	<hr/> 以下无效????
@@ -179,5 +182,15 @@
 	      el.value="找到的值";
 	     
 	</script>
+	
+dl 描述列表
+<dl>
+  <dt>描述标题1</dt>
+    <dd>描述内容1</dd>
+  <dt>描述标题2</dt>
+    <dd>描述内容2</dd>
+</dl>
+	
+	
 </body>
 </html>
