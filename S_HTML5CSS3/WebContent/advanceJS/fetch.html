@@ -1,0 +1,139 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>fetch</title>
+
+<script type="text/javascript">  
+//https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API 左侧菜单有很多文章
+//https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+//https://www.w3cschool.cn/fetch_api/fetch_api-w7mt2jzc.html 中文翻译的
+
+
+//fetch('http://127.0.0.1:8080/S_HTML5CSS3/jsonGet') //不能跨域
+//是异步的，fetch没有提供同步请求的方法
+fetch('/S_HTML5CSS3/jsonGet') 
+.then(function(response) {  //多个then按顺序执行
+  return response.json();
+})
+.then(function(myJson) {
+  console.log(JSON.stringify(myJson));
+});
+
+
+//http://127.0.0.1:8080/S_HTML5CSS3/jsonPost
+//http://localhost:8080/S_HTML5CSS3/jsonPost
+
+//var formData = "answer=42&name=lisi";  //POST,"Content-Type": "application/x-www-form-urlencoded",服务端request可以的 
+var formData = new URLSearchParams("answer=42&name=lisi");//也可以
+//-----
+//var formData=JSON.stringify({answer: 42}); //POST, "Content-Type": "application/x-www-form-urlencoded", 服务端request拿不到数据？？？？  
+
+//var formData = new FormData(); //POST,"Content-Type": "application/x-www-form-urlencoded",服务端request拿不到数据？？？？, 可能FormData只能只对文件上传
+//formData.append("answer",42); 
+//formData.append("name","lisi"); 
+
+postData(`http://localhost:8080/S_HTML5CSS3/jsonPost`, formData) 
+.then(data => 
+		{console.log("raw:"+data);
+		console.log("JSON:"+JSON.stringify(data))
+		}
+	) // JSON-string from `response.json()` call
+.catch(error => console.error(error));
+
+function postData(url = ``, data = {}) {
+// Default options are marked with *
+  return fetch(url, {  //*表示默认值
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, cors, *same-origin
+      cache: "no-cache", // *default,  no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+          //"Content-Type": "application/json",
+           "Content-Type": "application/x-www-form-urlencoded", 
+      },
+      redirect: "follow", // manual, *follow, error
+      referrer: "no-referrer", // no-referrer, *client
+      body: data, // body data type must match "Content-Type" header
+    //可以是 Blob, BufferSource, FormData, URLSearchParams, or USVString
+  })
+  .then( //response => response.json()//简写方式，如debug报body stream is locked
+		  response =>{  
+		 	var res=response.json()//json()函数返回一个Promise,只可调用一次
+	  	 	console.log(res);
+		  	return res;//如=>后加{，则要return，才可再次then
+	  		}	 
+  	); // parses JSON response into native Javascript objects 
+}
+
+function uploadFile()
+{
+	var formData = new FormData();
+	var photos = document.querySelector("input[type='file'][multiple]");
+	formData.append('title', 'My Vegas Vacation');
+	for (var i = 0; i < photos.files.length; i++) {
+	  formData.append('attache1', photos.files[i]);
+	}
+	/*
+	fetch('http://127.0.0.1:8080/S_HTML5CSS3/uploadServlet3', {
+	  method: 'POST',
+	  body: formData
+	})
+	.then(response => response.json())
+	.then(response => console.log('Success:', JSON.stringify(response)))
+	.catch(error => console.error('Error:', error));
+	*/
+	var myHeaders = new Headers();
+	myHeaders.append("X-Custom-Header", "ProcessThisImmediately");
+	myHeaders.delete("X-Custom-Header");
+	console.log(myHeaders.has("Content-Type")); 
+	console.log(myHeaders.get("Content-Length")); 
+	var myInit = { method: 'POST',
+	               headers: myHeaders,
+	               body: formData,
+	               //mode: 'cors',
+	               //cache: 'default' 
+	               }; 
+	//mode: 'cors'加不加都可 跨域可以请求到服务端，但JS端会调用到catch中，
+	var myRequest = new Request('http://127.0.0.1:8080/S_HTML5CSS3/uploadServlet3', myInit);
+	//var myRequest = new Request('http://localhost:8080/S_HTML5CSS3/uploadServlet3', myInit);
+	fetch(myRequest)
+	.then(function(response) {
+	  if(response.ok) {
+		  //return response.blob();
+		  //return response.json();
+		  console.log('ok:', response)
+		  return response;
+	  }
+	  throw new Error('Network response was not ok.');
+	})
+	.then(response => console.log('Success:', response.json()))
+	.catch(error => console.error('Error:', error));
+
+}
+
+
+  
+  
+</script> 
+</head>
+<body>
+ 
+<img id="myImg"></img>
+<script type="text/javascript"> 
+//var myImage = document.querySelector("#myImg");//querySelector一定要在HTML后
+var myImage = document.querySelector("img");
+fetch('../assets/img_logo.gif').then(function(response) {
+  return response.blob();//blob()方法 
+}).then(function(myBlob) {
+  var objectURL = URL.createObjectURL(myBlob);
+  myImage.src = objectURL;
+});
+</script>
+<input type="file" multiple />
+<button type="button" onclick="uploadFile()" >upload</button>
+
+</body>
+</html>

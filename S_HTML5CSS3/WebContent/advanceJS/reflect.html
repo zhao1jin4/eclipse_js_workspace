@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">  
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect
+//方法里有示例
+
+var d = Reflect.construct(Date, [1776, 6, 4]);//类型，参数
+console.log(d instanceof Date); // true
+console.log(d.getFullYear()); // 1776
+
+function someConstructor() {}
+var result = Reflect.construct(Array, [], someConstructor);//类型，参数，构造器
+console.log(Reflect.getPrototypeOf(result));  
+console.log(Array.isArray(result)); // true
+
+
+const student = {};
+Reflect.defineProperty(student, "name", {value: "Mike"}); //(target, propertyKey, attributes),返回是否成功
+console.log(student.name); // "Mike"
+
+var obj = { x: 1, y: 2 };
+Reflect.deleteProperty(obj, "x"); // true
+console.log(obj); // { y: 2 }
+var arr = [1, 2, 3, 4, 5];
+Reflect.deleteProperty(arr, "3"); // true
+console.log(arr); // [1, 2, 3, , 5]
+// 如果属性不存在，返回 true
+var res=Reflect.deleteProperty({}, "foo"); // true
+// 如果属性不可配置，返回 false
+res=Reflect.deleteProperty(Object.freeze({foo: 1}), "foo"); // false
+
+
+
+//Object
+var obj = { x: 1, y: 2 };
+var val=Reflect.get(obj, "x"); // 1
+// Array
+val=Reflect.get(["zero", "one"], 1); // "one"
+// Proxy with a get handler
+var x = {p: 1};
+var obj = new Proxy(x, {
+  get(target, k, r) { //target 就是x ,k是属性名，r是receiver即 Proxy或者继承Proxy的对象
+	  return k + "bar"; 
+  }
+});
+val=Reflect.get(obj, "foo"); // "foobar"
+
+
+val=Reflect.has({x: 0}, "x"); // true
+val=Reflect.has({x: 0}, "y"); // false
+// 如果该属性存在于原型链中，返回true 
+val=Reflect.has({x: 0}, "toString");
+// Proxy 对象的 .has() 句柄方法
+obj = new Proxy({}, {
+  has(t, k) { return k.startsWith("door"); }
+});
+val=Reflect.has(obj, "doorbell"); // true
+val=Reflect.has(obj, "dormitory"); // false
+
+
+
+
+val=Reflect.ownKeys({z: 3, y: 2, x: 1}); // [ "z", "y", "x" ]
+val=Reflect.ownKeys([]); // ["length"]
+var sym = Symbol.for("comet");
+var sym2 = Symbol.for("meteor");
+var obj = {[sym]: 0, "str": 0, "773": 0, "0": 0,
+           [sym2]: 0, "-1": 0, "8": 0, "second str": 0};
+val=Reflect.ownKeys(obj);
+// [ "0", "8", "773", "str", "-1", "second str", Symbol(comet), Symbol(meteor) ]
+// Indexes in numeric order, 
+// strings in insertion order, 
+// symbols in insertion order
+
+</script>
+</head>
+<body > 
+</body> 
+ 
+</html>

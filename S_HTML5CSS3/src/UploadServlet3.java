@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -34,40 +36,52 @@ public class UploadServlet3 extends HttpServlet{
 			throws ServletException, IOException {
 		
 		req.setCharacterEncoding("UTF-8");
+		System.out.println(req.getParameter("title"));
 		
-		Part file1=req.getPart("attache1");//是<input type=file name="attache1"
-		String name=file1.getName();//attache1 
-//		Collection headers=file1.getHeaderNames();
-//		System.out.println(headers);
-		String pairs=file1.getHeader("content-disposition");
-//		System.out.println(pairs);
-		
-		//form-data; name="attache1"; filename="中文测试.txt"  
-		//form-data; name="attache2"; filename=""
-		String nameHeader="filename=";
-		String path=pairs.substring(pairs.indexOf(nameHeader)+nameHeader.length()+1,pairs.lastIndexOf("\""));
-		if(!"".equals(path))
+		Collection<Part> parts=req.getParts();//包括表单参数 <input type="file" multiple />
+		//Part file1=req.getPart("attache1");//是<input type=file name="attache1"
+		for(Part file1:parts) 
 		{
-			String filename=path.substring(path.lastIndexOf("\\")+1);//只IE是带C:\,和req.setCharacterEncoding("UTF-8")中文 OK
-		//	file1.write("d:/temp/"+filename);//一个Part要调用一次write
+			String name=file1.getName();//attache1 
+			String fname=file1.getSubmittedFileName();
+			if(fname==null)//表单域
+				continue;
 			
-			FileOutputStream output=new FileOutputStream("/tmp/"+filename);
-			InputStream input = file1.getInputStream();
-			byte[] buffer=new byte[1024];
-			int len=0;
-			while((len=input.read(buffer))!=-1 )
+			
+	//		Collection headers=file1.getHeaderNames();
+	//		System.out.println(headers);
+			String pairs=file1.getHeader("content-disposition");
+	//		System.out.println(pairs);
+			
+			//form-data; name="attache1"; filename="中文测试.txt"  
+			//form-data; name="attache2"; filename=""
+			String nameHeader="filename=";
+			String path=pairs.substring(pairs.indexOf(nameHeader)+nameHeader.length()+1,pairs.lastIndexOf("\""));
+			if(!"".equals(path))
 			{
-				output.write(buffer,0,len);
+				String filename=path.substring(path.lastIndexOf("\\")+1);//只IE是带C:\,和req.setCharacterEncoding("UTF-8")中文 OK
+			//	file1.write("d:/temp/"+filename);//一个Part要调用一次write
+				
+				FileOutputStream output=new FileOutputStream("/tmp/"+filename);
+				InputStream input = file1.getInputStream();
+				byte[] buffer=new byte[1024];
+				int len=0;
+				while((len=input.read(buffer))!=-1 )
+				{
+					output.write(buffer,0,len);
+				}
+				output.close();
+				input.close();
 			}
-			output.close();
-			input.close();
+			
+			String type=file1.getContentType();
+			long  size=file1.getSize();  
 		}
-	
-		String type=file1.getContentType();
-		long  size=file1.getSize();  
-		resp.setContentType("text/plain");
 		resp.setCharacterEncoding("utf-8");
-		resp.getWriter().println(name + "上传成功");
+		//resp.setContentType("text/plain");
+		//resp.getWriter().println(name + "上传成功");
+		resp.setContentType("application/json");
+		resp.getWriter().println( "{\"resp\":\"上传成功\"}");
 	}
 
 }

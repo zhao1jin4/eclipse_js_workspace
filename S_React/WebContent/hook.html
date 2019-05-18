@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>hook</title>
+     
+     <script src="unpkg_react-16.8.4/react.development.js"></script>
+    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+    <!--  这种引入的方式不行，报useState is not define  -->
+     <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+   <script  type="text/babel" >  
+//import React, {useState} from 'react'; 
+function Example() {
+  const [count, setCount] = useState(0);//useState返回两人个参数
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+ReactDOM.render(
+        <Example ></Example>,
+        document.getElementById('example')
+      );
+
+
+  </script>
+    hook是16.8的新功能 <br/>
+   
+    <div id="example"></div> 
+   
+  </body>
+</html>

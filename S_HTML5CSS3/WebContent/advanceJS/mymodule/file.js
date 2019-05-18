@@ -7,7 +7,6 @@ function getJSON(url, callback) {
   xhr.open('GET', url, true);
   xhr.send();
 }
-
 export function getUsefulContents(url, callback) {
   getJSON(url, data => callback(JSON.parse(data)));
 }

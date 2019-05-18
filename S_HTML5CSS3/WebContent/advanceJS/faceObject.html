@@ -64,8 +64,8 @@ function People(username)
 }
 function Man(username,password)
 {
-	this.method=Parent;
-	this.method(username);//调用父类方法
+	this.method=People;
+	this.method(username);//调用父类方法(通过里面的this完成的)
 	delete this.method; //删除这个属性/方法
 	
 	this.password=password;
@@ -135,6 +135,10 @@ book.sayhello();
 book.sayworld();
 
  
+ 
+//----Object.create继承 见object.html
+
+				
 //-----------------闭包
  /*
 function f1(){

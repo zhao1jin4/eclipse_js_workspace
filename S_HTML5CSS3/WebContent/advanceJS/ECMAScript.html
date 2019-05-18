@@ -572,13 +572,17 @@ console.log(descriptors1.property1.value);
 
 
 
-//--Promise 		
+//--Promise 	用于表示一个异步操作
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+//要么调用resolve函数来将promise状态改成fulfilled，要么调用reject 函数将promise的状态改为rejected
 var promise1 = new Promise(function(resolve, reject) {
 setTimeout(function() {
-  resolve('foo');
+  resolve('foo');//这个函数是then函数传过来的
 }, 300);
 });
 
+//then方法包含两个参数：onfulfilled (fulfilled满足的) 和 onrejected，它们都是 Function 类型
 promise1.then(function(value) {
 console.log(value);
 // expected output: "foo"
@@ -587,6 +591,68 @@ console.log(value);
 console.log(promise1);
 //expected output: [object Promise]
 
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch
+var p1 = new Promise(function(resolve, reject) {
+	  resolve('Success');
+	}); 
+p1.then(function(value) {
+  console.log(value); // "Success!"
+  return Promise.reject('oh, no!');//会跳到cach里，不会路到第二参数的函数
+  //一样的效果 
+  //throw 'oh, no!';//会跳到cach里，不会路到第二参数的函数
+}).catch(function(e) {
+  console.log(e); // "oh, no!"
+}).then(function(){
+  console.log('after a catch the chain is restored');
+}, function () {
+  console.log('Not fired due to the catch');
+});
+console.log(p1); 
+
+
+//抛出一个错误，大多数时候将调用catch方法
+var p1 = new Promise(function(resolve, reject) {
+  throw 'Uh-oh!';
+}); 
+p1.catch(function(e) {
+  console.log(e); // "Uh-oh!"
+}); 
+
+// 在异步函数中抛出的错误不会被catch捕获到
+var p2 = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    throw 'Uncaught Exception!';
+  }, 1000);
+});
+
+p2.catch(function(e) {
+  console.log(e); // 不会执行
+});
+
+// 在resolve()后面抛出的错误会被忽略
+var p3 = new Promise(function(resolve, reject) {
+  resolve();
+  throw 'Silenced Exception!';
+});
+p3.catch(function(e) {
+   console.log(e); // 不会执行
+});
+
+//创建一个新的 Promise ，且已决议
+var pp1 = Promise.resolve("calling next");
+var pp2 = pp1.catch(function (reason) {
+    //这个方法永远不会调用
+    console.log("catch p1!");
+    console.log(reason);
+});
+pp2.then(function (value) {
+    console.log("next promise's onFulfilled"); /* next promise's onFulfilled */
+    console.log(value); /* calling next */
+}, function (reason) {
+	//这个不会调用
+    console.log("next promise's onRejected");
+    console.log(reason);
+});
 
 //---async
 
@@ -698,14 +764,43 @@ class C {
 Math.max(10, 20,);
 	
  
+//https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+ function testURLSearchParams()
+ {
+ 	var paramsString = "q=URLUtils.searchParams&topic=api";
+ 	var searchParams = new URLSearchParams(paramsString);
 
+ 	//Iterate the search parameters.
+ 	for (let p of searchParams) {
+ 	  console.log(p);//p是数组0元素是键，1元素是值
+ 	}
+
+ 	console.log(	searchParams.has("topic") === true   ); // true
+ 	console.log(	searchParams.get("topic") === "api"  ); // true
+ 	console.log(	searchParams.getAll("topic") ); // ["api"]
+ 	console.log(	searchParams.get("foo") === null    ); // true
+ 	console.log(	searchParams.append("topic", "webdev") );
+ 	console.log(	searchParams.toString() ); // "q=URLUtils.searchParams&topic=api&topic=webdev"
+ 	console.log(	searchParams.set("topic", "More webdev") );
+ 	console.log(	searchParams.toString() ); // "q=URLUtils.searchParams&topic=More+webdev"
+ 	console.log(	searchParams.delete("topic") );
+ 	console.log(	searchParams.toString() ); // "q=URLUtils.searchParams"
+ 	
+ 	var paramsString2 = "?query=value";
+ 	var searchParams2 = new URLSearchParams(paramsString2);
+ 	console.log(	searchParams2.has("query") ); // true 
+
+ 	var url = new URL("http://example.com/search?query=%40");
+ 	var searchParams3 = new URLSearchParams(url.search);
+ 	console.log(	searchParams3.has("query")  );// true
+ }
 	
 </script>
 <script type="text/javascript" src="js/mySymbol.js"></script>
 <script type="text/javascript" src="js/myStrict.js"></script>
  
 <body>
-
+<button onclick="testURLSearchParams()">testURLSearchParams</button>
 </body>
 
 </html>

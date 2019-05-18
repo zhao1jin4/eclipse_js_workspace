@@ -1,4 +1,3 @@
-
 function cube(x) {
   return x * x * x;
 }
@@ -13,3 +12,6 @@ var graph = {
     }
 }
 export { cube, foo, graph };
+
+let k; 
+export default k = 12;  //一个文件中只能有一个默认导出

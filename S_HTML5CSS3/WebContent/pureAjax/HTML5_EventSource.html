@@ -16,16 +16,31 @@
 	服务器推消息  
 	<div id="server_send_result"></div>
 <script>
+//EventSource非标准
+//https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+
 	if(typeof(EventSource)!=="undefined")
 	{
 		var source=new EventSource("html5_server-send-event.jsp");
-		//server要 response.addHeader("Content-Type", "text/event-stream");response.addHeader("Cache-Control", "no-cache");
+		//server要 response.addHeader("Content-Type", "text/event-stream");
 		//response.addHeader("Cache-Control", "no-cache");
 		//消息要以data:开头
+		 
 		source.onmessage=function(event)
-				  {
-				  	document.getElementById("server_send_result").innerHTML+=event.data + "<br />";
-				  };
+		  {
+		  	document.getElementById("server_send_result").innerHTML+=event.data + "<br />";
+		  };
+		   
+		  
+		 	  /*
+		  source.addEventListener("ping", function(e) {
+			  var newElement = document.createElement("li");
+			  
+			  var obj = JSON.parse(e.data);
+			  newElement.innerHTML = "ping at " + obj.time;
+			  eventList.appendChild(newElement);
+			}, false);	
+		 */
 	}
 	else
 	{

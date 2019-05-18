@@ -115,7 +115,24 @@ justify-content: center 水平居中对齐
 	<button type="button" onclick="document.querySelector('#panelDiv').style.visibility='visible'">visibility显示 </button>
 	<button type="button" onclick="document.querySelector('#panelDiv').style.opacity=0">opacity隐藏 里面的按钮还点</button>
 	<button type="button" onclick="document.querySelector('#panelDiv').style.opacity=1">opacity显示 </button>
-	 
+	
+	<br/>
+	<style> 
+		span { 
+		  font: 2rem/2 sans-serif;
+		}
+	</style>
+	<span>span的内容</span>
+	<script type="text/javascript"> 
+	let para = document.querySelector('p');
+	let compStyles = window.getComputedStyle(para);
+	console.log(compStyles.getPropertyValue('font-size'));
+	console.log(compStyles.getPropertyValue('line-height'));
+	
+	</script>
+	
+	
+	
 	
 </body>
 </html>

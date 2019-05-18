@@ -322,7 +322,9 @@
 		}
 		function myBarReload()
 		{
-			$('#dg').datagrid('reload');
+			$('#dg').datagrid('loading','任务正在加处理中。。。');//可用进度条
+			$('#dg').datagrid('load');//取消显示处理中
+			// $('#dg').datagrid('reload');
 		}
 		
 		

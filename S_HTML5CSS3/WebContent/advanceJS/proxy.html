@@ -5,21 +5,16 @@
 <title>Insert title here</title>
 <script type="text/javascript">  
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-let handler = {
-	    get: function(target, name){
+	let handler = {
+	    get: function(target, name){//get函数格式
 	        return name in target ? target[name] : 37;
 	    }
 	};
-
 	let p = new Proxy({}, handler);
-
 	p.a = 1;
 	p.b = undefined;
-
 	console.log(p.a, p.b);    // 1, undefined
-
 	console.log('c' in p, p.c);    // false, 37
-
 	//----
 	
 	let target = {};
@@ -29,7 +24,7 @@ let handler = {
 	
 	//---
 	let validator = {
-	  set: function(obj, prop, value) {
+	  set: function(obj, prop, value) {//set函数格式
 	    if (prop === 'age') {
 	      if (!Number.isInteger(value)) {
 	        throw new TypeError('The age is not an integer');
@@ -38,35 +33,63 @@ let handler = {
 	        throw new RangeError('The age seems invalid');
 	      }
 	    }
-	
 	    // The default behavior to store the value
 	    obj[prop] = value;
 	  }
 	};
-
 	let person = new Proxy({}, validator);
-	
 	person.age = 100;
-	
-	console.log(person.age); 
-	// 100
-	
+	console.log(person.age);  // 100
 	//person.age = 'young'; 
 	// 抛出异常: Uncaught TypeError: The age is not an integer
-	
 	//person.age = 300; 
 	// 抛出异常: Uncaught RangeError: The age seems invalid
 	
+ 	//---扩展构造函数
+ 	function extend(sup,base) {
+	  var descriptor = Object.getOwnPropertyDescriptor(
+	    base.prototype,"constructor"
+	  );
+	  base.prototype = Object.create(sup.prototype);//做继承，因做了修改，上面再执行没有返回值，后面要重新设置一次
+	  var handler = {
+	    construct: function(target, args) {  //construct 固定的构造函数名，new时被拦截，args以数组形式的参数
+	      var obj = Object.create(base.prototype);
+	      this.apply(target,obj,args);
+	      return obj;
+	    },
+	    apply: function(target, that, args) {//自已的方法target没用上
+	      sup.apply(that,args); //apply 参数是按数组传
+	      base.apply(that,args);
+	    }
+	  };
+	  var proxy = new Proxy(base,handler);
+	  descriptor.value = proxy;//覆盖原来的方法
+	  Object.defineProperty(base.prototype, "constructor", descriptor);//重新设置
+	  return proxy;
+	}
+	var Person = function(name){
+	  this.name = name
+	};
+	var Boy = extend(Person, function(name, age) {
+	  this.age = age;
+	});
+	Boy.prototype.sex = "M";
+	var Peter = new Boy("Peter", 13);
+	console.log(Peter.sex);  // "M"
+	console.log(Peter.name); // "Peter"
+	console.log(Peter.age);  // 13
 	
-	//.............
-	
-	
-	
-	
-	
-	
-	
-	
+	{
+		p = new Proxy({}, {
+		  has: function(target, prop) { //has 方法 用于 in操作
+		    console.log('called: ' + prop);
+		    return true;
+		  }
+		});
+		console.log('a' in p); // "called: a"
+		                       // true
+	}
+
 </script>
 </head>
 <body > 

@@ -107,6 +107,8 @@
  	<a href="my/switchButton.jsp"> my switchbuttion </a> <br/>
  	<a href="my/tooltip.jsp"> my tooltip no js  </a> <br/>
  	<a href="my/message.jsp"> Message Alert click invoke function  </a> <br/>
+ 	<a href="my/fileBox.jsp"> my fileBox </a> <br/>
+ 	
  	<a href="my/layout.jsp">layout </a> <br/>
  	<a href="my/sqlView.jsp">sqlView ,table 动态column (在 J_SpringMVC 项目中有 连接DB的) </a> <br/>
  	

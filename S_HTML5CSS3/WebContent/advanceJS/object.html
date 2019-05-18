@@ -42,62 +42,60 @@ d = Object.getOwnPropertyDescriptor(o, "baz");
 // }
 
 
-//==create
-
+//----Object.create继承
 const person = {
   isHuman: false,
   printIntroduction: function () {
     console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
   }
 };
-
 const me = Object.create(person);
-
 me.name = "Matthew"; // "name" is a property set on "me", but not on "person"
 me.isHuman = true; // inherited properties can be overwritten
-
 me.printIntroduction();
 // expected output: "My name is Matthew. Am I human? true"
 
 		
-		
+//----比faceObject.html	的要强
 // Shape - 父类(superclass)
 function Shape() {
   this.x = 0;
   this.y = 0;
 }
-
 // 父类的方法
 Shape.prototype.move = function(x, y) {
   this.x += x;
   this.y += y;
   console.info('Shape moved.');
 };
-
 // Rectangle - 子类(subclass)
 function Rectangle() {
   Shape.call(this); // call super constructor.
 }
 
-// 子类续承父类
+// 子类续承父类  （这两句 rect instanceof Shape 是对的值，rect.move可调用后面才被prototype的）
 Rectangle.prototype = Object.create(Shape.prototype);
-Rectangle.prototype.constructor = Rectangle;
+Rectangle.prototype.constructor = Rectangle;//constructor构造器
 
 var rect = new Rectangle();
-
-console.log('Is rect an instance of Rectangle?',
-  rect instanceof Rectangle); // true
-console.log('Is rect an instance of Shape?',
-  rect instanceof Shape); // true
+console.log('Is rect an instance of Rectangle?',  rect instanceof Rectangle); // true
+console.log('Is rect an instance of Shape?',  rect instanceof Shape); // true
 rect.move(1, 1); // Outputs, 'Shape moved.'
 
 
 //--继承到多个对象
+function SuperClass()
+{
+	this.s="Super";
+}
+function OtherSuperClass()
+{
+	this.o="Other";
+}
 function MyClass() {
      SuperClass.call(this);
      OtherSuperClass.call(this);
-}
-/*
+} 
 // 继承一个类
 MyClass.prototype = Object.create(SuperClass.prototype);
 // 混合其它
@@ -106,10 +104,14 @@ Object.assign(MyClass.prototype, OtherSuperClass.prototype);//把OtherSuperClass
 MyClass.prototype.constructor = MyClass;
 
 MyClass.prototype.myMethod = function() {
-     // do a thing
+    console.log("myMethod");
 };
+var my =new MyClass();
+console.log(my.s);
+console.log(my.o);
+ my.myMethod();
 //Object.assign 是在 ES2015 引入的
-*/
+
 //---propertyObject
 var o;
 
@@ -171,10 +173,11 @@ o2 = Object.create({}, {
     value: 42, 
     writable: true,
     enumerable: true,
-    configurable: true 
+    configurable: false //true表示属性(不是值)可删除(delete)
   } 
 });
-
+delete o2.p; //如configurable: false 删不掉，不会报错
+console.log(o2.p);
 
 //----object 的方法
 
@@ -195,7 +198,7 @@ const object1 = {
   property1: 42
 };
 
-Object.seal(object1); //现有属性如可以，就可以修改，但不能加，删
+Object.seal(object1); //现有属性如可以写，就可以修改值，但不能加，删
 object1.property1 = 33;
 console.log(object1.property1);
 // expected output: 33
@@ -209,17 +212,170 @@ console.log(object1.property2);//undefined
 
 console.log(Object.isSealed(object1));
 
+//----hasOwnProperty
+o = new Object();
+o.prop = 'exists';
+function changeO() {
+  o.newprop = o.prop;
+  delete o.prop;
+}
+o.hasOwnProperty('prop');   // 返回 true
+changeO();
+o.hasOwnProperty('prop');   // 返回 false
+//---- 
+var empty = {};
+var val=Object.isExtensible(empty); // === true 
+//preventExtensions变为不扩展
+Object.preventExtensions(empty);
+val=Object.isExtensible(empty); // === false
+//密封对象是不可扩展.
+var sealed = Object.seal({});
+val=Object.isExtensible(sealed); // === false
+// 冻结对象也是不可扩展.
+var frozen = Object.freeze({});
+val=Object.isExtensible(frozen); // === false
 
+//--
+// simple array
+var arr = ['a', 'b', 'c'];
+console.log(Object.keys(arr)); // console: ['0', '1', '2']
+// array like object
+var obj = { 0: 'a', 1: 'b', 2: 'c' };
+console.log(Object.keys(obj)); // console: ['0', '1', '2']
+// array like object with random key ordering
+var anObj = { 100: 'a', 2: 'b', 7: 'c' };
+console.log(Object.keys(anObj)); // console: ['2', '7', '100']
+// getFoo is a property which isn't enumerable
+var myObj = Object.create({}, {
+  getFoo: {
+    value: function () { return this.foo; }
+  } 
+});
+myObj.foo = 1;
+console.log(Object.keys(myObj)); // console: ['foo']
+val=Object.keys("foo");//["0", "1", "2"]    
 
+/*
+ Object.fromEntries还不支持
 
+//--- 以将 Map 转化为 Object: 
+{
+	const map = new Map([ ['foo', 'bar'], ['baz', 42] ]);
+	const obj = Object.fromEntries(map);
+	console.log(obj); // { foo: "bar", baz: 42 }
+}
+//---Array 转化为 Object
+{
+	const arr = [ ['0', 'a'], ['1', 'b'], ['2', 'c'] ];
+	const obj = Object.fromEntries(arr);
+	console.log(obj); // { 0: "a", 1: "b", 2: "c" }
+}
+//
+{
+	const object1 = { a: 1, b: 2, c: 3 };
+	const object2 = Object.fromEntries(
+	  Object.entries(object1) //Object.entries  返回值给定对象自身可枚举属性的键值对数组。
+	  .map(([ key, val ]) => [ key, val * 2 ])
+	);
+	console.log(object2); // { a: 2, b: 4, c: 6 }
+}
+*/
 
+//Object.entries  返回值给定对象自身可枚举属性的键值对数组。
+{
+	const object1 = { foo: 'bar', baz: 42 };
+	console.log(Object.entries(object1)[1]);
+	// expected output: Array ["baz", 42]
+	const object2 = { 0: 'a', 1: 'b', 2: 'c' };
+	console.log(Object.entries(object2)[2]);
+	// expected output: Array ["2", "c"]
+	val=Object.entries(object2);//  [ [0,a],[1,b],[2,c] ]
+	
+	
+	const result = Object.entries(object2).sort(
+			(a, b) => 
+				a - b //Nan ???
+			);
+	console.log(Object.entries(result)[1]);
+	// expected output: Array ["1", Array ["1", "b"]]
+}
 
+//是否相等
+Object.is('foo', 'foo');     // true
+Object.is(window, window);   // true
+Object.is('foo', 'bar');     // false
+Object.is([], []);           // false
+Object.is(0, -0);            // false
+Object.is(NaN, 0/0);         // true
 
+{
+	const object1 = {
+			  a: 'somestring',
+			  b: 42,
+			  c: false
+			};
+	console.log(Object.values(object1));
+	// expected output: Array ["somestring", 42, false]
+	//getFoo is property which isn't enumerable
+	var my_obj = Object.create({}, { getFoo: { value: function() { return this.foo; } } });
+	my_obj.foo = 'bar';
+	console.log(Object.values(my_obj)); // ['bar']
+	// non-object argument will be coerced to an object
+	console.log(Object.values('foo')); // ['f', 'o', 'o']
+}
 
+{// constructor一个只读的原始数据类型，返回一构建函数
+	var o = {};
+	o.constructor === Object; // true
+	var o = new Object;
+	o.constructor === Object; // true
+	var a = [];
+	a.constructor === Array; // true
+	var a = new Array;
+	a.constructor === Array; // true
+	var n = new Number(3);
+	n.constructor === Number; // true
+	function Tree(name) {
+		  this.name = name;
+		}
+	var theTree = new Tree('Redwood');
+	console.log('theTree.constructor is ' + theTree.constructor);//函数源码
 
-
-
-
+	//构建器重写
+	function Parent() {}; 
+	function CreatedConstructor() {} 
+	CreatedConstructor.prototype = Object.create(Parent.prototype); 
+	CreatedConstructor.prototype.constructor = CreatedConstructor; // set right constructor for further using
+	CreatedConstructor.prototype.create = function create() { 
+	  return new this.constructor();
+	} 
+	new CreatedConstructor().create().create(); // it's pretty fine
+	
+	//构建器不重写
+	function ParentWithStatic() {}
+	ParentWithStatic.startPosition = { x: 0, y:0 };
+	ParentWithStatic.getStartPosition = function getStartPosition() {
+	  return this.startPosition;
+	} 
+	function Child(x, y) {
+	  this.position = {
+	    x: x,
+	    y: y
+	  };
+	}
+	Child.prototype = Object.create(ParentWithStatic.prototype); 
+	//Child.prototype.constructor = Child;//这行注释 下面this.constructor.getStartPosition()才不会报错
+	Child.prototype.getOffsetByInitialPosition = function getOffsetByInitialPosition() {
+	  var position = this.position;
+	  var startPosition = this.constructor.getStartPosition(); // error undefined is not a function, since the constructor is Child
+	  return {
+	    offsetX: startPosition.x - position.x,
+	    offsetY: startPosition.y - position.y
+	  }
+	};
+	new Child(1,2).getOffsetByInitialPosition();
+	
+}
 </script>
 </head>
 <body > 

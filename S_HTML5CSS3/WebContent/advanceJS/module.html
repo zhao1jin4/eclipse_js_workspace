@@ -4,15 +4,9 @@
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>import/export</title>
- <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>	
-<!-- 
-MDN firefox 60,chrome 61就已经支持了，
-可在firefox63测试不行？？  export declarations may only appear at top level of a module
-chrome70 报语法错误，测试不行 ？？
- -->
-<script type="text/javascript" src="mymodule/circel.js"></script>
-<script type="text/javascript" src="mymodule/main.js"></script>
-
+ <!-- import 语句只能在声明了 type="module" 的 script 的标签中使用 -->
+<script  src="mymodule/main.js" type="module"></script>
+</head>
  
 <body>
 

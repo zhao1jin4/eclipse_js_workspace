@@ -1,0 +1,45 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DataView</title>
+
+<script type="text/javascript">  
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/DataView 
+/* 
+DataView 视图是一个可以从 ArrayBuffer 对象中读写多种数值类型的底层接口，使用它时，不用考虑不同平台的字节序问题
+little endian 小端字节序：低字节存于内存低地址；高字节存于内存高地址  (intel全部是这个) 
+big endian 大端字节序：高字节存于内存低地址；低字节存于内存高地址 (网络字节序) 
+*/
+  // create an ArrayBuffer with a size in bytes
+var buffer = new ArrayBuffer(16);
+
+// Create a couple of views
+var view1 = new DataView(buffer);
+var view2 = new DataView(buffer,12,4); //from byte 12 for the next 4 bytes
+//new DataView(buffer [, byteOffset [, byteLength]]) 
+view1.setInt8(12, 42); // put 42 in slot 12
+
+console.log(view2.getInt8(0));
+// expected output: 42
+
+
+var littleEndian = (function() {
+  var buffer = new ArrayBuffer(2);
+  new DataView(buffer).setInt16(0, 256, true /* 设置值时，使用小端字节序 */);
+  // Int16Array 使用系统字节序（由此可以判断系统字节序是否为小端字节序）
+  return new Int16Array(buffer)[0] === 256;
+})();
+console.log(littleEndian); // 返回 true 或 false
+
+
+console.log("2**3="+2**3); //**表示次方
+
+</script> 
+</head>
+<body>
+  
+
+</body>
+</html>
