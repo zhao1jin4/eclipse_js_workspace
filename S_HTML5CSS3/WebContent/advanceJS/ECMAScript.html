@@ -167,7 +167,7 @@ f("a1", ...a)
 console.log(Math.max.apply(null, [14, 3, 77]))
 
 // ES6
-console.log(Math.max(...[14, 3, 77]))
+console.log(Math.max(...[14, 3, 77])) //展开语法(Spread syntax)
 
 // 等同于
 console.log(Math.max(14, 3, 77));
@@ -575,6 +575,8 @@ console.log(descriptors1.property1.value);
 //--Promise 	用于表示一个异步操作
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
+// Axios 是一个基于 Promise 的 HTTP 客户端
+
 //要么调用resolve函数来将promise状态改成fulfilled，要么调用reject 函数将promise的状态改为rejected
 var promise1 = new Promise(function(resolve, reject) {
 setTimeout(function() {
@@ -794,7 +796,14 @@ Math.max(10, 20,);
  	var searchParams3 = new URLSearchParams(url.search);
  	console.log(	searchParams3.has("query")  );// true
  }
-	
+//----ECMAScript 2018
+{
+	var objOld={id:123,name:"lisi"};
+	let objClone = { ...objOld };//对象可以直接复制
+	console.log(objClone); 
+}
+
+
 </script>
 <script type="text/javascript" src="js/mySymbol.js"></script>
 <script type="text/javascript" src="js/myStrict.js"></script>

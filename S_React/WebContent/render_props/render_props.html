@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>render props</title>
+     
+ 	 <script src="../unpkg_react-16.8.4/react.development.js"></script>
+     <script src="../unpkg_react-16.8.4/react-dom.development.js"></script>
+	 <script src="../babel.min.js"></script>
+  </head>
+  <body>
+
+
+  
+     <div id="example"></div> 
+    <!-- 原始方式
+    <script type="text/babel" src="render_props_old.js"></script> 
+     -->
+     
+     <!-- 改进方式1 
+    <script type="text/babel" src="render_props1.js"></script> 
+     -->
+     
+    <!--  改进方式2  
+    <script type="text/babel" src="render_props2.js"></script> 
+    -->
+   <!--  改进方式3  -->
+    <script type="text/babel" src="render_props3.js"></script> 
+   
+    <script type="text/babel" > 
+	ReactDOM.render(
+        <MouseTracker ></MouseTracker>,
+        document.getElementById('example')
+      );
+ 
+    </script>
+  </body>
+</html>

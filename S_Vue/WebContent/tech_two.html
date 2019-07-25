@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech two </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+ <div id="conditionDiv">
+ 	<h1 v-if="awesome">Vue is awesome!</h1>
+	<h1 v-else>Oh no  </h1>
+	
+	<template v-if="ok">
+	  <h1>Title</h1>
+	  <p>Paragraph 1</p>
+	  <p>Paragraph 2</p>
+	</template>
+
+	<div v-if="Math.random() > 0.5">
+	  Now you see me
+	</div>
+	<div v-else>
+	  Now you do not
+	</div>
+	
+	<div v-if="type === 'A'">
+	  A
+	</div>
+	<div v-else-if="type === 'B'">
+	  B (v-else-if 2.1.0 新增)
+	</div>
+	<div v-else-if="type === 'C'">
+	  C
+	</div>
+	<div v-else>
+	  Not A/B/C
+	</div>
+	 切换 loginType 将不会清除用户已经输入的内容 
+	<!--
+	因为两个模板使用了相同的元素，<input> 不会被替换掉——仅仅是替换了它的 placeholder
+	-->
+	<template v-if="loginType === 'username'">
+	  <label>Username</label>
+	  <input placeholder="Enter your username">
+	</template>
+	<template v-else>
+	  <label>Email</label>
+	  <input placeholder="Enter your email address">
+	</template>
+	增加key属性后
+	<!--  如果需要替换组合，要增加 唯一值的 key 属性 --> 
+	<template v-if="loginType === 'username'">
+	  <label>Username</label>
+	  <input placeholder="Enter your username" key="username-input">
+	</template>
+	<template v-else>
+	  <label>Email</label>
+	  <input placeholder="Enter your email address" key="email-input">
+	</template>
+	
+	<!-- v-show 不支持 <template> 元素，也不支持 v-else 
+	v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
+	
+	v-for 具有比 v-if 更高的优先级 (不推荐同时使用这两个)
+	 -->
+	<h1 v-show="ok">v-show元素始终会被渲染并保留在 DOM 中， 只是简单地切换元素的 CSS 属性 display</h1>
+</div>
+
+<div id="forDiv"> 
+	<!-- v-for可加在第二列加index  -->
+	  <li v-for="(item, index) in items">
+	    {{ parentMessage }} - {{ index }} - {{ item.message }}
+	  </li>
+	 
+	<!--  of 同 in  -->
+	<div v-for="item of items">{{item.message}}</div>
+	
+	<!--  当不是数组，而是对象时，取的是属性的值  -->
+	<li v-for="value in object">
+		{{ value }}
+	</li>
+	
+	<!--  是对象时可选第二个参数是属性名  -->
+	<div v-for="(value, name) in object">
+		{{ name }}: {{ value }}
+	</div>
+	<!--  是对象时可选第三个参数索引  --> 
+	<div v-for="(value, name, index) in object">
+	  {{ index }}. {{ name }}: {{ value }}
+	</div>
+ 	会按 Object.keys() 的结果遍历，不能保证顺序
+ 	建议尽可能在使用 v-for 时提供 key<br/>
+ 
+ 	<!-- 用自定义的函数even-->
+	偶数<li v-for="n in even(numbers)">{{ n }}</li>
+   
+	1到10结果为：<span v-for="n in 10">{{ n }} </span>
+	 
+	 <br/>template上可以用for
+	 <ul>
+	  <template v-for="item in items">
+	    <li>{{ item.message }}</li> 
+	  </template>
+	</ul>
+	for和if一起用 ,同一节点v-for 的优先级比 v-if 更高
+	<ol>
+		<li v-for="item in items" v-if="item.message!='Foo'">
+		  {{ item.message }}
+		</li>
+	</ol>
+</div>
+<script type="text/javascript">
+v=new Vue({
+	  el: '#conditionDiv',
+	  data: {
+		  awesome:true,
+		  ok:true,
+		  type:'B',
+		  loginType:'username'
+	  }
+	});
+	// console中 v.loginType='x' 
+
+v1 = new Vue({
+	  el: '#forDiv',
+	  data: {
+	    parentMessage: 'Parent',
+	    items: [
+	      { message: 'Foo' },
+	      { message: 'Bar' }
+	    ],
+		object: 
+		{
+	      title: 'How to do lists in Vue',
+	      author: 'Jane Doe',
+	      publishedAt: '2016-04-10'
+	    },
+	    numbers: [ 1, 2, 3, 4, 5 ]
+	  }, 
+	  methods: {
+		  even: function (numbers) {
+		    return numbers.filter(function (number) {
+		      return number % 2 === 0
+		    })
+		  }
+		} 
+	});
+	/*
+	filter()、concat() 和 slice() 。它们不会改变原始数组，而总是返回一个新数组,VUE也会重新渲染
+	Vue 不能检测两种数组的变动(由于 JavaScript 的限制)，
+	1.vm.items[indexOfItem] = newValue 
+		解决方法 Vue.set(vm.items, indexOfItem, newValue) 或 vm.items.splice(indexOfItem, 1, newValue)
+		 		vm.$set(vm.items, indexOfItem, newValue) //是全局方法 Vue.set 的一个别名
+	2.修改数组的长度时 如vm.items.length = newLength
+		解决方法 vm.items.splice(newLength)//测试无效
+	*/
+	console.log([0,1,2,3,4].splice(1,1,11));//JS 的 splice没有三参数的功能，但vue有
+/*
+	//console中写入 
+	v1.items.splice(1, 1, {message:'XXX'});
+	Vue.set(v1.items, 1, {message:'YYY'});
+	v1.$set(v1.items, 1, {message:'ZZZ'});
+*/	
+	console.log([0,1,2,3,4].splice(8));//JS 的 splice没有扩展数组的功能
+	//v1.items.splice(4);//测试无效 
+	//v1.$set(v1.items, 3, {message:'AAA'});//但递增一个是可以的
+
+	//Vue 不允许动态添加根级别的响应式属性,可以用 Vue.set(v1.object, 'age', 27) 或 v1.$set(v1.object, 'age', 27)
+	//v1.object.age = 2 这种是不行的
+	/*
+	//用 Object.assign() 创建一个新的对象
+	v1.object = Object.assign(
+			{},   //第一个参数要为空才行
+			v1.object, 
+			{ age: 27 }); 
+	//Object.assign(v1.object, {  age: 27  }); //这样不行的
+	*/
+
+</script>
+
+
+完整的todo例子：
+<my-component
+  v-for="(item, index) in items"
+  v-bind:item="item"
+  v-bind:index="index"
+  v-bind:key="item.id"
+></my-component> 
+<div id="todo-list-example">
+  <form v-on:submit.prevent="addNewTodo">
+    <label for="new-todo">Add a todo</label>
+    <input
+      v-model="newTodoText"
+      id="new-todo"
+      placeholder="E.g. Feed the cat"
+    >
+    <button>Add</button>
+  </form>
+  <ul>
+ <!--  
+ <li is="todo-item"  效果与 <todo-item>相同 ,但是可以避开一些潜在的浏览器解析错误  
+ 自定义 remove1 事件 
+-->  
+   <li
+      is="todo-item"
+      v-for="(todo, index) in todos"
+      v-bind:key="todo.id"
+      v-bind:title="todo.title"
+      v-on:remove1="todos.splice(index, 1)"
+    ></li>
+  </ul>
+</div> 
+<script type="text/javascript">
+ 
+Vue.component('todo-item', {
+	 //定义产生 remove1 事件(使用$emit)
+	  template: '\
+	    <li>\
+	      {{ title }}\
+	      <button v-on:click="$emit(\'remove1\')">Remove</button>\
+	    </li>\
+	  ',
+	  props: ['title']
+	})
+
+	new Vue({
+	  el: '#todo-list-example',
+	  data: {
+	    newTodoText: '',
+	    todos: [
+	      {
+	        id: 1,
+	        title: 'Do the dishes',
+	      },
+	      {
+	        id: 2,
+	        title: 'Take out the trash',
+	      },
+	      {
+	        id: 3,
+	        title: 'Mow the lawn'
+	      }
+	    ],
+	    nextTodoId: 4
+	  },
+	  methods: {
+	    addNewTodo: function () {
+	      this.todos.push({
+	        id: this.nextTodoId++,
+	        title: this.newTodoText
+	      })
+	      this.newTodoText = ''
+	    }
+	  }
+	})
+</script>
+
+
+</body>
+</html>

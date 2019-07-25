@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tetch one </title>
+
+<style type ="text/css"> 
+.static
+{
+	font-size:2rem
+}
+.active
+{
+	background-color:#0000ff
+}
+.text-danger
+{
+	color:#ff0000;
+}
+
+</style>
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+<div id="app">
+  <p>{{ foo }}</p>
+  <!-- freeze `foo` 不会更新 -->
+  <button v-on:click="foo = 'baz'">Change it</button>
+</div>
+
+<div id="example">{{a}}</div>
+ 
+<div id="test"> 
+	<span v-once>v-once 如数据变，显示不会改变: {{ msg }}</span>
+	<p>Using mustaches: {{ rawHtml }}</p>
+	<p>Using v-html directive: <span v-html="rawHtml"></span></p>
+	
+	
+	<p>number+1={{ number + 1 }} </p>
+	<p>ok={{ ok ? 'YES' : 'NO' }}</p>
+	<p>message reverse={{ message.split('').reverse().join('') }}</p>
+	<div v-bind:id="'list-' + id"></div>
+</div>
+
+<script type="text/javascript"> 
+var obj = { foo: 'bar' }
+//是使用 Object.freeze()，这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。
+Object.freeze(obj) 
+new Vue({
+  el: '#app',
+  data: obj
+})
+ 
+//-------- 
+var data = { a: 1 }
+var vm = new Vue({
+  el: '#example',
+  data: data
+})
+
+vm.$data === data // => true
+vm.$el === document.getElementById('example') // => true
+
+// $watch 是一个实例方法
+vm.$watch('a', function (newValue, oldValue) {
+  // 这个回调将在 `vm.a` 改变后调用
+  console.log("newValue="+newValue+",oldValue="+oldValue)
+})
+//console中修改vm.a=2
+
+//---- 生命周期 
+ 
+new Vue({
+  data: {
+    a: 1
+  },
+  // created方法在实例被创建之后执行 
+  	created: function () {
+    // `this` 指向 vm 实例,
+    //不要使用箭头函数，比如 created: () => console.log(this.a) 箭头函数并没有 this
+    console.log('a is: ' + this.a)
+  }
+})
+// => "a is: 1"
+
+/*  其它函数
+    			beforeCreate -> created->
+vm.$mount(el)-> beforeMount -> 建立vm.$el   ->mounted->
+  					beforeUpdate->updated ->
+vm.$destory() ->beforeDestroy-> destroyed->
+*/
+
+//--
+var test= new Vue({
+	  el: '#test',
+	  data: {rawHtml:"<b>粗体不安全</b>",
+		  	msg:"常量1",
+			message:"正反",
+			number:100,
+			ok:undefined
+		  }
+	})
+//console中 test.msg="aaa" 
+
+/* 
+ 
+ --- 2.6.0 新功能  动态参数 
+ <a v-bind:[attributeName]="url"> ... </a>
+ 如Vue 实例有一个 data 属性 attributeName，其值为 "href"，那么这个绑定将等价于 v-bind:href
+
+ <a v-on:[eventName]="doSomething"> ... </a>
+ 当 eventName 的值为 "focus" 时，v-on:[eventName] 将等价于 v-on:focus
+
+ 动态参数 要求结果是一个字符串，特殊的 null 值可以被显性地用于移除绑定
+
+ 不能有空格和引号，如<a v-bind:['foo' + bar]="value"> ... </a>  是不行的
+ 
+ <a v-bind:[someAttr]="value"> ... </a>  在 DOM 中使用模板时这段代码会被转换为 `v-bind:[someattr]` (全部强制转为小写)
+
+ ---  修饰符 (modifier) 是以半角句号 . 
+ <form v-on:submit.prevent="onSubmit">...</form> 
+ 表示 .prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()
+
+---构建由 Vue 管理所有模板的单页面应用程序 (SPA - single page application) 时 v-bind 和 v-on 提供了特定简写
+<!-- 完整语法 -->
+<a v-bind:href="url">...</a> 
+<!-- 缩写 -->
+<a :href="url">...</a>
+
+<!-- 完整语法 -->
+<a v-on:click="doSomething">...</a> 
+<!-- 缩写 -->
+<a @click="doSomething">...</a>
+*/
+
+
+</script>
+
+
+-----
+
+<div id="computeDiv"> 
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+  <p>method reversed message: "{{ me_reversedMessage() }}"</p>
+</div> 
+<script type="text/javascript"> 
+var vm = new Vue({
+  el: '#computeDiv',
+  data: {
+    message: 'Hello'
+  },
+  computed: { 
+   //计算属性 message 还没有发生改变，多次访问 reversedMessage 计算属性会立即返回之前的计算结果，而不必再次执行函数
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  },
+  methods: {//不能和computed组函数同名
+    me_reversedMessage: function () {
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+</script>
+
+--watch <br/>
+
+watchDiv:<div id="watchDiv">{{ fullName }}</div>
+computeSetDiv:<div id="computeSetDiv"> {{ fullName }} </div>
+
+<script type="text/javascript">
+//这种方法不如computed方式好 
+var vm = new Vue({
+  el: '#watchDiv',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+    fullName: 'Foo Bar'
+  },
+  watch: {
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    },
+    lastName: function (val) {
+      this.fullName = this.firstName + ' ' + val
+    }
+  }
+});
+//console中修改 vm.firstName='li'
+var vm = new Vue({
+  el: '#computeSetDiv',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+    fullName: 'Foo Bar'
+  },
+	computed: {
+	  fullName: {
+	    // getter
+	    get: function () {
+	      return this.firstName + ' ' + this.lastName
+	    },
+	    // setter
+	    set: function (newValue) {
+	      var names = newValue.split(' ')
+	      this.firstName = names[0]
+	      this.lastName = names[names.length - 1]
+	    }
+	  }
+	}
+});
+//console中修改 vm.fullName='li si'
+
+</script>
+
+  
+<!-- 属性是样式类名，值真/假表示是否要 -->
+<div id="innerClassDiv" class="static"  v-bind:class="{ active: isActive, 'text-danger': hasError }" >class样式 内部对象 </div>
+<div id="outObjClassDiv" v-bind:class="classObject">class 样式 外部对象</div>
+<div id="arrayClassDiv" >
+	<div v-bind:class="[activeClass, errorClass]">class 样式 数组式，变量值是样式名</div>
+	<div v-bind:class="[isActive ? activeClass : '', errorClass]">class样式 数组中有?表达式</div>
+	<div v-bind:class="[{ active: isActive }, errorClass]">class 样式 混合用法</div>
+</div>
+<div id="componentClass">
+	<my-component class="baz boo"></my-component>  	<!--把所有class组合一起，结果为 <p class="foo bar baz boo">Hi</p> -->
+	<my-component v-bind:class="{ active: isActive }"></my-component> <!-- 结果为 <p class="foo bar active">Hi</p> -->
+</div>
+<div id="styleDiv"> 
+	<!--  v-bind:style 功能同 v-bind:class-->
+	<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">style样式 内部对象 驼峰式</div>
+	<div v-bind:style="{ color: activeColor, 'font-size': fontSize + 'px' }">style样式 内部对象  短横线 式，外加''</div>
+	<div v-bind:style="styleObject">style样式 外部对象</div>
+	<div v-bind:style="[baseStyles, overridingStyles]">style样式 数组</div>
+	<div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">2.3.0 版本开始，只数组中最后一个被浏览器支持的值(v-bind被省)</div>
+ 
+</div>
+<script type="text/javascript"> 
+ new Vue({
+  el: '#innerClassDiv', 
+   data: {
+    isActive: true,
+    hasError: false
+  } 
+    
+}); 
+ new Vue({
+	  el: '#outObjClassDiv',  
+	data: {
+		  classObject: {
+		    active: true,
+		    'text-danger': false
+		  }
+		}
+	}); 
+ new Vue({
+	  el: '#arrayClassDiv',  
+	  data: {
+		  activeClass: 'active',
+		  errorClass: 'text-danger'
+		} 
+	}); 
+
+ Vue.component('my-component', {
+	  template: '<p class="foo bar">class组件样式</p>'
+	});
+ new Vue({
+	  el: '#componentClass',  
+	  data: {
+		    isActive: true 
+	  }
+	}); 
+ 
+ new Vue({
+	  el: '#styleDiv',  
+	  data: 
+	  { 
+	    activeColor:'#0000ff',
+	    fontSize:20,
+	    styleObject: {
+	        color: 'red',
+	        fontSize: '13px'
+	      },
+	      baseStyles:{
+	    	  color: 'red',
+		      fontSize: '13px'
+	      }
+	  }
+	}); 
+</script>
+
+
+
+</body>
+</html>

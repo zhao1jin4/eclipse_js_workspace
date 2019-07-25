@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech component basic </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body>
+
+<div id="components-demo">
+  <button-counter></button-counter>
+  <button-counter></button-counter>
+  <button-counter></button-counter> 
+</div>
+<script type="text/javascript">
+	Vue.component('button-counter', { 
+		  data:function () { //如组件多次复用，这要是一个函数，每个组件才有自己的值
+		    return {
+		      count: 0
+		    }
+		  },
+		  template: `
+		  	<button v-on:click="count++">
+		  		You clicked me {{ count }} times.
+		  	</button>` //使用`` 加字串，可以多行，但不被IE支持
+	});
+	new Vue({ el: '#components-demo' });
+</script>
+
+
+<div id="eventParamDiv"> 
+	事件传参数
+	 <div :style="{ fontSize: postFontSize + 'em' }">
+<!-- 
+	    <blog-post
+	      v-for="post in posts"
+	      v-bind:key="post.id"
+	      v-bind:post="post"
+	       v-on:enlarge-text="postFontSize += $event"
+	    ></blog-post>
+	     以通过 $event 访问到被抛出的0.1 
+ 二选一
+ -->
+	    <blog-post
+	      v-for="post in posts"
+	      v-bind:key="post.id"
+	      v-bind:post="post"
+	     v-on:enlarge-text="onEnlargeText"
+	    ></blog-post>
+	    接收事件使用方法处理
+	  </div>
+</div>
+ <script type="text/javascript">
+ Vue.component('blog-post', {
+	  props: ['post'],
+	  //$emit('enlarge-text', 0.1) 表示 生产事件带参数0.1
+	  template: `
+	    <div class="blog-post">
+	      <h3>{{ post.title }}</h3>
+	      <button v-on:click="$emit('enlarge-text', 0.1)">
+			  Enlarge text
+			</button>
+	      <div v-html="post.content"></div>
+	    </div>`
+	});
+new Vue({ 
+	 el: '#eventParamDiv' ,
+	 data: {
+	    posts: [{id:1,title:'标题1',content:'内容1'},{id:2,title:'标题2',content:'内容2'}],
+	    postFontSize: 1
+	  },
+	methods: {
+	  onEnlargeText: function (enlargeAmount) //方法式来接收$emit产生事件带的参数
+	  {
+	    this.postFontSize += enlargeAmount
+	  }
+	}
+});
+ 
+ </script>
+
+ <div id="myComponentModelDiv">
+ 	v-model用于自定义组件
+	<input v-model="searchText">
+	等价于：
+	<input
+	  v-bind:value="searchText"
+	  v-on:input="searchText = $event.target.value"
+	>
+	<br/>
+	自定义组件使用变形
+	<custom-input
+	  v-bind:value="searchText"
+	  v-on:input="searchText = $event"
+	></custom-input>
+	自定义组件使用v-module(template中要用加value属性，加input事件)
+	<custom-input v-model="searchText"></custom-input>
+ </div>
+ <script type="text/javascript">
+	Vue.component('custom-input', {
+	  props: ['value'],
+	  template: `
+	    <input
+	      v-bind:value="value"
+	      v-on:input="$emit('input', $event.target.value)"
+	    >
+	  `
+	});
+	new Vue({ 
+		 el: '#myComponentModelDiv' ,
+		 data: {
+			 searchText:''
+		 }
+	});
+</script>
+<!-- 
+<table>
+  <tr is="blog-post-row"></tr> 
+  is用法 ，应该是可以把组件最外层标签修改为tr 
+</table>
+
+以下不存在这种限制
+template: '...'
+.vue 文件
+<script type="text/x-template">
+ -->
+</body>
+</html>

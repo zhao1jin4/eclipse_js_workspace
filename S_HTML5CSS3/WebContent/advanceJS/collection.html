@@ -207,6 +207,36 @@ var arr=["one","two"];
 	 array.forEach( myFunction);//Array 的 forEach
 })(arr); //像匿名内部函数 
 
+
+
+//- shift 
+//shift 第一个元素返回并从数组移除 
+let myFish = ['angel', 'clown', 'mandarin', 'surgeon']; 
+console.log('调用 shift 之前: ' + myFish);
+//"调用 shift 之前: angel,clown,mandarin,surgeon" 
+var shifted = myFish.shift();  
+console.log('调用 shift 之后: ' + myFish); 
+//"调用 shift 之后: clown,mandarin,surgeon"  
+console.log('被删除的元素: ' + shifted); 
+//"被删除的元素: angel"
+
+//- unshift 
+var arr1 = [0, 1, 2];
+var arr2 = [3, 4, 5];
+//将 arr2 中的元素插入到 arr1 的开头
+Array.prototype.unshift.apply(arr1, arr2) // arr1 现在是 [3, 4, 5, 0, 1, 2]
+
+//slice
+var animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+console.log(animals.slice(2));
+// expected output: Array ["camel", "duck", "elephant"]
+
+console.log(animals.slice(2, 4));
+//expected output: Array ["camel", "duck"]
+
+
+
+
 //===ArrayBuffer  Int32Array
 var buffer = new ArrayBuffer(8); //原始二进制数据缓冲区
 console.log(buffer.byteLength);

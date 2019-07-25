@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>axios demo</title>
+<!-- 
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+ -->
+ <script src="./axios-0.19.0/axios.min.js"></script>
+ <script type="text/javascript"> 
+ 
+ // npm install axios -g
+ 
+ var context="/S_ThirdLib";
+ 
+ axios.get(context+'/jsonGet', {
+	    params: {
+	        id: 12345
+	      }
+	    })
+   .then(function (response) { 
+     console.log(response);
+   })
+   .catch(function (error) { 
+     console.log(error);
+   })
+   .finally(function () { 
+   });
+/*
+ async function getUser() {
+	  try {
+	    const response = await axios.get(context+'/jsonGet?id=12345');
+	    console.log(response);
+	  } catch (error) {
+	    console.error(error);
+	  }
+	}
+ */
+ 
+ axios.post(context+'/jsonPost', {
+	    firstName: 'Fred',
+	    lastName: 'Flintstone'
+	  })
+	  .then(function (response) {
+	    console.log(response);
+	  })
+	  .catch(function (error) {
+	    console.log(error);
+	  });
+ 
+ axios({
+	  method: 'post',
+	  url: context+'/jsonPost',
+	   headers: {"Content-Type": 'application/json'},
+	   //options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
+	   //browser only: 'blob'
+	   responseType: 'json', // default 
+	   responseEncoding: 'utf8', // default 
+	   timeout: 5000, // default is `0` (no timeout)
+		//get方式	 
+	  params: {
+	    id: 12345
+	  },
+	 //Post方式
+	  data: {
+	    firstName: 'Fred',
+	    lastName: 'Flintstone'
+	  }
+	}).then(function (response) {
+	    console.log(response); 
+	    console.log(response.data);
+	    console.log(response.headers);
+	    console.log(response.status);//200 
+	    console.log(response.statusText);//测试下来是空串，不是OK 
+	    
+	});
+ 
+ </script>
+</head>
+<body>
+
+</body>
+</html>

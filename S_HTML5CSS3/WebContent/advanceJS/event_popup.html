@@ -10,10 +10,12 @@
 <body onclick="alert('body')">
     <!--html-->
     <div style="width:400px; height:400px; background:red" onclick="alert(this.style.background)">
-            <div id="div2" style="width:300px; height:300px; background:palevioletred">
+           red <div id="div2" style="width:300px; height:300px; background:palevioletred">
+            	div2
                     <div style="width:200px; height:200px; background:yellow" onclick="alert(this.style.background)">
+                            yellow
                             <div id="div1" style="width:100px; height:100px; background:palegreen">
-                                <a id="aaa" href="http://www.baidu.com">aaa</a> 
+                             div1   <a id="aaa" href="http://www.baidu.com">aaa</a> 
                             </div>
                     </div>
             </div>
@@ -33,21 +35,47 @@
                 var oEvent = ev || event;
                 alert("this is div1");
                 
-                //js阻止事件冒泡(从里向外传递事件)
+                //js阻止事件冒泡二选一( 捕获阶段: 外-》里 , 冒泡阶段: 里-》外)
                 //oEvent.cancelBubble = true;
-                //oEvent.stopPropagation();
+                oEvent.stopPropagation();
 
-                //js阻止链接默认行为，没有停止冒泡
-                //oEvent.preventDefault(); 
-                //return false;
+                //js阻止(链接跳转/表单中button提交)默认行为，没有停止冒泡
+                oEvent.preventDefault()
             }
 
             oDiv2.onclick = function (ev){
                 var oEvent = ev || event;
                 alert("this is div2");
-                oEvent.cancelBubble = true; 
+                //oEvent.cancelBubble = true; 
             }
         }
     </script>
+    
+    
+     <div id="myDiv1" style="background: blue;width: 100px; height: 100px;">
+        div1<div id="myDiv2" style="background: red;width: 70px; height: 70px;">
+           div2 <div id="myDiv3" style="background: yellow;width: 50px; height: 50px;">div3</div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    var oDvi1 = document.getElementById('myDiv1'),
+    oDvi2 = document.getElementById('myDiv2'),
+    oDvi3 = document.getElementById('myDiv3');
+
+	//addEventListener 第3个参数 useCapture 默认值为false， 如true使用Capture方式，如false是Bubbling
+ 	oDvi1.addEventListener('click', xx1, true);
+	oDvi2.addEventListener('click', xx2, false);
+	oDvi3.addEventListener('click', xx3, true);// div1->div3->div2->body->html
+	function xx1(){ 
+	    alert('div1');
+	}
+	function xx2(){  
+	    alert('div2');
+	}
+	function xx3(){ 
+	    alert('div3');
+	}
+</script>
 </body>
 </html>

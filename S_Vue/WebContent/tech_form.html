@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech form </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body>  
+
+
+v-model 会忽略所有表单元素的 value，checked，selected  的初始值， 应使用组件的 data 声明初始值
+<br/>
+多行文本
+<div id="multiDiv">
+	<span>Multiline message is:</span>
+	<p style="white-space: pre-line;">{{ message }}</p>
+	<br>
+	<textarea v-model="message" placeholder="add multiple lines"></textarea>
+</div>
+<script type="text/javascript">
+new Vue({
+	  el: '#multiDiv',
+	  data:{
+		  message:''
+	  }
+	})
+</script>
+
+
+<div id="formDiv">
+	<input type="checkbox" id="checkbox" v-model="checked">
+	<label for="checkbox">{{ checked }}</label>
+ <br/>
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <br>
+  <span>Checked names: {{ checkedNames }}</span>
+<br/>
+  <input type="radio" id="one" value="One" v-model="picked">
+  <label for="one">One</label>
+  <br>
+  <input type="radio" id="two" value="Two" v-model="picked">
+  <label for="two">Two</label>
+  <br>
+  <span>Picked: {{ picked }}</span>
+<br/>
+   <select v-model="selected">
+    <option disabled value="">请选择</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <span>Selected: {{ selected }}</span>
+</div>
+<script type="text/javascript">
+new Vue({
+	  el: '#formDiv',
+	  data:{
+		  checkedNames: [],
+		  checked:false,
+		  picked: '',
+		  selected: ''
+	  }
+	})
+</script>
+
+<div id="multiSelectDiv">
+  <select v-model="selected" multiple style="width: 50px;">
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <br>
+  <span>Selected: {{ selected }}</span>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+	  el: '#multiSelectDiv',
+	  data: {
+	    selected: []
+	  }
+	})
+</script>
+
+<div id="selectArrayDiv">
+	<select v-model="selected">
+	  <option v-for="option in options" v-bind:value="option.value">
+	    {{ option.text }}
+	  </option>
+	</select>
+	<span>Selected: {{ selected }}</span>
+	<br/>click event:
+	 <input
+	  type="checkbox"
+	  v-model="toggle"
+	  true-value="yes"
+	  false-value="no"
+	  @click="myOncheck" > <!-- true-value 和 false-value 是Vue的功能 -->
+	  
+</div>
+<script type="text/javascript">
+	new Vue({
+	  el: '#selectArrayDiv',
+	  data: {
+		    selected: 'A',
+		    options: [
+		      { text: 'One', value: 'A' },
+		      { text: 'Two', value: 'B' },
+		      { text: 'Three', value: 'C' }
+		    ],
+		    toggle:'yes',
+		  },
+		  methods:{
+			  myOncheck:function(evt){
+				  console.log(this.toggle)
+			  }
+		  }
+	})
+</script>
+
+<div id="otherFormDiv">
+	other Div:	<input type="radio" v-model="pick" v-bind:value="a"  @click="myOncheck" >
+	<br/>值是对象: 
+	<select v-model="selected"> <!-- 内部是对象变量 -->
+	  <option v-bind:value="{ number: 123 }">123</option>
+	  <option v-bind:value="{ number: 456 }">456</option>
+	</select>
+	selected={{selected}} <br/>
+	数字:<input v-model.number="age" type="number"> <br/>
+	去空格:<input v-model.trim="msg"> <br/> 
+	输入完成时才更新<input v-model.lazy="msg" > msg:{{msg}}
+</div>
+<script type="text/javascript">
+//当选中时 vm.pick值被修改为 vm.a的值
+	vm=new Vue({
+	  el: '#otherFormDiv',
+	  data: {
+		    a: '1',
+		    pick:'2',
+		    selected:undefined,
+		    msg:'a'
+	  },
+	  methods:{
+		  myOncheck:function(evt){
+			console.log(this.a)
+			console.log(this.pick) 
+		  }
+	  }
+	});
+</script>
+	
+</body>
+</html>

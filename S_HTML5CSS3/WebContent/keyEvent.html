@@ -39,12 +39,23 @@
              }
          }; 
          */
+         
+         function checkNum(event)
+         {
+        	 console.log("key="+event.key);//event.key是真实的数字，字母
+        	 console.log("kekeyCodey="+event.keyCode);//使用keyCode已经过时了,用code
+        	 console.log("code="+event.code);//按1显示Digit1,按a显示KeyA
+         	var res= /[\d]/.test(event.key);
+         	return res|| event.keyCode==8|| event.keyCode==37|| event.keyCode==39|| event.keyCode==46;
+         	//46 = Delete, 8 backspace , 37 left ,39 rigth
+         }
  </script>
 </head>
 <body> 
 
  按 ctrl+enter <br/>
  按ctrl+alt+shift+space <br/>
+<input type="text"  onKeypress="return checkNum(event)" size="3" maxlength="3"/>
 
 </body>
 </html>

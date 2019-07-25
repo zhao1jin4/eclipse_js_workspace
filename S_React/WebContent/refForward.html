@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> ref</title>
+     
+    <script src="unpkg_react-16.8.4/react.development.js"></script>
+    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+      <script src="babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+     
+    <script  type="text/babel" > 
+  //React.forwardRef函数
+const FancyButton = React.forwardRef((props, ref) => (
+  <button ref={ref} className="FancyButton">
+    {props.children}
+  </button>
+));
+
+/*
+// React.createRef函数
+const ref = React.createRef();
+<FancyButton ref={ref}>Click me!</FancyButton>;
+//ref.current 将指向 <button> DOM 节点。
+//Ref 转发不仅限于 DOM 组件，你也可以转发 refs 到 class 组件实例中
+
+*/
+
+
+
+class MyComponent extends React.Component 
+{
+   constructor(props) 
+	{
+ 	super(props);
+	   this.ref = React.createRef();
+	} 
+  handleClick() {
+     this.ref.current.innerHTML="新的文本";
+  }
+
+ render() { 
+    return (
+	<div> 
+		<FancyButton ref={ref}>Click me!</FancyButton>
+		<button onClick={this.handleClick.bind(this)} >修改文本</button>
+	</div>  
+    );
+  }
+}
+ 
+
+ReactDOM.render(
+  <MyComponent />,
+  document.getElementById('example')
+);
+
+ 
+
+   </script>
+     <div id="example"></div>  
+  </body>
+</html>
