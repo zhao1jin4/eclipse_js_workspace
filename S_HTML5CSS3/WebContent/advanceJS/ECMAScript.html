@@ -695,7 +695,7 @@ add(10).then(v => {
   console.log(v);  // prints 60 after 4 seconds.
 });
  
-//-- await后 可写值 并发执行
+//-- await 并发执行 写法
 (async function(x) { // async function expression used as an IIFE
   var p_a = resolveAfter2Seconds(20);//已经启动定时器， 并发执行
   var p_b = resolveAfter2Seconds(30);
@@ -796,6 +796,10 @@ Math.max(10, 20,);
  	var searchParams3 = new URLSearchParams(url.search);
  	console.log(	searchParams3.has("query")  );// true
  }
+ //在 ES2015+ 中，在对象中放一个类似 ComponentA 的变量名其实是 ComponentA: ComponentA 的缩写
+ var ComponentA={a:1}
+ console.log({ComponentA});
+ 	
 //----ECMAScript 2018
 {
 	var objOld={id:123,name:"lisi"};

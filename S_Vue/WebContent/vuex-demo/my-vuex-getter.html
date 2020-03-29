@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vuex demo getter  </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../vuex-3.1.1/vuex.js"></script>
+</head>
+<body> 
+ Getters 包装store中的数据
+ <div id="app"></div>
+ <script type="text/javascript">
+ const store = new Vuex.Store({
+	  state: {  
+	    count: 10
+	  },
+	  mutations: {  
+		  incrementByStep (state,step) { 
+		      state.count+=step 
+		  }
+	  },
+	  getters:{ //只包装store中的数据,不修改,如store中数据变化,这里也变化,类似compute
+		  formatNumber:function(state)
+		  {
+			  return '$'+state.count;
+		  }
+	  }
+ });
+const Counter = {//组件内取值 方法$store.getters.xxx
+	 template: `<div>$store显示getters中的值为: {{$store.getters.formatNumber}} <br/>
+					mapGetters显示getter的值(computed): {{formatNumber}} </div>`, 
+	 computed:{
+		//方式二 import { mapGetters } from 'vuex' 只对npm方式
+		  ...Vuex.mapGetters(['formatNumber']), //formatNumber是store 中 getters中方法名
+	  }
+} 
+const MyButton = {
+		  template: `<div> 
+		  				<button @click="showFomatter">外部显示getter的值</button> 
+		  				<button @click="addStore">增加2</button>
+			  		</div>`,
+		  methods:{ 
+			  showFomatter:function()
+			  {
+				//组件外store.getters.xxx 
+				console.log(store.getters.formatNumber);//formatNumber是store 中 getters中方法名
+			  },
+			 addStore:function(){
+				this.$store.commit('incrementByStep',2); 
+			 }
+		  }
+	  }
+ const app = new Vue({
+	  el: '#app',
+	  store,  
+	  components: { Counter,
+		  			mybutton:MyButton},
+	  template: `
+	    <div class="app">
+	      <counter></counter> 
+	      <mybutton></mybutton> 
+	    </div>
+	  `
+	})
+ </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>hook</title>
+     
+    <script src="../unpkg_react-16.13.1/react.development.js"></script>
+     <script src="../unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+    <!--  script 引入的方式不行，报useState is not define  -->
+     <script src="../unpkg_babel-7.9.1/babel.min.js"></script>
+	 <script src="../jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+   <script  type="text/babel" >  
+
+ 
+//import React, {useState,useEffect} from 'react'; 
+import  {useState,useEffect} from '../unpkg_react-16.13.1/react.development.js'; 
+
+function App() { //Hook在类中不能工作 （不推荐修改现有的代码，修改为不使用类，但可以新代码使用hook不使用类）可以保存值的函数，函数组件
+  const [count, setCount] = useState(0);//useState 返回两参数(pair)，当前状态值和一个函数用于更新值,参数是是初始状态
+  //可以再增加useState要保存多个值
+
+
+  // 等同于 componentDidMount, componentDidUpdate,  componentWillUnmount
+  //可用多次使用 useEffect,按照 effect 声明的顺序依次调用
+  //useLayoutEffect
+  useEffect(() => { 
+    document.title = `You clicked ${count} times`;
+    //useEffect可选的返回一个无参函数 用于清除，组件卸载的时候执行清除操作
+  });
+
+   
+  
+  return (
+    <div>
+      <p>You clicked {count} times</p>   {/* 直接用，(符合react的数据变 联动 界面） */}
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+ReactDOM.render(
+        <App ></App>,
+        document.getElementById('example')
+      );
+
+
+  </script>
+    hook是16.8的新功能 <br/>
+   script 引入的方式不行，报useState is not define<br/>
+    <div id="example"></div> 
+   
+  </body>
+</html>

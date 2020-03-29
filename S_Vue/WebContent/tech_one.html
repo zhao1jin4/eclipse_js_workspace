@@ -31,15 +31,15 @@
 <div id="example">{{a}}</div>
  
 <div id="test"> 
-	<span v-once>v-once 如数据变，显示不会改变: {{ msg }}</span>
-	<p>Using mustaches: {{ rawHtml }}</p>
+	<span v-once>v-once 如数据变，显示不会改变: {{ msg }} ,比react强(没有state中数据变不要UI变)</span>
+	<p>Using mustaches: {{ rawHtml }} ,Vue默认是安全的</p>
 	<p>Using v-html directive: <span v-html="rawHtml"></span></p>
 	
 	
 	<p>number+1={{ number + 1 }} </p>
 	<p>ok={{ ok ? 'YES' : 'NO' }}</p>
 	<p>message reverse={{ message.split('').reverse().join('') }}</p>
-	<div v-bind:id="'list-' + id"></div>
+	<div v-bind:id="'list-' + id"> 动态ID </div>
 </div>
 
 <script type="text/javascript"> 
@@ -53,20 +53,20 @@ new Vue({
  
 //-------- 
 var data = { a: 1 }
-var vm = new Vue({
+var vm1 = new Vue({
   el: '#example',
   data: data
 })
 
-vm.$data === data // => true
-vm.$el === document.getElementById('example') // => true
+vm1.$data === data // => true
+vm1.$el === document.getElementById('example') // => true
 
 // $watch 是一个实例方法
-vm.$watch('a', function (newValue, oldValue) {
+vm1.$watch('a', function (newValue, oldValue) {
   // 这个回调将在 `vm.a` 改变后调用
   console.log("newValue="+newValue+",oldValue="+oldValue)
 })
-//console中修改vm.a=2
+//console中修改vm1.a=2
 
 //---- 生命周期 
  
@@ -74,16 +74,17 @@ new Vue({
   data: {
     a: 1
   },
+  
   // created方法在实例被创建之后执行 
   	created: function () {
     // `this` 指向 vm 实例,
-    //不要使用箭头函数，比如 created: () => console.log(this.a) 箭头函数并没有 this
+    //不要使用箭头函数，比如 created: () => console.log(this.a) 箭头函数并没有 this(和react相反)
     console.log('a is: ' + this.a)
   }
 })
 // => "a is: 1"
 
-/*  其它函数
+/*  其它函数 (类似React)
     			beforeCreate -> created->
 vm.$mount(el)-> beforeMount -> 建立vm.$el   ->mounted->
   					beforeUpdate->updated ->
@@ -97,7 +98,8 @@ var test= new Vue({
 		  	msg:"常量1",
 			message:"正反",
 			number:100,
-			ok:undefined
+			ok:undefined,
+			id:22
 		  }
 	})
 //console中 test.msg="aaa" 
@@ -169,11 +171,12 @@ var vm = new Vue({
 --watch <br/>
 
 watchDiv:<div id="watchDiv">{{ fullName }}</div>
+<br/>
 computeSetDiv:<div id="computeSetDiv"> {{ fullName }} </div>
 
 <script type="text/javascript">
 //这种方法不如computed方式好 
-var vm = new Vue({
+var vm2 = new Vue({
   el: '#watchDiv',
   data: {
     firstName: 'Foo',
@@ -189,13 +192,14 @@ var vm = new Vue({
     }
   }
 });
-//console中修改 vm.firstName='li'
-var vm = new Vue({
+//console中修改 vm2.firstName='li' 
+
+var vm3 = new Vue({
   el: '#computeSetDiv',
   data: {
     firstName: 'Foo',
     lastName: 'Bar',
-    fullName: 'Foo Bar'
+    //fullName: 'Foo Bar'//和computed方法同名报警告
   },
 	computed: {
 	  fullName: {
@@ -212,16 +216,18 @@ var vm = new Vue({
 	  }
 	}
 });
-//console中修改 vm.fullName='li si'
+//console中修改 vm3.fullName='li si'
 
 </script>
 
   
-<!-- 属性是样式类名，值真/假表示是否要 -->
+<!-- 属性是样式类名，值真/假表示是否要  这个样式类名 -->
 <div id="innerClassDiv" class="static"  v-bind:class="{ active: isActive, 'text-danger': hasError }" >class样式 内部对象 </div>
 <div id="outObjClassDiv" v-bind:class="classObject">class 样式 外部对象</div>
 <div id="arrayClassDiv" >
-	<div v-bind:class="[activeClass, errorClass]">class 样式 数组式，变量值是样式名</div>
+	<div v-bind:class="[activeClass, errorClass]">class 样式 数组式	变量值是样式名
+		<br/>  对象为{activeClass}写法时(react中有)，全写为{activeClass:activeClass}  
+	</div>
 	<div v-bind:class="[isActive ? activeClass : '', errorClass]">class样式 数组中有?表达式</div>
 	<div v-bind:class="[{ active: isActive }, errorClass]">class 样式 混合用法</div>
 </div>
@@ -260,7 +266,8 @@ var vm = new Vue({
 	  el: '#arrayClassDiv',  
 	  data: {
 		  activeClass: 'active',
-		  errorClass: 'text-danger'
+		  errorClass: 'text-danger',
+		  isActive:true
 		} 
 	}); 
 
@@ -287,6 +294,9 @@ var vm = new Vue({
 	      baseStyles:{
 	    	  color: 'red',
 		      fontSize: '13px'
+	      },overridingStyles:
+	      {
+	    	  color: 'yellow',
 	      }
 	  }
 	}); 

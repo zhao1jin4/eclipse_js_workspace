@@ -25,6 +25,8 @@
 	<div v-else>
 	  Now you do not
 	</div>
+	<!-- v-else 元素必须紧跟在带 v-if 或者 v-else-if 的元素的后面，否则它将不会被识别。 -->
+	
 	
 	<div v-if="type === 'A'">
 	  A
@@ -38,10 +40,7 @@
 	<div v-else>
 	  Not A/B/C
 	</div>
-	 切换 loginType 将不会清除用户已经输入的内容 
-	<!--
-	因为两个模板使用了相同的元素，<input> 不会被替换掉——仅仅是替换了它的 placeholder
-	-->
+	 切换 loginType 将不会清除用户已经输入的内容  ,  因为两个模板使用了相同的input元素<br/> 
 	<template v-if="loginType === 'username'">
 	  <label>Username</label>
 	  <input placeholder="Enter your username">
@@ -50,8 +49,9 @@
 	  <label>Email</label>
 	  <input placeholder="Enter your email address">
 	</template>
-	增加key属性后
-	<!--  如果需要替换组合，要增加 唯一值的 key 属性 --> 
+	<button @click="toggleLoginType()">切换loginType</button>
+	
+	<br/> 增加唯一key属性后,替换了组件,清除用户已经输入的内容 <br/> 
 	<template v-if="loginType === 'username'">
 	  <label>Username</label>
 	  <input placeholder="Enter your username" key="username-input">
@@ -63,19 +63,17 @@
 	
 	<!-- v-show 不支持 <template> 元素，也不支持 v-else 
 	v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
-	
-	v-for 具有比 v-if 更高的优先级 (不推荐同时使用这两个)
 	 -->
-	<h1 v-show="ok">v-show元素始终会被渲染并保留在 DOM 中， 只是简单地切换元素的 CSS 属性 display</h1>
+	<h3 v-show="ok">v-show元素始终会被渲染并保留在DOM中,只是简单地切换元素的CSS属性display, v-if第一次变为真时,才会开始渲染 </h3>
 </div>
 
 <div id="forDiv"> 
-	<!-- v-for可加在第二列加index  -->
+	  v-for可加在第二列加index   <br/>
 	  <li v-for="(item, index) in items">
 	    {{ parentMessage }} - {{ index }} - {{ item.message }}
 	  </li>
 	 
-	<!--  of 同 in  -->
+	  of 同 in   <br/>
 	<div v-for="item of items">{{item.message}}</div>
 	
 	<!--  当不是数组，而是对象时，取的是属性的值  -->
@@ -83,11 +81,11 @@
 		{{ value }}
 	</li>
 	
-	<!--  是对象时可选第二个参数是属性名  -->
+	  是对象时可选第二个参数是属性名 <br/>
 	<div v-for="(value, name) in object">
 		{{ name }}: {{ value }}
 	</div>
-	<!--  是对象时可选第三个参数索引  --> 
+	 是对象时可选第三个参数索引 <br/>
 	<div v-for="(value, name, index) in object">
 	  {{ index }}. {{ name }}: {{ value }}
 	</div>
@@ -111,6 +109,7 @@
 		  {{ item.message }}
 		</li>
 	</ol>
+	动态增加属性age :{{object.age}}
 </div>
 <script type="text/javascript">
 v=new Vue({
@@ -120,6 +119,19 @@ v=new Vue({
 		  ok:true,
 		  type:'B',
 		  loginType:'username'
+	  },
+	  methods:
+	  {
+		  toggleLoginType : function()
+		  {
+			  if(this.loginType == 'username')
+			  {
+				  this.loginType ='password'
+			  }else
+			  {
+				  this.loginType  = 'username'
+			  }
+		  }
 	  }
 	});
 	// console中 v.loginType='x' 
@@ -130,7 +142,9 @@ v1 = new Vue({
 	    parentMessage: 'Parent',
 	    items: [
 	      { message: 'Foo' },
-	      { message: 'Bar' }
+	      { message: 'Bar' },
+	      { message: 'Foo1' },
+	      { message: 'Bar1' }
 	    ],
 		object: 
 		{
@@ -149,24 +163,31 @@ v1 = new Vue({
 		} 
 	});
 	/*
-	filter()、concat() 和 slice() 。它们不会改变原始数组，而总是返回一个新数组,VUE也会重新渲染
+	JS原始方法 filter()、concat() 和 slice() 。它们不会改变原始数组，而总是返回一个新数组
 	Vue 不能检测两种数组的变动(由于 JavaScript 的限制)，
 	1.vm.items[indexOfItem] = newValue 
 		解决方法 Vue.set(vm.items, indexOfItem, newValue) 或 vm.items.splice(indexOfItem, 1, newValue)
 		 		vm.$set(vm.items, indexOfItem, newValue) //是全局方法 Vue.set 的一个别名
 	2.修改数组的长度时 如vm.items.length = newLength
-		解决方法 vm.items.splice(newLength)//测试无效
+		解决方法 vm.items.splice(newLength)//测试无效??? JS 的 splice没有扩展数组的功能
 	*/
-	console.log([0,1,2,3,4].splice(1,1,11));//JS 的 splice没有三参数的功能，但vue有
+	console.log([0,1,2,3,4].splice(1,1,11));//JS 的 splice没有第三参数的功能(不报错,只忽略),但vue有
 /*
 	//console中写入 
-	v1.items.splice(1, 1, {message:'XXX'});
+	//v1.items.filter(i=>i.message == 'Foo');//VUE不会重新渲染
+	//v1.items.concat( [{message:'AA'},{message:'BB'}]);//VUE不会重新渲染
+	//v1.items.length=1;//VUE不会重新渲染
+	
+	
+	v1.items.splice(1);//从第1个位置删到尾 (js功能返回的数据做了删除)
+	v1.items.splice(2, 1)//从第2个位置删1个(js功能返回的数据做了删除)
+	v1.items.splice(1, 1, {message:'XXX'});//VUE会重新渲染(三参数是vue的方法)
 	Vue.set(v1.items, 1, {message:'YYY'});
 	v1.$set(v1.items, 1, {message:'ZZZ'});
 */	
 	console.log([0,1,2,3,4].splice(8));//JS 的 splice没有扩展数组的功能
-	//v1.items.splice(4);//测试无效 
-	//v1.$set(v1.items, 3, {message:'AAA'});//但递增一个是可以的
+	//v1.items.splice(8);//测试无效 ??? v1.items还是原来的长度
+	//v1.$set(v1.items, 4, {message:'AAA'});//但递增一个(位置要紧要最后)是可以的
 
 	//Vue 不允许动态添加根级别的响应式属性,可以用 Vue.set(v1.object, 'age', 27) 或 v1.$set(v1.object, 'age', 27)
 	//v1.object.age = 2 这种是不行的

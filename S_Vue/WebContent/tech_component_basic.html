@@ -11,13 +11,14 @@
 <body>
 
 <div id="components-demo">
+     如组件多次复用，data要是一个函数，每个组件才有自己的值
   <button-counter></button-counter>
   <button-counter></button-counter>
   <button-counter></button-counter> 
 </div>
 <script type="text/javascript">
 	Vue.component('button-counter', { 
-		  data:function () { //如组件多次复用，这要是一个函数，每个组件才有自己的值
+		  data:function () { //如组件多次复用，data要是一个函数，每个组件才有自己的值
 		    return {
 		      count: 0
 		    }
@@ -32,25 +33,28 @@
 
 
 <div id="eventParamDiv"> 
-	事件传参数
+	自定义事件传参数
 	 <div :style="{ fontSize: postFontSize + 'em' }">
-<!-- 
+	
+	 	 自定义组件 v-on:xxx="" 以通过 $event 访问到$emit被抛出的事件参数 
 	    <blog-post
 	      v-for="post in posts"
 	      v-bind:key="post.id"
 	      v-bind:post="post"
 	       v-on:enlarge-text="postFontSize += $event"
-	    ></blog-post>
-	     以通过 $event 访问到被抛出的0.1 
+	    ></blog-post> 
+<!--
  二选一
- -->
+    
+ 		接收事件也可使用函数,函数参数 接收 事件参数 
 	    <blog-post
 	      v-for="post in posts"
 	      v-bind:key="post.id"
 	      v-bind:post="post"
 	     v-on:enlarge-text="onEnlargeText"
 	    ></blog-post>
-	    接收事件使用方法处理
+ -->	   
+	
 	  </div>
 </div>
  <script type="text/javascript">
@@ -60,9 +64,7 @@
 	  template: `
 	    <div class="blog-post">
 	      <h3>{{ post.title }}</h3>
-	      <button v-on:click="$emit('enlarge-text', 0.1)">
-			  Enlarge text
-			</button>
+	      <button v-on:click="$emit('enlarge-text', 0.1)">Enlarge text</button>
 	      <div v-html="post.content"></div>
 	    </div>`
 	});
@@ -82,21 +84,22 @@ new Vue({
  
  </script>
 
+<br/>
  <div id="myComponentModelDiv">
- 	v-model用于自定义组件
+ 	v-model用于自定义组件 (非自定义事件,$event是原生的JS event) <br/>
 	<input v-model="searchText">
-	等价于：
+	等价于(react)：
 	<input
 	  v-bind:value="searchText"
 	  v-on:input="searchText = $event.target.value"
 	>
 	<br/>
-	自定义组件使用变形
+	自定义组件使用变形(自定义组件 以通过 $event 访问到$emit被抛出的事件参数 )
 	<custom-input
 	  v-bind:value="searchText"
 	  v-on:input="searchText = $event"
 	></custom-input>
-	自定义组件使用v-module(template中要用加value属性，加input事件)
+	自定义组件 如也要 使用v-module(template中要用加value属性(props),加input事件)
 	<custom-input v-model="searchText"></custom-input>
  </div>
  <script type="text/javascript">
@@ -117,9 +120,9 @@ new Vue({
 	});
 </script>
 <!-- 
+is用法  
 <table>
   <tr is="blog-post-row"></tr> 
-  is用法 ，应该是可以把组件最外层标签修改为tr 
 </table>
 
 以下不存在这种限制

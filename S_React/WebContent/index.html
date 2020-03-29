@@ -8,55 +8,64 @@
 
 <pre>
   pre标签中script标签也被执行了
-  react-16.6.3 是官方最后提供的js下载可  script src="" /script 方式使用
-  react-16.8.4 下载地址  https://unpkg.com/react/ 使用时报警告
+  react-16.6.3 是官方最后提供的js下载可  script src=""  方式使用 
   <!-- 
-  <script src="https://unpkg.com/react@16.8.4/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@16.8.4/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@16.13.0/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.development.js" crossorigin></script>
    -->
 </pre>
 
    <article>
    	type="text/babel" 方式 chrome,firefox不能debug!!!!  
    </article>
-	<a href="helloReact.html">helloReact 16.8.4 waring</a> <br/>
+	<a href="helloReact.html">helloReact</a> <br/>
 	<a href="NotJSX.html">NotJSX</a> <br/>
 	<a href="clock_mount.html">clock_mount</a> <br/>
 	<a href="event.html">event</a> <br/>
 	<a href="conditionRender.html">conditionRender</a> <br/>
-	<a href="listKeys.html">listKeys  16.8.4 waring</a> <br/>
+	<a href="listKeys.html">listKeys</a> <br/>
 	<a href="lifecycle.html">lifecycle</a> <br/>
 	<a href="form.html">form</a> <br/>
 	<a href="refOld.html">refs 过时API</a> <br/>
 	<a href="refNew.html">ref 新API</a> <br/>
 	<a href="refFunction.html">ref 回调函数</a> <br/>
-	<a href="refForward.html">ref 转发  未成功???</a> <br/>
-	
-	<a href="offical_demo.html">offical_demo</a> <br/>
-	<a href="hook.html">hook  要用import才行，见AppHook.js</a> <br/>
+	<a href="refForward.html">ref 转发 </a> <br/>
+	<a href="refForwardHoc.html">ref 转发 高阶组件中，示例未完成??? </a> <br/>
+	<a href="higherOrderComponent.html"> 高阶组件higher-order component (HOC)</a> <br/>
 	<a href="context.html"> context</a> <br/>
 	<a href="render_props/render_props.html"> Render Props</a> <br/>
-	<a href="composition.html"> 组合 vs 继承</a> <br/>
-    <a href="proptypes.html"> proptypes  要用import才行，未试,官方 tolist示例中</a> <br/>
-    
-	//-----  <br/>
-	<a href="x.html"> 高阶组件higher-order component (HOC), 参数为组件，返回值为新组件的函数,提到redux,relay</a> <br/>
+	<a href="composition.html"> 组合   非继承</a> <br/>
+ 	<a href="fragments.html"> Fragments </a> <br/>
+
+	<a href="offical_demo.html">offical_demo</a> <br/>
 	
-	//----- redux <br/><hr/>
+	<hr/>
+	---node才行的<br/>
+	<a href="node_react/hook.html">hook 要用import才行</a> <br/>
+	 见node_react/hook/AppHook.js <br/>
+	 Hook还要增加!!!<br/>
+	Flow 由 Facebook 开发,用于替代PropTypes  <br/> 
 	
-	<a href="redux-demo/one.html"> Redux demo 引入js不行 </a> <br/>
-	redux-demo/offical_count 示例 <br/>
-	redux-demo/react-redux-demo 示例 https://segmentfault.com/a/1190000010851224 , https://github.com/jeromehan/react-redux-test<br/>
-	redux-demo/offical_todos 示例 有使用react-redux 有使用 combineReducers <br/>
-	  	git clone https://github.com/reduxjs/redux.git<br/>
-		cd redux/examples/todos-with-undo  <br/>
+	<hr/>
+	//----- redux <br/>
+	<a href="node_redux/one.html"> Redux demo 引入js不行 </a> <br/>
+	node_redux/offical_count 示例 <br/>
+	node_redux/react-redux-demo 示例 https://segmentfault.com/a/1190000010851224 , https://github.com/jeromehan/react-redux-test<br/>
+	node_redux/offical_todos 示例 有使用react-redux 有使用 combineReducers <br/>
+	<br/>
+	git clone https://github.com/reduxjs/redux.git<br/>
+	cd redux/examples/todos-with-undo  <br/>
 	官方 tolist-undo 示例，有引用新库，可以像word一样做撤消和重作， 不常用，比较复杂 <br/>
-	
-	//----- react-router <br/><hr/>
-	react-router-demo/AppBrowserRouterBasic.js   官方web Browser基本路由示例 <br/>
-	react-router-demo/AppBrowserRouterNested.js   官方web Browser嵌套路由示例 <br/>
-	react-router-demo/AppHashRouter.js   官方web Hash路由示例 <br/>
-	react-router-demo/AppMemoryRouter.js   官方 Memory路由示例带NavLink <br/>
+	<hr/>
+	//----- react-router <br/>
+	<a href="node_react-router/basic.html">react-router 使用unpkg 的script方式 </a> <br/>
+	 加import 报 require is not defined<br/>
+  	不加import 报 BrowserRouter is not defined <br/>
+  	
+	node_react-router/AppBrowserRouterBasic.js   官方web Browser基本路由示例 <br/>
+	node_react-router/AppBrowserRouterNested.js   官方web Browser嵌套路由示例 <br/>
+	node_react-router/AppHashRouter.js   官方web Hash路由示例 <br/>
+	node_react-router/AppMemoryRouter.js   官方 Memory路由示例带NavLink <br/>
 	
 </body>
 </html>

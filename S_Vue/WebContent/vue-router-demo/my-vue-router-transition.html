@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router transition </title>
+
+
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+ 
+</head>
+<body>
+ 过渡  同 tech_animation.html
+ <style type ="text/css">  
+	.fade-enter-active, .fade-leave-active {
+	  transition: opacity .5s;
+	}
+	.fade-enter, .fade-leave-to{
+	  opacity: 0;
+	}
+</style> 
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <router-link to="/foo">Go to Foo</router-link>
+    <router-link to="/bar">Go to Bar</router-link>
+  </p>
+  <router-view></router-view>
+</div>
+<script type="text/javascript">
+//fade是指定类样式名的前缀
+const Foo = { template: '<transition name="fade"> <div>foo</div>  </transition>' }
+const Bar = { template: '<transition name="fade"> <div>bar</div>  </transition>' }
+const routes = [
+  { path: '/foo', component: Foo },
+  { path: '/bar', component: Bar }
+]
+const router = new VueRouter({
+  routes  
+}) 
+const app = new Vue({
+  router
+}).$mount('#app') 
+</script>
+	
+</body>
+</html>

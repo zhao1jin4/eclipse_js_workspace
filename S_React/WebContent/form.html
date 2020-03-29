@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <title>form</title>
      
-    <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+     <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
     
-     <script src="babel.min.js"></script>
+    <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
@@ -38,16 +38,7 @@ ReactDOM.render(
 
 
 
-
-
-
-
-
-
-
-
-
-
+ 
 class Content extends React.Component {
   render() {
     return  <div>
@@ -70,11 +61,8 @@ class HelloMessage2 extends React.Component {
     var value = this.state.value;
     return <div>
             <Content myDataProp = {value} 
-              updateStateProp = {this.handleChange}></Content>   
-			
-			{/*
-                                          函数传递给子组件  
-             */}
+              updateStateProp = {this.handleChange}></Content>
+			      {/* 函数传递给子组件    */}
            </div>;
   }
 }
@@ -82,12 +70,6 @@ ReactDOM.render(
   <HelloMessage2 />,
   document.getElementById('form2')
 );
-
-
-
-
-
-
 
 
 
@@ -137,21 +119,14 @@ ReactDOM.render(
 
 
 
-
-
-
-
-
-
-
 class Reservation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isGoing: true,
       numberOfGuests: 2,
-	  male:true,
-	 age:18
+	    male:true,
+	    age:18
     };
  
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -163,7 +138,7 @@ class Reservation extends React.Component {
     const name = target.name;
  
     this.setState({
-      [name]: value
+      [name]: value  //使用[] ,变量的值做字段名,类似eval
     });
   }
  
@@ -190,14 +165,14 @@ class Reservation extends React.Component {
         </label><br />
 
 	是否男
-		{ /* 用 checked={this.state.male} 就不可修改，要用 defaultChecked */ }
+		{ /*  要用 defaultChecked ,否则报警告*/ }
  		<input
             name="male"
             type="checkbox"
             defaultChecked={this.state.male} />
 		<br />
 	年龄：
-		{ /* 用 value={this.state.age}  就不可修改，要用 defaultValue */ }
+		{ /*  要用 defaultValue ,否则报警告*/ }
 		<input
             name="age"
             type="text"

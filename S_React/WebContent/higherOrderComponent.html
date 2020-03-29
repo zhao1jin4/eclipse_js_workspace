@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>HOC (Higher Order Component)</title>
+	
+	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+	 
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
+      
+  
+</head>
+<body>
+	高阶组件higher-order component (HOC), 一个函数  参数为组件，返回值为新组件    <br/>
+  
+   <div id="oldDiv"></div> 
+	 <div id="hocDiv"></div> 
+    <script type="text/babel">
+
+/*
+//v1.0的组件示例代码如下 
+class HelloWorld extends React.Component {
+  render() {
+    return "hello,world!"
+  }
+} 
+ReactDOM.render(<HelloWorld />, document.querySelector("#oldDiv"))
+*/
+
+ 
+ // 此函数接收一个组件，返回组件 
+const toUpperCaseHoc = function(WrappedComponent) {
+  return class  extends React.Component { //匿名类
+    render() {
+      const { text } = this.props;
+      const text2Upper = text.toUpperCase();
+      return <WrappedComponent text={text2Upper} />;
+    }
+  };
+};
+ 
+class HelloWorld extends React.Component {
+  render() {
+    return this.props.text;
+  }
+}  
+const HelloWorld2Upper = toUpperCaseHoc(HelloWorld); 
+ReactDOM.render(<HelloWorld2Upper text="hello,world!" />, document.querySelector('#hocDiv'));
+
+/*
+ 不要使用prototype的方式修改输入组件
+// 过滤掉非此 HOC 额外的 props，且不要进行透传
+const { extraProp, ...passThroughProps } = this.props;
+*/
+ 
+
+	</script>
+</body>
+</html>

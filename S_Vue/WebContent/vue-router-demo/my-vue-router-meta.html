@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router meta  </title>
+
+<style type ="text/css">  
+	.router-link-active
+	{
+		color: yellow;
+		background-color: gray;
+	}
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+
+</head>
+<body>
+	<div id="programRouterDiv">
+		元数据
+	  <p>
+	    <button @click="goLisi">内部的编程式路由</button>
+	    <router-link to="/post/aaa">Go to post/aaa 取匹配*部分 </router-link> <br/>
+	  </p>
+	  <router-view></router-view>
+	</div>
+	<script type="text/javascript"> 
+	var logined=false;
+	   
+	const Post = { 
+			  template: '<div>Post {{ $route.params.pathMatch  }}</div>',
+	}
+   router=new VueRouter({
+		  routes: [ 
+			    	{ 
+			    		path: '/user/:id', 
+			    		component:  { template: '<div>User {{ $route.params.id }}</div>'},
+			    		meta:{ //元数据
+			    			mustLogin:true
+			    		},
+			    		//路由独享的守卫
+			    		beforeEnter: (to, from, next) => 
+			    		{
+			    			if(!logined &&  
+			    					to.matched.some( item => item.meta.mustLogin) //得到元数据
+			    			)
+			    	     		next('/login'); 
+			    	     	else
+			    	     		next();
+			    	    }
+			    	},{ 
+			    		path: '/login', 
+			    		component:  { template: '<div>login </div>'}
+			    	},
+			    	{ path: '/post/*', component: Post },
+			     ]
+		});
+    
+	const vm = new Vue(
+	{
+	  	router,
+		methods:
+		{
+			goLisi:function()
+			{
+				this.$router.push("/user/lisi"); 
+			}
+		}
+	}).$mount('#programRouterDiv');
+	
+	function outGoLisi()
+	{
+		 router.replace("/user/lisi")//Vue实例外部用法,这里的router是 new VueRouter实例
+	}
+	</script> 
+	<button onclick='outGoLisi()'>外部的编程式路由</button> 
+	
+</body>
+</html>

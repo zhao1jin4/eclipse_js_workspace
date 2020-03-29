@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech  render jsx</title>
+
+
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+<style type ="text/css">  
+  
+ 
+</style>
+
+<body>
+
+Vue的JSX也要Babel(同react) <br/>
+还要单独安装 npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props<br/> 
+比较复杂<br/>
+
+函数式组件也很复杂<br/>
+<pre>
+	件标记为 functional，这意味它无状态 (没有响应式数据)，也没有实例 (没有 this 上下文)
+	Vue.component('my-component', {
+	  functional: true,
+	  
+	  });
+	<template functional>
+	</template>
+</pre>
+
+Vue 的模板实际上被编译成了渲染函数<br/>
+
+
+</body>
+</html>

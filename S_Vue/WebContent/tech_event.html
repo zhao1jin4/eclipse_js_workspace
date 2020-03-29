@@ -118,15 +118,19 @@ addEventListener 中的 passive 选项(默认值是false)，VUE提供了.passive
 
 <input v-on:keyup.page-down="onPageDown">
 https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values 
-中的 pageDown 命令风格变为 page-down
+中的 PageDown 命令风格变为 page-down
 
 可以使用过时的keyCode 
+https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
 <input v-on:keyup.13="submit">
 
 .ctrl
 .alt
 .shift
 .meta 	在Mac对应 command 键，在 Windows 系统键盘Win键
+.backspace
+.delete
+.insert
 
 <!-- Alt + C -->
 <input @keyup.alt.67="clear">

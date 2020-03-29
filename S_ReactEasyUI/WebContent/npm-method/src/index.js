@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //import App from './App';
-import App from './AppDataGridServer';
-
+//import App from './AppDataGridServer';
+import App from './AppTreeGrid';
 import * as serviceWorker from './serviceWorker';
 
 

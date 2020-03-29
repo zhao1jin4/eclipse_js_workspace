@@ -26,11 +26,13 @@ public class DataGridQueryJsonDataServlet extends PageServlet
 		
 		String[] selectStatus=request.getParameterValues("selectStatus[]");//收easyUI的数组
 		System.out.println("easyUI  array param:"+selectStatus);
+		String[] my_array=request.getParameterValues("my_array[]");
+		System.out.println("easyUI  my_array:"+my_array);
+		
 		String user=request.getParameter("user");
 		String date_from=request.getParameter("date_from");
 		String date_to=request.getParameter("date_to");
 		String lang=request.getParameter("lang");
-		
 		String my_custome_param=request.getParameter("my_custome_param");
 		
 		String reqPageNO=request.getParameter("page");//easyUI 固定

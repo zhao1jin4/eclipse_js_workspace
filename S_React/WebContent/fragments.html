@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>fragments</title>
+ 
+ 	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+	 
+      <script src="unpkg_babel-7.9.1/babel.min.js"></script>
+</head>
+<body>
+
+	<div id="tableDiv"></div> 
+	
+	<script type="text/babel">
+	/*
+	render() {
+		return (
+		  <React.Fragment>
+			<ChildA />
+			<ChildB />
+			<ChildC />
+		  </React.Fragment>
+		);
+	  }
+*/
+class Table extends React.Component {
+  render() {
+    return (
+	  <table>
+		<tbody>
+        <tr>
+          <Columns />
+		</tr>
+		</tbody>
+      </table>
+    );
+  }
+}
+
+/*
+class Columns extends React.Component {
+  render() {
+    return (
+      <div>
+        <td>Hello</td>
+        <td>World</td>
+      </div>
+    );
+  }
+}
+*/
+
+//使用<React.Fragment> 或  <> </> 不支持 key 属性 
+/*
+class Columns extends React.Component {
+  render() {
+    return (
+      <React.Fragment>
+        <td>Hello</td>
+        <td>World</td>
+      </React.Fragment>
+    );
+  }
+}
+*/
+class Columns extends React.Component {
+  render() {
+    return (
+      <>
+        <td>Hello</td>
+        <td>World</td>
+      </>
+    );
+  }
+} 
+ReactDOM.render(
+  <Table />,
+  document.getElementById('tableDiv')
+);
+	
+	
+	
+	
+	
+	</script>
+
+描述列表
+<dl>
+    <dt>描述标题1</dt>
+    <dd>描述内容1</dd>
+    
+	<dt>描述标题2</dt>
+    <dd>描述内容2</dd>
+</dl>
+</body>
+</html>

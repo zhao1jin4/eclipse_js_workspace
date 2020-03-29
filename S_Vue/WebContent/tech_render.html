@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech  render jsx</title>
+
+
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+<style type ="text/css">  
+  
+ 
+</style>
+
+
+render 渲染函数<br/>
+:level  变量 level prop 
+<div id="renderDiv"> 
+	<anchored-heading :level=2>动态Hx标签 2</anchored-heading>
+	<anchored-heading :level=5>动态Hx标签 5</anchored-heading>
+</div>
+<script type="text/javascript">
+Vue.component('anchored-heading', {
+	  render: function (createElement) {//render 渲染函数
+	    return createElement( //虚拟 DOM
+	      'h' + this.level,   // 标签名称
+	      this.$slots.default // 子节点数组
+	    )
+	  },
+	  props: {
+	    level: {
+	      type: Number,
+	      required: true
+	    }
+	  }
+	});
+new Vue({  el: '#renderDiv' });
+</script>
+将 h 作为 createElement 的别名是 Vue 生态系统中的一个通用惯例，实际上也是 JSX 所要求的
+可以去掉 (h) 参数
+
+
+虚拟节点 (virtual node) 简写它为VNode,虚拟DOM 是我们对由 Vue 组件树建立起来的整个 VNode 树的称呼
+<div id="renderAdvDiv">
+	<anchored-heading :level=2> 链接1 <span>内部span2</span></anchored-heading>
+</div>
+<script type="text/javascript">
+	var getChildrenTextContent = function (children) {
+	  return children.map(function (node) {
+	    return node.children
+	      ? getChildrenTextContent(node.children)
+	      : node.text
+	  }).join('')
+	}
+
+	Vue.component('anchored-heading', {
+	  render: function (createElement) {
+	    // 创建 kebab-case 风格的 ID
+	    var headingId = getChildrenTextContent(this.$slots.default)
+	      .toLowerCase()
+	      .replace(/\W+/g, '-') //非数字和字母
+	      .replace(/(^-|-$)/g, '')
+
+	    return createElement(
+	      'h' + this.level,
+	      [//第三个参数可选，{String | Array} ，子级虚拟节点 (VNodes)， createElement()建成，或字符串做 “文本虚拟节点”
+	    	//数组里不能有重复的VNode
+	        createElement('a', 
+		        { //第二个参数可选，对象
+		          attrs: { //普通的 HTML attribute ,还有很多其它选项，见https://cn.vuejs.org/v2/guide/render-function.html 深入数据对象
+		            name: headingId,
+		            href: '#' + headingId
+		          }
+		        }, this.$slots.default
+		    ),
+	      ]
+	    )
+	  },
+	  props: {
+	    level: {
+	      type: Number,
+	      required: true
+	    }
+	  }
+	})
+	new Vue({  el: '#renderAdvDiv' });
+</script>
+
+
+要重复元素的方法
+<div id="renderRepeatDiv">
+	<repeat-p></repeat-p>
+</div>
+<script type="text/javascript">
+Vue.component('repeat-p', 
+{ 
+	render: function (createElement)
+	 {
+		/*
+		var myParagraphVNode = createElement('p', 'hi'); 
+		 return createElement('div', [
+		    myParagraphVNode, myParagraphVNode // 文档说不行，但测试下来是可以的
+  		])
+  		*/
+		return createElement('div',
+			Array.apply(null, { length: 20 }) //apply继承，数组有20个元素
+			.map(function () 
+				{
+				  return createElement('p', 'hi')
+				})
+		)
+	}
+})
+ new Vue({  el: '#renderRepeatDiv' });
+ 
+//apply继承，数组有20个元素,第一个参数 处于非严格模式下，则指定为 null 或 undefined 时会自动替换为指向全局对象
+//var myArray=Array.apply(null, { length: 20 }); 
+var myArray=Array.apply( undefined, { length: 20 }); 
+var mapRes=myArray.map(function (){ return '1';})//返回  instanceof Array
+
+/*
+//apply第二个参数要求是数组，但传的是对象，怎么会变成20个元素的数组呢？？，什么意思？？？
+class MyArray extends Array
+{
+	constructor()
+	{
+		super({ length: 20 })
+	}
+}
+var my=new MyArray();
+//---
+ var myArray1=new Array (  { length: 20 });//数组有1个元素
+ var myArray2=new Array (20);//数组长度20，但没有元素
+*/
+
+</script>
+
+
+
+在模板中使用的 v-if 和 v-for 都可以在render渲染函数中用 JavaScript 的 if/else 和 map 来重写
+<div id="ifForInTempDiv">
+</div>
+<template id="templateUseIfFor">
+	<ul v-if="items.length">
+	  <li v-for="item in items">{{ item.name }}</li>
+	</ul>
+	<p v-else>No items found.</p>
+</template>
+<script type="text/javascript">
+	new Vue({  
+			el: '#ifForInTempDiv' , 
+			template:'#templateUseIfFor', 
+			 data:
+			 {
+				 items:[{ name:'lisi'},{name:'wangwu'}]
+			 },
+		 });
+</script>
+
+另一种方式 ，for,if在render函数中 ,报错 (items找不到)解决???<br/>
+<!-- 
+<div id="ifForInRenderDiv"  :items="items">
+</div> 
+<script type="text/javascript">
+	new Vue({  
+			el: '#ifForInRenderDiv' ,
+			 data:
+			 {
+				 items:[{ name:'lisi'},{name:'wangwu'}]
+			 },
+			props: ['items'],
+			render: function (createElement) 
+			{
+			  if (this.items.length) 
+			  {
+			    return createElement('ul', this.items.map(function (item) 
+				    		{
+						      return createElement('li', item.name)
+						    })
+						)
+			  } else
+			  {
+			    return createElement('p', 'No items found.')
+			  }
+			}
+	
+		 });
+</script>
+ -->
+渲染函数中没有与 v-model 的直接对应——你必须自己实现相应的逻辑(繁锁) <br/>
+<pre>
+props: ['value'],
+render: function (createElement) {
+  var self = this
+  return createElement('input', {
+    domProps: { //DOM 属性
+      value: self.value
+    },
+    on: { //事件监听器,不再支持如 `v-on:keyup.enter` 这样的修饰器,需要在处理函数中手动检查 keyCode
+      input: function (event) {
+        self.$emit('input', event.target.value)
+      }
+    }
+  })
+}
+</pre>
+
+this.$scopedSlots 访问作用域插槽 ,不懂？？？
+
+
+
+</body>
+</html>

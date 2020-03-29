@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vuex demo action  </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../vuex-3.1.1/vuex.js"></script>
+</head>
+<body>
+ 可以通过 vue.js devtools看以看 vuex的状态值 <br/>
+
+action中可异步操作
+ 
+ <div id="app"></div>
+ <script type="text/javascript">
+ const store = new Vuex.Store({
+	  state: {  
+	    count: 10
+	  },
+	  mutations: { //修改store数据的函数,可以方便查找谁修改了变量,	这里不要执行异步操作
+		increment  (state) { 
+		    state.count++; 
+		},
+	    incrementByStep (state,step) 
+	    { 
+		  if(typeof step =='number')
+	      	state.count+=step 
+	      else if (step instanceof Object)
+	    	state.count+=step.amount
+	    }
+	  },
+	  actions: //可异步操作,调用 mutations中方法，不能修改state
+	  {
+		  incrementAsync ({ commit })  //context里的commit属性
+		  {  
+			  setTimeout(() => {
+		      	commit('increment')//context.commit('increment');//是mutations中的方法名
+		     }, 1000)
+		  },
+		  incrementByStepAsync (context,step)  //带参数 
+		  {  
+			  setTimeout(() => {
+				  context.commit('incrementByStep',step) 
+		     }, 1000)
+		  }
+	  }
+ });
+const Counter = {
+	 template: `<div> {{$store.state.count}} </div>`, 
+}
+ const Add = {
+		  template: `<div> 
+		  				<button @click="addAsync">add Async</button>
+			  			<button @click="addByStepAsync">add by Step Async</button>
+			  			<button @click="aliasAddAsyn">add  use mapActions </button>
+			  			<button @click="incrementByStepAsync(5)">add by Step Async  use mapActions</button>
+			  		</div>`,
+		  methods:{ 
+			  addAsync:function()
+			  {
+				  this.$store.dispatch('incrementAsync')//你在组件中使用 ,对应store中actions中的函数
+			  },
+			  addByStepAsync:function()
+			  {
+				 //this.$store.dispatch('incrementByStepAsync',3)//传参数,可为对象
+				  //store.dispatch('incrementByStepAsync',3)//组件外使用
+				  //以对象形式分发
+				  store.dispatch({
+				    type: 'incrementByStepAsync',
+				    amount: 10
+				  })
+			  },
+			  //方式二 import { mapActions } from 'vuex' //只对npm方式
+	          ...Vuex.mapActions({
+			      aliasAddAsyn: 'incrementAsync' // 将 `this.aliasAddAsyn()` 映射为 `this.$store.dispatch('incrementAsync')`
+			   }),
+			   //可以传参数
+			   ...Vuex.mapActions([
+			      'incrementByStepAsync' // 将 `this.incrementByStepAsync(amount)` 映射为 `this.$store.dispatch('incrementByStepAsync', amount)`
+	          ]),
+		  }
+	  }
+ const app = new Vue({
+	  el: '#app',
+	  store,  
+	  components: { Counter ,Add},
+	  template: `
+	    <div class="app">
+	      <counter></counter>
+	      <add></add>
+	    </div>
+	  `
+	})
+ </script>
+</body>
+</html>

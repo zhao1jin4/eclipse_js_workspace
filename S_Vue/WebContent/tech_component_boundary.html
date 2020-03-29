@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech component boundary</title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+这些功能都是有劣势或危险的场景的 <hr/>
+
+在每个 new Vue 实例的子组件中，其根实例可以通过 $root 属性进行访问 (不建议用 ,推荐使用 Vuex)<br/>
+<div id="rootDiv">
+ 	{{  $root.foo }}
+ 	<button @click="$root.foo = 2">修改foo</button>
+ 	<button @click="baz">调用baz,修改foo</button>
+</div>
+ <script type="text/javascript"> 
+	new Vue({
+	  el: '#rootDiv',
+	  data: {
+	    foo: 1
+	  },
+	  computed: {
+	    bar: function () { /* ... */ }
+	  },
+	  methods: {
+	    baz: function () { 
+			console.log("baz");
+			this.$root.foo = 3
+		}
+	  }
+	});
+	 
+</script>
+
+
+<br/>
+$parent 属性可以用来从一个子组件访问父组件的实例 (不建议用)，示例还有$children <br/>
+
+<h3>子组件方式1  components属性 </h3> 
+
+<p><strong>可以通过$refs访问父组件的子组件</strong></p>
+ <div id="app1">
+   <parent-component></parent-component>
+ </div>
+ 
+<template id="parentcomponent">
+  <div >
+    <p>this is a parent-component</p>
+    <firstchild ref="f1"></firstchild>
+    <secondchild ref="f2"></secondchild>
+    <button @click='show_child_of_parents'>show child msg</button>
+  </div>
+</template>
+<script type="text/x-template" id="childOne">
+  <div>
+    <p>this is first child</p>
+    //使用stop阻止默认事件（vue的事件处理机制）
+    <button @click.stop='getParent'>get parent msg</button>
+  </div>
+</script>
+ 
+<template id="childSec">
+  <div>
+    <p>this is second child</p>
+  </div>
+</template>
+<script>
+  new Vue({
+    el:"#app1",
+    data:{},
+    components:
+    {
+      "parent-component":
+       {
+	        template:'#parentcomponent', 
+	        data()
+	        {
+	          return{msg:'这是父组件中的内容'}          
+	        },
+	        methods:
+	        {
+	          show_child_of_parents()
+	          {
+	              //children方式访问自组件
+	　　　　　　　　　　　for(let i=0;i<this.$children.length;i++){
+	                	console.log(this.$children[i].msg);
+	           		}
+	　　　　　　　　　　　 //通过$ref打标记，访问子组件　
+	           		console.log(this.$refs.f1.msg);//和以前的react一样
+	           		//$refs 只会在组件渲染完成之后生效，应该避免在模板或计算属性中访问 $refs。
+	           		
+	 　　　　　　　　　　　this.$refs.f1.getParent();//自已的方法
+	          },                  
+        	},  
+	        components:
+	        {
+	          'firstchild':
+	           {
+		            template:'#childOne',
+		            data()
+		            {
+		              return {msg:'这是第一个子组件'};
+		            },
+		            methods:
+		            {
+		              getParent()
+		              {
+		                let a=1;
+		                console.log(a);
+		                alert(this.$parent.msg);
+		              }
+	            	},
+	          },
+	          'secondchild':
+	          {
+		            template:'#childSec',
+		            data()
+		            {
+		              return {msg:"这是第二个组件"};
+		            }
+	          }
+	       }
+      }
+    }
+  });
+</script>
+
+
+<hr/>
+<h3>子组件方式2  template中有子组件 (定义死了)</h3> 
+<div id="app2" style="background-color:#00FF00">
+	<span>test</span> 
+    <root-obj style="background-color:#0000FF"></root-obj>
+</div>
+<script type="text/javascript">
+
+Vue.component('root-obj', {
+    data() {
+        return {
+			
+        }
+    },
+    template: `<div>
+                    <button @click='getRoot'>子组件</button>
+                    <child-component></child-component>
+                </div>`,
+    methods: {
+        getRoot() {
+            console.log(this)
+            console.log(this.$root);
+            console.log(this.$parent)
+        }
+    }
+})
+Vue.component('child-component', {
+    data() {
+        return {
+
+        }
+    },
+    template: `<div>
+                <button @click='getRoot'>子子组件</button>
+                </div>`,
+    methods: {
+        getRoot() {
+            console.log(this)
+            console.log(this.$root)
+            console.log(this.$parent)
+        }
+    }
+})
+var app = new Vue({
+    el: '#app2',
+    data: {
+        msg: 'Root',
+        bg:'#00FF00'
+    }
+})
+</script>
+<pre>
+
+依赖注入(比react的context好的地方是,没有变更名是必须的写法),有耦合可用 Vuex
+provide 选项允许我们指定我们想要提供给后代组件的数据/方法
+任何后代组件里，我们都可以使用 inject 选项来接收指定的
+ 
+ 
+<div id="depsInjectDiv"><test></test></div>
+<script>
+  Vue.component('child',{
+    inject:['message'],
+    template:'<p>{{message}}</p>'
+  })
+  Vue.component('test',{
+    template:`<div><child></child></div>`
+  })
+  new Vue({
+    el:'#depsInjectDiv',
+    provide:{message:'Hello Vue!'}
+  })
+</script>
+<pre>
+Vue 的事件系统不同于浏览器的
+    通过 $on(eventName, eventHandler) 侦听一个事件
+    通过 $once(eventName, eventHandler) 一次性侦听一个事件
+    通过 $off(eventName, eventHandler) 停止侦听一个事件
+
+递归组件就可能导致无限循环 
+name: 'stack-overflow',
+template: '<div><stack-overflow></stack-overflow></div>'
+请确保递归调用是条件性的 (例如使用一个最终会得到 false 的 v-if)
+
+组件之间的循环引用
+模块系统发现它需要 A，但是首先 A 依赖 B，但是 B 又依赖 A ....
+1.当通过 Vue.component 全局注册组件的时候，这个会被自动解开
+2.本地注册组件的时候，你可以使用 webpack 的异步 import：
+components: {
+  TreeFolderContents: () => import('./tree-folder-contents.vue')
+}
+3. beforeCreate生命周期  this.$options.components.xxx  ??? 
+
+
+
+当 inline-template 这个特殊的 attribute 出现在一个子组件上时，这个组件将会使用其里面的内容作为模板(不建议用)
+优先选择 template 选项或 .vue 文件里的一个 <template> 元素来定义模板
+
+
+<script type="text/x-template" id="hello-world-template">
+  <p>Hello hello hello</p>
+</script> 
+Vue.component('hello-world', {
+  template: '#hello-world-template'
+}) 
+x-template 需要定义在 Vue 所属的 DOM 元素外 (会将模板和该组件的其它定义分离开)
+
+极少数的情况下需要手动强制更新，那么你可以通过 $forceUpdate 来做这件事
+
+组件包含了大量静态内容。在这种情况下，你可以在根元素上添加 v-once attribute 以确保这些内容只计算一次然后缓存起来(不建议用，像<keep-alive>)
+Vue.component('terms-of-service', {
+  template: `
+    <div v-once>
+      <h1>Terms of Service</h1>
+      ... a lot of static content ...
+    </div> 
+ `
+})
+    
+
+</pre>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router  </title>
+
+<style type ="text/css">  
+	.router-link-active
+	{
+		color: yellow;
+		background-color: gray;
+	}
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+<!-- 
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+ -->
+</head>
+<body>
+	路由 (类似react的hash路由,也是这个影响浏览器的返回功能)
+	<div id="app">
+	  <h1>Hello App!</h1>
+	  <p>
+	    <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 
+	    	当 <router-link> 对应的路由匹配成功，将自动设置 class 属性值 .router-link-active
+	    -->
+	    <router-link to="/foo">Go to Foo</router-link>
+	    <router-link to="/bar">Go to Bar</router-link>
+	  </p>
+	  <!-- 路由匹配到的组件将渲染在这里 -->
+	  <router-view></router-view>
+	</div>
+	<script type="text/javascript">
+	// 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
+	const Foo = { template: '<div>foo</div>' }
+	const Bar = { template: '<div>bar</div>' }
+
+	// 2. 定义路由
+	// 每个路由应该映射一个组件。 其中"component" 可以是
+	// 通过 Vue.extend() 创建的组件构造器
+	const routes = [
+	  { path: '/foo', component: Foo },
+	  { path: '/bar', component: Bar }
+	]
+	// 3. 创建 router 实例，然后传 `routes` 配置 
+	const router = new VueRouter({
+	  routes // (缩写) 相当于 routes: routes
+	}) 
+	// 4. 创建和挂载根实例 
+	const app = new Vue({
+	  router
+	}).$mount('#app') 
+	
+	
+	
+	</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vuex demo form  </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../vuex-3.1.1/vuex.js"></script>
+</head>
+<body> 
+v-model在vuex中的使用,有点麻烦
+ <div id="app"></div>
+ <script type="text/javascript">
+ const store = new Vuex.Store({
+	  state: {  
+		  obj: {
+			  message:"one"
+		  }
+	  },
+	  mutations: {  
+		  updateMessage (state,msg) { 
+		      state.obj.message=msg 
+		  }
+	  } 
+ }); 
+ const app = new Vue({
+	  el: '#app',
+	  store,   
+	  template: `
+	    <div class="app">
+		  <label>{{message}}</label><br/>
+		  <input v-model="message"> 
+	    </div>
+	  `,
+	 computed: 
+	 {
+		  message: 
+		  {
+		    get () {
+		      return this.$store.state.obj.message
+		    },
+		    set (value) {
+		      this.$store.commit('updateMessage', value)
+		    }
+		  }
+	 }
+ })
+ </script>
+</body>
+</html>

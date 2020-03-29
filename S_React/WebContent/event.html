@@ -4,23 +4,23 @@
     <meta charset="UTF-8" />
     <title> Event</title>
 
-	<script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+	<script src="unpkg_react-16.13.1/react.development.js"></script>
+    <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
     
-      <script src="babel.min.js"></script>
-   <script src="jquery-3.2.1.min.js"></script> 
+    <script src="unpkg_babel-7.9.1/babel.min.js"></script>
+    <script src="jquery-3.2.1.min.js"></script> 
     <style type="text/css">
-  .box{
-    width:200px;
-    height: 200px;
-    background: #CCC;
-    position: absolute;
-  }
-  </style>
+    .box{
+      width:200px;
+      height: 200px;
+      background: #CCC;
+      position: absolute;
+    }
+    </style>
   </head>
   <body>
      
-    <script  type="text/babel" >
+<script  type="text/babel" >
 	 
 class Toggle extends React.Component {
   constructor(props) {
@@ -63,7 +63,7 @@ class LoggingButton extends React.Component {
   render() {
     return (
       <button onClick={this.handleClick}>
-        Click me
+        Click me 1
       </button>
     );
   }
@@ -84,7 +84,7 @@ class LoggingButton2 extends React.Component {
 	//每次渲染的时候都会创建一个不同的回调函数
     return (
       <button onClick={(e) => this.handleClick(e)}>
-        Click me
+        Click me 2
       </button>
     );
   }
@@ -106,17 +106,17 @@ class Popper extends React.Component{
         alert(name);
     }
     deleteRow(id)
-	{
- 		alert('delete'+id);
-	}
+    {
+      alert('delete'+id);
+    }
     render(){
         return (
             <div>
-                <p>hello</p>
-                {/* 通过 bind() 方法传递参数。 */}
+                <p>通过 bind() 方法传递参数</p>
+                {/* 通过 bind() 方法传递参数 */}
                 <a href="https://reactjs.org" onClick={this.preventPop.bind(this,this.state.name)}>Click</a>
 				<br/>				
-				<button onClick={(e) => this.deleteRow(2, e)}>Delete Row</button>   //事件对象e要放在最后
+				<button onClick={(e) => this.deleteRow(2, e)}>Delete Row</button>   {/* 事件对象e要放在最后 */}
           
 			</div>
         );
@@ -134,8 +134,8 @@ class MyDrag extends React.Component{
     {
         super(...args);//...args
         this.state={
-          x:0,
-          y:0
+          x:100,
+          y:100
         }; 
     }
 	render()
@@ -145,15 +145,15 @@ class MyDrag extends React.Component{
                 background:'blue',
                 top:this.state.y  ,//+'px'
                 left:this.state.x  //+'px'
-                }} className="box"  onMouseDown={this.myMouseDown.bind(this)} >123</div>
+                }} className="box"  onMouseDown={this.myMouseDown.bind(this)} >拖我</div>
              );
 	}
 	myMouseDown(evt)//evt是被封装过的
 	{
 	 	console.log(evt.target);
 		console.log(evt.pageX);
-    var disX=evt.pageX;  //-this.state.x
-    var disY=evt.pageY;//-this.state.y
+		var disX=evt.pageX - this.state.x;
+		var disY=evt.pageY - this.state.y;
    // $(document).onmousemove(function(e){ 
     //})
     var _this=this;
@@ -206,10 +206,14 @@ class MyPop extends React.Component{
     }
     render()
     { 
-      return   <div onClick={this.parentClick.bind(this)}>
+      return(
+		    <div style={{background:'pink',border:'2px solid red',width:100,height:100}} onClick={this.parentClick.bind(this)}>
                 parentDIV
-               <div onClick={this.childClick.bind(this)}> childDiv</div>
-      </div>
+           <div  style={{background:'grey',border:'2px solid #cdcdcd',width:50,height:50}}  onClick={this.childClick.bind(this)}>
+                childDiv
+           </div>
+        </div>
+	  )
     } 
  }
 

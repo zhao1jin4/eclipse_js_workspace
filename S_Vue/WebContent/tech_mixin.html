@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech   mixin</title>
+
+
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+<style type ="text/css">  
+  
+ 
+</style>
+
+ 
+<script type="text/javascript"> 
+//混入 (mixin) 
+
+var myMixin = {
+  created: function () {//create 生命周期
+    this.hello()
+  },
+  methods: {
+    hello: function () {
+      console.log('hello from mixin!')
+    }
+  }
+}
+var Component = Vue.extend( //Vue.extend
+	{  mixins: [myMixin] //mixins属性
+	})
+var component = new Component() //new 会调用 created
+
+</script>
+
+ 当组件和混入对象含有同名选项时，这些选项将以恰当的方式进行“合并”。 <br/>
+ 比如，数据对象在内部会进行递归合并，并在发生冲突时以组件数据优先。 <br/>
+<script type="text/javascript">
+var mixin = {
+		  data: function () {
+		    return {
+		      message: 'hello',
+		      foo: 'abc'
+		    }
+		  }
+		}
+
+		new Vue({
+		  mixins: [mixin],
+		  data: function () {
+		    return {
+		      message: 'goodbye',
+		      bar: 'def'
+		    }
+		  },
+		  created: function () {
+		    console.log(this.$data) //$data 的使用
+		    // => { message: "goodbye", foo: "abc", bar: "def" }
+		  }
+		})
+		
+</script>
+
+像created生命周期 这样的同名钩子函数将合并为一个数组，不被覆盖，先用调用混入的再组件的 <br/>
+<script type="text/javascript">
+var mixin = {
+		  created: function () {
+		    console.log('混入对象的钩子被调用')
+		  }
+		}
+
+		new Vue({
+		  mixins: [mixin],
+		  created: function () {
+		    console.log('组件钩子被调用')
+		  }
+		})
+
+		// => "混入对象的钩子被调用"
+		// => "组件钩子被调用"
+</script>
+
+
+全局注册。使用时格外小心,它将影响每一个之后创建的 Vue 实例
+<script type="text/javascript">
+Vue.mixin({
+  created: function () {
+    var myOption = this.$options.myOption
+    if (myOption) {
+      console.log(myOption)
+    }
+  }
+})
+new Vue({
+  myOption: '全局hello!'
+})
+// => "hello!"
+</script>
+
+默认策略，即简单地覆盖已有值,自定义合并逻辑
+Vue.config.optionMergeStrategies.myOption = function (toVal, fromVal) {
+  // 返回合并后的值
+}
+于多数值为对象的选项，可以使用与 methods 相同的合并策略
+var strategies = Vue.config.optionMergeStrategies
+strategies.myOption = strategies.methods
+ 
+ 
+</script>
+
+</body>
+</html>

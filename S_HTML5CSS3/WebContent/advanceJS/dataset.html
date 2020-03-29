@@ -1,0 +1,33 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+
+<body>
+
+<div id="user" data-id="1234567890" data-user="johndoe" data-date-of-birth>
+	John Doe (html中用 - 式命名)
+</div>
+
+<script type="text/javascript"> 
+//https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/dataset 
+var el = document.querySelector('#user');
+// el.id == 'user'
+// el.dataset.id === '1234567890'
+// el.dataset.user === 'johndoe'
+// el.dataset.dateOfBirth === ''
+
+el.dataset.dateOfBirth = '1960-10-03'; //JS驼峰命名
+
+// 'someDataAttr' in el.dataset === false
+
+el.dataset.someDataAttr = 'mydata';
+// 'someDataAttr' in el.dataset === true
+
+</script> 
+</body>
+
+</html>

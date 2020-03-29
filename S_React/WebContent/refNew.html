@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <title> ref</title>
      
-    <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
-      <script src="babel.min.js"></script>
+     <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
@@ -55,24 +56,25 @@ ReactDOM.render(
 class AutoFocusTextInput extends React.Component {
   constructor(props) {
     super(props);
-    this.textInput = React.createRef();
+    this.textInput1 = React.createRef();
   }
-
+  //页面加载后立即得到光标
   componentDidMount() {
-    this.textInput.current.focusTextInput();
+    //这里的current为<CustomTextInput>,调用它的focusTextInput()方法
+    this.textInput1.current.focusTextInput();
+    
   }
 
   render() {
+    //仅在 CustomTextInput 声明为 class 时加ref属性才有效
     return (
-      <CustomTextInput ref={this.textInput} />
+      <CustomTextInput ref={this.textInput1} />
     );
   }
 }
-//请注意，这仅在 CustomTextInput 声明为 class 时才有效：
-//你不能在函数组件上使用 ref 属性，因为它们没有实例
-//可以在函数组件内部使用 ref 属性
+
 ReactDOM.render(
-  <CustomTextInput />,
+  <AutoFocusTextInput />,
   document.getElementById('refClass')
 );
  

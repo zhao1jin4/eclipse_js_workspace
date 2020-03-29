@@ -6,19 +6,21 @@
 </head>
 <body>
 
-Hello ,  EasyUI for  React 1.0.18<br/>
+Hello ,  EasyUI for  React 1.0.53<br/>
 
-<a href="js-method/demoDataGrid.html">js-method/demoDataGrid.html  
-加import 报 require is not defined，这是node的语法 ，原因js文件是从node_module 中复制的，没有纯js版本的?????
-</a> <br/>
+<a href="js-method/demoDataGrid.html">js-method/demoDataGrid.html  </a> <br/>
+加import 报 require is not defined，这是node的语法 ，原因js文件是从node_module 中复制的，没有纯js版本的?????<br/>
 
 npm-method 目录下的所有都是从npm项目复制过来的，不要node_modules（build不大)，因是ajax必须运行在服务上 <br/>
 <a href="npm-method/build/index.html"> build/index.html 生产极别，中修改引用的css,js 去除/ 使用相对路径可以运行,</a> <br/>
 <br/>
- package.json 下增加如下设置代理
+
+package.json 下增加如下设置代理
 "proxy":"http://localhost:8080/S_ReactEasyUI",
 npm start 就可debug
-
+<br/>
+修改内容index.js 和  App.css 和  App.js 和  AppXxx.js
+<br/>
 真实开发环境要求登录,只能对已有做好的easyUI登录才行，
 代理后输入http://localhost:3000/aa.jsp不能把后面的参数代理过去？？？？？只显示index.html，
 <br/>
@@ -26,8 +28,9 @@ npm start 就可debug
 
 
 <pre>
-	tomcat server.xml中增加
-	<Context path="/" docBase="D:\\NEW_\eclipse_js_workspace\\S_ReactEasyUI\\WebContent\\js-method"/>
+	pre标签里面也不能有xml
+	tomcat server.xml中增加 
+	Context path="/" docBase="D:\\NEW_\eclipse_js_workspace\\S_ReactEasyUI\\WebContent\\js-method"/>
 </pre>
 
 

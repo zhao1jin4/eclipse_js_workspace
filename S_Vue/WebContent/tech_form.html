@@ -13,12 +13,12 @@
 
 v-model 会忽略所有表单元素的 value，checked，selected  的初始值， 应使用组件的 data 声明初始值
 <br/>
-多行文本
+多行文本,pre-line表示多个空白合并成一个
 <div id="multiDiv">
 	<span>Multiline message is:</span>
 	<p style="white-space: pre-line;">{{ message }}</p>
 	<br>
-	<textarea v-model="message" placeholder="add multiple lines"></textarea>
+	<textarea v-model="message" placeholder="add multiple lines">这里的内容被忽略</textarea>
 </div>
 <script type="text/javascript">
 new Vue({
@@ -72,6 +72,7 @@ new Vue({
 </script>
 
 <div id="multiSelectDiv">
+按ctrl多选
   <select v-model="selected" multiple style="width: 50px;">
     <option>A</option>
     <option>B</option>
@@ -97,8 +98,9 @@ new Vue({
 	  </option>
 	</select>
 	<span>Selected: {{ selected }}</span>
-	<br/>click event:
-	 <input
+	<br/>
+	click event:   true-value 和 false-value 是Vue的功能
+	<input
 	  type="checkbox"
 	  v-model="toggle"
 	  true-value="yes"
@@ -127,16 +129,18 @@ new Vue({
 </script>
 
 <div id="otherFormDiv">
-	other Div:	<input type="radio" v-model="pick" v-bind:value="a"  @click="myOncheck" >
-	<br/>值是对象: 
+	v-bind:value="变量名"  替代	 v-model <input type="radio" v-model="pick" v-bind:value="a"  @click="myOncheck" >
+	<br/>
+	v-bind:value="对象" 
 	<select v-model="selected"> <!-- 内部是对象变量 -->
 	  <option v-bind:value="{ number: 123 }">123</option>
 	  <option v-bind:value="{ number: 456 }">456</option>
 	</select>
 	selected={{selected}} <br/>
-	数字:<input v-model.number="age" type="number"> <br/>
+	
+	整数类型:<input v-model.number="age" type="number"> <br/>
 	去空格:<input v-model.trim="msg"> <br/> 
-	输入完成时才更新<input v-model.lazy="msg" > msg:{{msg}}
+	失去焦点或回车键时才更新<input v-model.lazy="msg" > msg:{{msg}}
 </div>
 <script type="text/javascript">
 //当选中时 vm.pick值被修改为 vm.a的值
@@ -146,7 +150,8 @@ new Vue({
 		    a: '1',
 		    pick:'2',
 		    selected:undefined,
-		    msg:'a'
+		    msg:'a',
+		    age:20
 	  },
 	  methods:{
 		  myOncheck:function(evt){

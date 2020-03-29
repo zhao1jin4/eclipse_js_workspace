@@ -5,20 +5,18 @@
     <title>DataGrid!</title>
 	
 <!-- 
-    <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+    <script src="unpkg_react-16.13.1/react.development.js"></script>
+    <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
   -->
      <script src="react-16.6.3/react.production.min.js"></script>
      <script src="react-16.6.3/react-dom.production.min.js"></script>
 
-     <script src="babel.min.js"></script>
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
  
 	<link rel="StyleSheet" type="text/css"  href="common.css"/>
-	<!--node_modules 上的有require -->
-	<script src="rc-easyui-1.0.19/rc-easyui-min.js"></script> 
-	<!-- unpkg上的也有require 
-	<script src="unpkg_rc-easyui-1.0.19/rc-easyui-min.js"></script> 
-	-->
+	
+	<!-- node_modules 上的有require -->
+	  
 	
   </head>
   <body>
@@ -53,8 +51,7 @@
 
 
 // import React from 'react';  
-//import { DataGrid, GridColumn } from 'rc-easyui-1.0.19/rc-easyui-min.js'; 
-import { DataGrid, GridColumn } from 'unpkg_rc-easyui-1.0.19/rc-easyui-min.js'; 
+import { DataGrid, GridColumn } from 'rc-easyui-1.0.53/rc-easyui-min.js'; 
 
 
 class App extends React.Component {

@@ -13,7 +13,7 @@
     <!--
       现在我们为每个 todo-item 提供 todo 对象
       todo 对象是变量，即其内容可以是动态的。
-      2.2.0+ 的版本里，当在组件上使用 v-for 时，key是必须
+      2.2.0+ 的版本里，当在组件上使用 v-for 时，key是必须(也和react一样)
     -->
     <todo-item
       v-for="item in groceryList"
@@ -25,7 +25,7 @@
  
 <script type="text/javascript">  
 
-//定义名为 todo-item 的新组件， props加自己的属性
+//定义名为 todo-item 的新组件， props(也和react类似)加自己的属性
 Vue.component('todo-item', {
   props: ['todo'],
   template: '<li>{{ todo.text }}</li>'

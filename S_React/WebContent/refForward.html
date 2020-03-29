@@ -4,61 +4,55 @@
     <meta charset="UTF-8" />
     <title> ref</title>
      
-    <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
-      <script src="babel.min.js"></script>
+   	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
      
     <script  type="text/babel" > 
-  //React.forwardRef函数
-const FancyButton = React.forwardRef((props, ref) => (
-  <button ref={ref} className="FancyButton">
+
+//React.forwardRef函数,转发外部引用指向内部,给外部引用赋值为<button>
+//只在使用 React.forwardRef 定义组件时存在第二个参数 ref
+const FancyButton = React.forwardRef((props, outRef) => (
+  <button ref={outRef} className="FancyButton">
     {props.children}
   </button>
 ));
-
-/*
-// React.createRef函数
-const ref = React.createRef();
-<FancyButton ref={ref}>Click me!</FancyButton>;
-//ref.current 将指向 <button> DOM 节点。
 //Ref 转发不仅限于 DOM 组件，你也可以转发 refs 到 class 组件实例中
-
-*/
-
-
+//你的库可能会有明显不同的行为（例如 refs 被分配给了谁，以及导出了什么类型）,可认为是破坏性更改
 
 class MyComponent extends React.Component 
 {
    constructor(props) 
 	{
- 	super(props);
-	   this.ref = React.createRef();
+ 	   super(props);
+	   this.innerRef = React.createRef();
+     this.myHandle=this.handleClick.bind(this);
 	} 
   handleClick() {
-     this.ref.current.innerHTML="新的文本";
-  }
-
+    //innerRef.current 将指向 <button> DOM 节点。
+     this.innerRef.current.innerHTML="新的文本";
+  } 
  render() { 
     return (
-	<div> 
-		<FancyButton ref={ref}>Click me!</FancyButton>
-		<button onClick={this.handleClick.bind(this)} >修改文本</button>
-	</div>  
+    <div> 
+      {/* 可以直接获取 DOM button(内部)  的 ref(外部组件 操作 子组件)  */}
+      <FancyButton ref={this.innerRef}>
+        这里的onClick无效 
+      </FancyButton> <br/>
+      <button onClick={this.myHandle} > 修改前面的文本 </button>
+      <button onClick={this.handleClick.bind(this)} > 修改前面的文本 </button> 
+    </div>  
     );
   }
 }
- 
-
 ReactDOM.render(
   <MyComponent />,
   document.getElementById('example')
-);
-
- 
-
+); 
    </script>
      <div id="example"></div>  
   </body>

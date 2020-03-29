@@ -4,57 +4,56 @@
     <meta charset="UTF-8" />
     <title> clock unmount </title>
      
-    <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
+   	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
 	
-      <script src="babel.min.js"></script>
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
      
     <script  type="text/babel" >
-	function FormattedDate(props) {// props 是不可变的
-  		return <h2>现在是 {props.date.toLocaleTimeString()}.</h2>;
-	}
+    function FormattedDate(props) {// props 是不可变的
+        return <h2>现在是 {props.date.toLocaleTimeString()}.</h2>;
+    }
     class Clock extends React.Component {
       constructor(props) {
         super(props);
         this.state = {date: new Date()};
       }
       
- 	 componentDidMount() { //在render后执行
+      componentDidMount() { //在render后执行
 
-		 /*
-		this.timerID = setInterval(
-			  () => this.tick(),
-			  1000
-		 );
-		*/
-		//方式二
-		let that = this;
-		this.timerID = setInterval(function () {
-		  return that.tick();
-		},1000);
-
-	  }
+        /*
+        this.timerID = setInterval(
+            () => this.tick(), //箭头函数有 this(和Vue相反)
+            1000
+        );
+        */
+        //方式二
+        let that = this;
+        this.timerID = setInterval(function () {
+          return that.tick();
+        },1000);
+	    }
 	 
-	  componentWillUnmount() {
-		clearInterval(this.timerID);
-	  }
-	 
-	  tick() {
-		//只需更新组件的 state，然后根据新的 state 重新渲染用户界面
-		this.setState({
-		  date: new Date()
-		});
-	  }
+      componentWillUnmount() {
+        clearInterval(this.timerID);
+      }
+    
+      tick() {
+        //只需更新组件的 state，然后根据新的 state 重新渲染用户界面
+        this.setState({
+          date: new Date()
+        });
+      }
 
       render() { //在constructor后执行
         return (
           <div>
             <h1>Hello, world!</h1>
             <h2>现在是 {this.state.date.toLocaleTimeString()}.</h2>
-   			<FormattedDate date={this.state.date} />
+   			    <FormattedDate date={this.state.date} />
           </div>
         );
       }
@@ -68,7 +67,7 @@
 //每当 Clock 组件第一次加载到 DOM 中的时候，我们都想生成定时器，这在 React 中被称为挂载。
 //同样，每当 Clock 生成的这个 DOM 被移除的时候，我们也会想要清除定时器，这在 React 中被称为卸载。
 
-//order , ReactDOM.render 未完成->Clock构构器-> render->componentDidMount
+//执行顺序  , ReactDOM.render 未完成->Clock构构器-> render->componentDidMount
 
 
 

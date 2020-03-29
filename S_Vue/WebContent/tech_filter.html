@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech  filter</title>
+
+
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body>  
+过滤器 即 | 符号,后是过滤器名字, 可用于{{ }}  和 v-bind 表达式中 <br/>
+<div id="example-1" class="demo">
+  <input type="text" v-model="message">
+  <p>{{ message | capitalize }}</p>
+</div>
+<script>
+//创建 Vue 实例之前全局定义过滤器：
+Vue.filter('capitalize', function (value) //参数是|前面的值
+{
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
+new Vue({
+  el: '#example-1',
+  data: function () {
+    return {
+      message: 'john'
+    }
+  },
+  /*
+  filters: { // filters 选项
+    capitalize: function (value) 
+    {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  }*/
+  
+})
+</script>
+{{ message | filterA | filterB }}  会将 filterA 的结果传递到 filterB 中 <br/>
+{{ message | filterA('arg1', arg2) }} filterA 被定义为接收三个参数的过滤器函数 <br/>
+</body>
+</html>

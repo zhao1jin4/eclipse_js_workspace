@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router lazy </title>
+
+<style type ="text/css">  
+	.router-link-active
+	{
+		color: yellow;
+		background-color: gray;
+	}
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+<!-- 
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+ -->
+</head>
+<body>
+路由懒加载
+	<div id="app">
+	  <h1>Hello App!</h1>
+	  <p>
+	    <router-link to="/foo">Go to Foo</router-link>
+	    <router-link to="/bar">Go to Bar</router-link>
+	  </p>
+	  <router-view></router-view>
+	</div>
+	<script type="text/javascript">
+	const Foo = () => Promise.resolve({ template: '<div>foo</div>' })
+	//const Foo = () => import('./Foo.vue')
+	
+	const Bar = { template: '<div>bar</div>' }
+ 
+	const routes = [
+	  { path: '/foo', component: Foo },
+	  { path: '/bar', component: Bar }
+	] 
+	const router = new VueRouter({
+	  routes  ,
+	  //mode: 'history',// 默认 hash 模式,  去上下文和文件名 不会丢失,请求这个地址不会404
+	  //,当history模式时, URL就像  http://127.0.0.1:8080/foo (上下文和文件名 会丢失 ? ?,当请求这个地址就404 不太好)
+	}) 
+	const app = new Vue({
+	  router
+	}).$mount('#app') 
+	</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vue Bootstrap button</title>
+ 
+ <!-- 
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+ 
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+ -->
+ 
+<link type="text/css" rel="stylesheet" href="bootstrap-4.3.1_unpkg/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="bootstrapvue-2.0.0-rc.27_unpkg/bootstrap-vue.min.css" />
+ <script src="vue-2.6.10/vue.min.js"></script>
+ <script src="bootstrapvue-2.0.0-rc.27_unpkg/bootstrap-vue.min.js"></script>
+
+</head>
+<body> 
+	<div id="buttonDiv">
+	  <b-button>Button</b-button>
+	  <b-button variant="danger">Button</b-button>
+	  <b-button variant="success">Button</b-button>
+	  <b-button variant="outline-primary">Button</b-button>
+	</div>
+	<script type="text/javascript">
+	var app = new Vue({
+		  el: '#buttonDiv',
+		  data: { }
+		})
+	</script>
+</body>
+</html>

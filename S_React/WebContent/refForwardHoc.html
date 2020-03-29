@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title> ref</title>
+     
+     <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
+	 <script src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+     
+    <script  type="text/babel" >  
+  
+//特殊属性 ref 和 key是不会被props传递的 
+
+//高阶组件 返回是一个forwardRef
+function logProps(Component) {
+  class LogProps extends React.Component {
+    componentDidUpdate(prevProps) {
+      console.log('old props:', prevProps);
+      console.log('new props:', this.props);
+    }
+
+    render() {
+      const {forwardedRef, ...rest} = this.props;
+
+      // 将自定义的 prop 属性 “forwardedRef” 定义为 ref
+      return <Component ref={forwardedRef} {...rest} />;
+    }
+  }
+
+  // 注意 React.forwardRef 回调的第二个参数 “ref”。
+  // 我们可以将其作为常规 prop 属性传递给 LogProps，例如 “forwardedRef”
+  // 然后它就可以被挂载到被 LogProps 包裹的子组件上。
+/*
+  return React.forwardRef((props, ref) => {
+    return <LogProps {...props} forwardedRef={ref} />;
+  });
+*/
+/*
+  //react developer tools  会显示myFunction名代替上面的anonymous
+  return React.forwardRef(function myFunction(props, ref)  {
+    return <LogProps {...props} forwardedRef={ref} />;
+  });
+*/
+ function forwardRef(props, ref) {
+    return <LogProps {...props} forwardedRef={ref} />;
+  }
+  const name = Component.displayName || Component.name;//Component.name的值是类名
+  forwardRef.displayName = `logProps(${name})`;//displayName属性设置reactDeveloperTools显示名字
+  return React.forwardRef(forwardRef);
+} 
+
+//----下面不会写,但不报错，可以显示名字
+
+class Com1 extends React.Component
+ {
+  constructor(props) 
+	{
+    super(props); 
+  }
+    componentDidMount(prevProps) {  
+      
+    }
+    render() {
+      return (<button  >{this.props.children} </button>);
+    }
+  }
+  Com1.displayName="MyButton";  
+
+class MyComponent extends React.Component 
+{
+   constructor(props) 
+	{
+ 	   super(props);
+	   this.innerRef = React.createRef();
+     this.myHandle=this.handleClick.bind(this);
+	} 
+  handleClick() { 
+    console.log("handleClick = " +this.innerRef.current);
+     this.innerRef.current.innerHTML="新的文本";
+  } 
+ render() { 
+   const MyButton=logProps(Com1);
+
+    return (
+    <div>  
+      <MyButton ref={this.innerRef} cols="20" rows="20" >
+        这里的onClick 
+      </MyButton> <br/>
+      <button onClick={this.myHandle} > 修改 </button>
+      <button onClick={this.handleClick.bind(this)} > 修改  </button> 
+    </div>  
+    );
+  }
+}
+
+ReactDOM.render(
+  <MyComponent />,
+  document.getElementById('root')
+); 
+   </script>
+     <div id="root"></div>   
+  </body>
+</html>

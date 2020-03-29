@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router  </title>
+
+<style type ="text/css">  
+	.router-link-active
+	{
+		color: yellow;
+		background-color: gray;
+	}
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+
+</head>
+<body>
+	<div id="app">
+	  <p>
+	    <router-link to="/user/li">Go to li</router-link> <br/>
+	    <router-link to="/user/si">Go to si</router-link> <br/>
+	    <router-link :to="{ path: '/user/abc'}" replace>v-bind值是对象，属性path匹配定义的，加replace无浏览器历史记录</router-link> <br/>
+	    	加replace会调用 router.replace() 而不是 router.push()，导航后不会留下 history 记录<br/>
+	    <router-link to="/post/aaa">Go to post/aaa 取匹配*部分 </router-link> <br/>
+	    <router-link to="/xxx/yyy">Go to/xxx/yyy 最后的找不到 </router-link> <br/>
+	  </p>
+	  <router-view></router-view>  
+	</div>
+	<script type="text/javascript"> 
+	const User = {
+	  //$route.params得到参数
+	  template: '<div>User {{ $route.params.id }}</div>',
+	  watch: {//watch
+		    '$route' (to, from) {//'$route'  后没有 : 
+		 		console.log("watch 路由"+from.path+"变"+to.path);
+		    }
+	  	},
+	  	beforeRouteUpdate (to, from, next) {//2.2新功能
+	  		console.log("beforeRouteUpdate对路由"+from.path+"变"+to.path);
+	  	     next();//一定调用这个
+	  	}
+	 }
+	
+	const Post = { 
+			  template: '<div>Post {{ $route.params.pathMatch  }}</div>',
+	}
+	const routes = [
+		 // 动态路径参数 以冒号开头(同react-router)，路径支持*通配
+	    { path: '/user/:id', component: User },
+	    { path: '/post/*', component: Post },
+	    { path: '*', component: { template: '<div>{{ $route.params.pathMatch }} 没有找到 !</div>'} }
+	] 
+	const router = new VueRouter({
+	  routes  
+	})  
+	const app = new Vue({
+	  router
+	}).$mount('#app')  
+	</script>
+	 
+	
+</body>
+</html>

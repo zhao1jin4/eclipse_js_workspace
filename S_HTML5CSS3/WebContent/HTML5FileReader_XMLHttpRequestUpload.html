@@ -315,7 +315,7 @@ h.init();
     	   if (xhr.status == 200) {
     		   info.innerHTML = "Uploaded!";
     	   } else {
-    		   info.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+    		   info.innerHTML = "Error  status :" + xhr.statusText + "<br/> msg:"+xmlHttp.responseText;
     	   }
     	 };
     	 

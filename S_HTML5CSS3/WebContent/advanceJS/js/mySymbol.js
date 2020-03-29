@@ -213,7 +213,7 @@ console.log(mapped instanceof Array);
 //---- apply方法  Function​.prototype​.apply() 
 //call()方法的作用和 apply() 方法类似，区别就是call()方法接受的是 argument 列表，而apply()方法接受的是一个数组。
 var numbers = [5, 6, 2, 3, 7];
-var max = Math.max.apply(null, numbers);//第一个参数是thisArg，null表示全局对象
+var max = Math.max.apply(null, numbers);//第一个参数是thisArg，非严格模式下，则指定为 null 或 undefined 时会自动替换为指向全局对象
 console.log(max);// expected output: 7
 
 var array = ['a', 'b'];

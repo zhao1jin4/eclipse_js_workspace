@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <title> lifecycle </title>
      
-     <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
-      <script src="babel.min.js"></script>
+    
+	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
@@ -101,7 +103,7 @@ class Button extends React.Component {
 }
  
  
-//forceUpdate()  方法调用后，会引发render()调用，跳过shouldComponentUpdate(),只有在在render()该用中读this.props 和 this.state时调用这 个方法 
+//forceUpdate()  方法调用后，会引发render()调用，跳过shouldComponentUpdate()
 //当state 发生变化时会调用组件内部的render()方法
 
 /* 生命周期
@@ -112,26 +114,26 @@ UNSAFE_componentWillReceiveProps(nextProps)
 shouldComponentUpdate(nextProps, nextState) 默认返回true
 UNSAFE_componentWillUpdate(nextProps, nextState)
 componentDidUpdate(prevProps, prevState, snapshot)
-componentWillUnmount()
+componentWillUnmount()//其它的will都是UNSAFE
 
 
 */
 
 class Content extends React.Component {
-  componentWillMount() {
-      console.log('Component WILL MOUNT!')
+  UNSAFE_componentWillMount() {
+      console.log('UNSAFE Component WILL MOUNT!')
   }
   componentDidMount() {
        console.log('Component DID MOUNT!')
   }
-  componentWillReceiveProps(newProps) {
-        console.log('Component WILL RECEIVE PROPS!')
+  UNSAFE_componentWillReceiveProps(newProps) {
+        console.log('UNSAFE Component WILL RECEIVE PROPS!')
   }
   shouldComponentUpdate(newProps, newState) {
         return true;
   }
-  componentWillUpdate(nextProps, nextState) {
-        console.log('Component WILL UPDATE!');
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
+        console.log('UNSAFE Component WILL UPDATE!');
   }
   componentDidUpdate(prevProps, prevState) {
         console.log('Component DID UPDATE!')

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vuex demo module  </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../vuex-3.1.1/vuex.js"></script>
+</head>
+<body> 
+ 
+ <div id="app"></div>
+ <script type="text/javascript"> 
+  const moduleA = {
+	  state: { ... },
+	  mutations: { ... },
+	  actions: { ... },
+	  getters: { ... }
+	}
+
+	const moduleB = {
+	  state: { ... },
+	  mutations: { ... },
+	  actions: { ... }
+	}
+
+	const store = new Vuex.Store({
+	  modules: {
+	    a: moduleA,
+	    b: moduleB
+	  }
+	})
+
+	store.state.a // -> moduleA 的状态
+	store.state.b // -> moduleB 的状态
+	
+ </script>
+</body>
+</html>

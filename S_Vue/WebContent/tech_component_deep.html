@@ -9,7 +9,551 @@
 <script type="text/javascript" src="vue-2.6.10/vue.js"></script>
 </head>
 <body>
+<hr/>
+局部注册 没有示例
+
+<div id="app"></div>
+<script type="text/javascript">
+	//局部注册 没有示例 {}中的格式是什么
+	var ComponentA = { /* ... */ }
+	var ComponentB = {
+	  components: { //组件B 中使用组件A
+	    'component-a': ComponentA
+	  }, 
+	}
+	//全局注册的行为必须在根 Vue 实例 (通过 new Vue) 创建之前发生
+	new Vue({
+		  el: '#app',
+		  components:  //内部组件
+		  {
+		    'component-a': ComponentA,
+		    'component-b': ComponentB
+		  }
+		});
+		
+/*	 
+//import ComponentA from './ComponentA.vue'
+import ComponentA from './ComponentA'
+import ComponentC from './ComponentC'
+
+export default {
+  components: {
+    ComponentA,  //在 ES2015+ 中，在对象中放一个类似 ComponentA 的变量名其实是 ComponentA: ComponentA 的缩写
+    ComponentC
+  },
+  // ...
+}
+//内部使用了 webpack 的 Vue CLI 3+
+*/		
+</script>
+
+
+ <hr/> Props <br>
+ HTML不区分大小写，浏览器会把所有大写字符解释为小写字符
+ <h1>小写h1</h1>
+ <H1>大写h1</H1>
  
+camelCase (驼峰命名法) 的 prop 名需要使用其等价的 kebab-case (短横线分隔命名) 命名
+<div id="propsDiv">
+	<!-- 在 HTML 中是 kebab-case 的 -->
+	<blog-post post-title="hello!"></blog-post>
+</div>
+<script type="text/javascript"> 
+Vue.component('blog-post', {
+  // 在 JavaScript 中是 camelCase 的
+  props: ['postTitle'], 
+  template: '<h3>{{ postTitle }}</h3>'
+});
+new Vue({ el: '#propsDiv'  }); 
+
+</script>
+
+
+<div id="propsDiv1">  
+	<blog-post1  v-for="post in posts" 
+      v-bind:key="post.id"
+      v-bind:likes="post.likes"
+	  v-bind:post-title="post.title + ' by ' + post.author.name"
+	  v-bind:is-published="post.isPublished"
+	  v-bind:comment-ids="[234, 266, 273]"
+	  v-bind:author="{
+		    name: 'Veronica',
+		    company: 'Veridian Dynamics'
+		  }"
+	></blog-post1>
+	传入一个对象的所有属性 等价于  (key属性对不上)：
+	<blog-post1  v-for="post in posts"  v-bind="post" ></blog-post1>
+</div>
+
+<script type="text/javascript"> 
+	Vue.component('blog-post1', { 
+		//以数组式形式传多个值 
+		//props: ['postTitle', 'likes', 'isPublished', 'commentIds', 'author'],
+		//以对象形式，value是类型
+		props: {
+			  postTitle: String,
+			  likes: Number,
+			  isPublished: Boolean,
+			  commentIds: Array,
+			  author: Object,
+			  callback: Function,
+			  contactsPromise: Promise // or any other constructor
+			}, 
+		template: `<h3>{{ postTitle }}  likes: {{likes}} isPublished: {{isPublished}} 
+			commentIds:{{commentIds}} author.name={{author.name}}</h3> `
+	 });
+	new Vue({ el: '#propsDiv1' ,
+			data: {
+			    posts: [
+			      { id: 0, title: 'myTitle0',author:{name:'lisi'},likes:10,isPublished:true },
+			      { id: 1, title: 'myTitle1' ,author:{name:'wang'},likes:20,isPublished:false },
+			      { id: 2, title: 'myTitle2',author:{name:'zhang'},likes:30,isPublished:true},
+			    ]
+			}
+		}); 
+//父级 prop 的更新会向下流动到子组件中，但是反过来则不行,每次父级组件发生更新时，子组件中所有的 prop 都将会刷新为最新的值
+//在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变这个对象或数组本身将会影响到父组件的状态。
+/* 
+ props: ['initialCounter'],
+ data: function () {//data可以是一个函数
+	  return {
+	    counter: this.initialCounter//可以访问到props中的值(父级件)
+	  }
+	}
+ */
+</script>
+
+<hr/>
+验证props (类似react的propTypes,要单独安装,现在建议用Flow)
+使用开发环境构建版本Vue,将会产生一个控制台的警告 
+<div id="propsValid">
+<!--  正确的 -->
+<my-component  v-bind:prop-a="myNum"  prop-b="123" prop-c="abc" v-bind:prop-e="myObject"  prop-f="success" v-bind:author="myPersion"/>
+ <!--  错误的   <my-component prop-a="abc"  v-bind:prop-b="myArray"  prop-f="su" />    -->
+</div>
+
+<script type="text/javascript">
+	//type 可以是下列原生构造函数中的一个： String,Number,Boolean,Array,Object,Date,Function,Symbol
+	function Person (firstName, lastName) {
+	  this.firstName = firstName
+	  this.lastName = lastName
+	}
+	Vue.component('my-component', {
+	  props: {
+	    // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+	    propA: Number,
+	    // 多个可能的类型
+	    propB: [String, Number],
+	    // 必填的字符串
+	    propC: {
+	      type: String,
+	      required: true
+	    },
+	    // 带有默认值的数字
+	    propD: {
+	      type: Number,
+	      default: 100
+	    },
+	    // 带有默认值的对象
+	    propE: {
+	      type: Object,
+	      // 对象或数组默认值必须从一个工厂函数获取
+	      default: function () {
+	        return { message: 'hello' }
+	      }
+	    },
+	    // 自定义验证函数
+	    propF: {
+	      validator: function (value) {
+	        // 这个值必须匹配下列字符串中的一个
+	        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+	      }
+	    },
+	    author: Person//自己的类型,通过 instanceof 来进行检查确认
+	  },
+	 template: `<span> props validation defaultValue={{propD}} , propE={{propE.message}} ,author={{author.firstName}} </span>`
+	});
+	new Vue({ el: '#propsValid' ,
+		data: {
+			myNum:123,
+			myArray:[1,2,3],
+			myObject:{message:'world'},
+			myPersion:new Person('li','si'),
+		}, 
+	});
+
+/*
+	非 prop 的 attribute 
+	如自定义组件<bootstrap-date-input> 组件，这个插件需要在其 <input> 上用到一个 data-date-picker attribute
+	那么这样写<bootstrap-date-input data-date-picker="activated"></bootstrap-date-input>
+	然后这个 data-date-picker="activated" attribute 就会自动添加到 <bootstrap-date-input> 的根元素上。
+	
+	大多数 attribute 来说，从外部提供给组件的值会替换掉组件内部设置好的值
+	只有样式(class 和 style)，组件自己会合并父级的(如 父级传入的主题)
+	
+	可在组件的选项中设置 inheritAttrs: false (不会影响 style 和 class )
+	$attrs 该属性包含了传递给这个组件的 attribute名 和 attribute值
+*/
+</script>
+
+
+<br/>
+inheritAttrs 和 $attrs <br/>
+<div id=attrsDiv>
+	<base-form title="form提示" style="background-color:#00FF00;font-size:2rem">
+		 v-model 的 input事件，都是自身组件发出，都是自身组件监听  见下面代码<br/>
+		 slot做的嵌套组件<br/>
+		<base-input
+		  v-model="username"
+		  required
+		  placeholder="Enter your username"
+		></base-input>
+	</base-form> 
+</div>
+<script type="text/javascript">
+//用后面的slot
+Vue.component('base-form', {
+	 template: `<form   v-bind="$attrs">
+	 	 <slot></slot>
+		</form>`
+});
+Vue.component('base-input', {
+	  inheritAttrs: false,//不希望组件的根元素继承特性(label没有required),不会影响 style 和 class 的绑定
+	  //inheritAttrs: true,//(label有required),base-form 的 title没继承下来
+	  
+	  props: ['label', 'value'],
+	 
+	  //$attrs  表示接收外部所有属性，即placeholder属性，required属性 
+	  // v-model 的 input事件，都是自身组件发出，都是自身组件监听  见下面代码
+	  template: `
+	    <label>
+	      {{ label }}
+	      <input
+	        v-bind="$attrs"
+	        v-bind:value="value"
+	        v-on:input="$emit('input', $event.target.value)"
+	      >
+	      the input value={{value}}
+	    </label>
+	  `
+	}) 
+new Vue({ el: '#attrsDiv' ,
+	data: { 
+		username:"lisi"
+	}, 
+});
+</script>
+
+<hr/>
+<h3>自定义事件</h3>
+
+ 不同于组件和 prop，事件名不存在任何自动化的大小写转换
+v-on 事件监听器在 DOM 模板中会被自动转换为全小写 (因为 HTML 是大小写不敏感的)，所以 v-on:myEvent 将会变成 v-on:myevent <br/>
+
+v-model 默认会利用名为 value 的 prop 和名为 input 的事件
+ 这里的 lovingVue 的值将会传入这个名为 checked 的 prop。
+ <div id="customEventDiv">
+ 	<base-checkbox v-model="lovingVue"></base-checkbox>
+ </div>
+ 
+ <script type="text/javascript">
+ Vue.component('base-checkbox', {
+	  model: { //model组 (v-model)
+	    prop: 'checked',//默认是value，即props组中的属性名
+	    event: 'change'//默认是input
+	  },
+	  props: {
+		//checked 要和model组的prop值相同
+	    checked: Boolean
+	  },
+	  template: `
+	  	<span> 
+		  <input
+		      type="checkbox"
+		      v-bind:checked="checked"
+		      v-on:change="$emit('change', $event.target.checked)"
+		    >
+		  checked={{checked}}
+		</span>
+	  `
+	});
+ new Vue({ el: '#customEventDiv' ,
+		data: {
+			lovingVue:true
+		}, 
+	});
+</script>
+<br/> 
+原始 checkbox事件: <input id="htmlCheckbox" type="checkbox"   checked />  <br/>
+<script type="text/javascript">
+ const selectElement = document.querySelector('#htmlCheckbox');
+ selectElement.addEventListener('change', (event) => {
+   console.log(`You like ${event.target.value} checked=${event.target.checked}`) ;//value默认on 可以改
+ });
+ </script>
+ 
+ 
+ 
+ 
+ <hr/>
+ $listeners .native  .sync 没有示例
+ <!-- 
+监听一个原生事件,用 v-on 的 .native 修饰符
+<base-input v-on:focus.native="onFocus"></base-input> 
+如根元素不是 input(是label) 就不行了,
+$listeners 属性，值是一个对象，里面包含了作用在这个组件上的所有监听器(如 focus: function (event) {})
+  -->
+  
+  <script type="text/javascript">
+ 
+  /*
+  Vue.component('base-input', {
+  inheritAttrs: false,
+  props: ['label', 'value'],
+  computed: {
+    inputListeners: function () {
+      var vm = this
+      // `Object.assign` 将所有的对象合并为一个新对象
+      return Object.assign({},
+        // 我们从父级添加所有的监听器
+        this.$listeners,
+        // 然后我们添加自定义监听器，
+        // 或覆写一些监听器的行为
+        {
+          // 这里确保组件配合 `v-model` 的工作
+          input: function (event) {
+            vm.$emit('input', event.target.value)
+          }
+        }
+      )
+    }
+  },
+  template: `
+    <label>
+      {{ label }}
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on="inputListeners"
+      >
+    </label>
+  `
+  //v-on 没有:  ??? 是v-on:input ??? 配合v-model ???
+})
+
+*/
+/*
+//.sync 用来对 prop 进行“双向绑定”
+//带有 .sync 修饰符的 v-bind 不能和表达式一起使用 
+
+doc的title属性
+<text-document v-bind:title.sync="doc.title"></text-document>
+
+个对象同时设置多个 prop 
+<text-document v-bind.sync="doc"></text-document>
+
+ */ 
+  </script>
+  
+  
+  
+  
+<hr/>
+slot 2.6版本新改进的功能 
+<div id="slotDiv">
+	<navigation-link url="/profile">
+	  <!-- 使用子组件时取不到父组件props,但在定义子组件时也取不到-->
+	  <font-awesome-icon name="user"></font-awesome-icon>
+	  Your Profile,自身组件内容区 取不到 自身组件标签变量(但可以取到data中的url 不加报警告) url= {{url}}
+	</navigation-link>
+	
+	<my-submit></my-submit>
+	<my-submit>save</my-submit>
+
+</div>
+<script type="text/javascript">
+Vue.component("navigation-link", {
+	 props: ['url'], 
+	//<slot></slot>表示在使用时 <navigation-link> 和 </navigation-link> 里的内容
+	template: ` <a  v-bind:href="url"  class="nav-link" >
+		  	<slot></slot>
+		  </a> `
+	});
+	
+Vue.component("font-awesome-icon", {
+	 	props: ['name'], 
+		  template: ` <span>{{name}} icon</span> `
+		});
+
+Vue.component("my-submit", { 
+		  // <slot>默认值</slot>
+		  template: ` <button type="submit">
+			  <slot>Submit</slot>
+			 </button>`
+		});
+new Vue({ el: '#slotDiv' ,
+		data: { 
+			url:'init val in data'//不加报警告
+		}, 
+	});
+</script> 
+
+<div id="layoutDiv">
+	<base-layout>
+		 多个slot按名字匹配，没有放在 template 带名标签 中的默认为default, v-slot只能用在template上(其它过时) 
+		 (这点不如react好,子级件在使用时必须知道父组件所有slot名字,这里还一定是按顺序写的)
+	  <template v-slot:header>
+	    <h1>Here might be a page title</h1>
+	  </template>
+	
+	  <p>A paragraph for the main content.</p>
+	  <p>And another one.</p>
+	<!-- 或者指名default
+	<template v-slot:default>
+		<p>A paragraph for the main content.</p>
+		<p>And another one.</p>
+	</template> 
+	-->
+	  <template v-slot:footer>
+	    <p>Here some contact info</p>
+	  </template>
+	</base-layout> 
+</div>
+<script type="text/javascript">
+Vue.component("base-layout", { 
+	  // <slot>默认的名字为default
+	  template: `
+		  <div class="container">
+		  <header>
+		    <slot name="header"></slot>
+		  </header>
+		  <main>
+		    <slot></slot>
+		  </main>
+		  <footer>
+		    <slot name="footer"></slot>
+		  </footer>
+		</div>
+		`
+	});
+new Vue({ el: '#layoutDiv' ,
+	data: { }, 
+});
+</script>
+ 
+ 以下的slot 官方文档使用时没有加 v-bind:user="user"，但测试下来用组件都要加(对应定义中的 props的值 ),template不用,显示值全是一样的(li)?????
+<hr/>
+<div id="scopeDiv">
+	(自身组件内容区 取 标签变量方法 ) 作用域插槽  slotProps可以任意名=
+	<current-user v-bind:user="user"> 
+	  <template v-slot:default="slotProps"> <!-- 修改定义中<slot>中的默认内容, default可赋值, slotProps.user 对应 <slot v-bind:user="user"> -->
+	    {{ slotProps.user.firstName }}
+	  </template> 
+	</current-user> 
+	
+	<br/> v-slot:default="slotProps" 可缩写为 v-slot="slotProps",但如有用带名的slot就不能省default=
+	<current-user v-bind:user="user"> 
+	  <template v-slot="slotProps">
+	    {{ slotProps.user.firstName }}
+	  </template> 
+	</current-user> 
+	 <br/> <br/> 
+    v-slot用在使用组件上(被假定对应默认插槽),但如有用带名的slot,就只能用在template上  =
+    <current-user  v-bind:user="user" v-slot="slotProps">
+	  {{ slotProps.user.firstName }}
+	</current-user> 
+	<br/> 
+	 
+    v-slot 值为对象{ user } ,结果=
+	<current-user v-bind:user="user"  v-slot="{ user }">
+	  {{ user.firstName }}
+	</current-user> 
+	
+	<br/> 
+	 v-slot 值为对象{ user: person } ,结果(user 重命名为 person)= 
+	 <current-user   v-bind:user="user" v-slot="{ user: person }">
+	  {{ person.firstName }}
+	</current-user> 
+
+<!--  报错 ？？？
+ 	<br/>解构插槽 Prop(用于插槽 prop 是 undefined 的情形)=
+	<current-user   v-bind:user="user" v-slot="{ user = { firstName: 'Guest' } }">
+	  {{ user.firstName }}
+	</current-user>
+  -->
+  <!-- 报 dynamicSlotName 未定义？？？
+ 	<br/> 动态的插槽名  v-slot:[dynamicSlotName]什么意思？？？ (显示结果为si)=
+	<current-user v-bind:user="user"  v-bind:dynamicSlotName="dynamicSlotName" v-slot:[dynamicSlotName]="{ user }">
+	  {{ user.firstName }}
+	</current-user> 
+	  
+ 	 -->	
+ 	<br/> v-slot: 替换为字符 #， default不能省略，示例结果=
+	 <current-user v-bind:user="user"> 
+	  <template #default="slotProps">
+	    {{ slotProps.user.firstName }}
+	  </template> 
+	</current-user>
+</div>
+
+
+<script type="text/javascript"> 
+Vue.component("current-user", {  
+	  props: ['user'], 
+	  // <slot v-bind:属性  叫 插槽 prop，在使用组件时 就可以赋值一个名字slotProps，<template v-slot:default="slotProps">
+	  template: ` 
+			<span>
+			  <slot v-bind:user="user">
+			    {{ user.lastName }}
+			  </slot>
+			</span> 
+		`
+	});
+new Vue({ el: '#scopeDiv' ,
+		data: {
+				user:{firstName:"li",lastName:"si" }
+		}, 
+});
+
+</script>
+
+<hr/>
+<div id="slotTodoDiv">
+	slot todo示例 
+	<todo-list v-bind:todos="todos"> <!-- v-bind对应的是定义中的props里的 -->
+	  <template v-slot:todo="{ todo }">
+	    <span v-if="todo.isComplete">✓</span>
+	    {{ todo.text }}
+	  </template>
+	</todo-list>
+
+</div>
+<script type="text/javascript">
+Vue.component("todo-list", {   
+	  props: ['todos'],
+	  template: ` 
+		  <ul>
+		    <li
+		      v-for="todo in todos"
+		      v-bind:key="todo.id"
+		    >  
+		      <slot name="todo" v-bind:todo="todo"> 
+		        {{ todo.text }}
+		      </slot>
+		    </li>
+		  </ul>
+		`
+	});
+new Vue({ el: '#slotTodoDiv' ,
+	data: {
+		todos: [
+			      { id: 0, text: 'Vegetables',isComplete:true },
+			      { id: 1, text: 'Cheese' },
+			      { id: 2, text: 'Whatever else humans are supposed to eat' }
+			    ]
+		}, 
+});
+</script>
 
 </body>
 </html>

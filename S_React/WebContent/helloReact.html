@@ -3,21 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <title>Hello React!</title>
-    
-	<!-- react-16.8.4 Waring -->
- 	 <script src="unpkg_react-16.8.4/react.development.js"></script>
-     <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
-	
-	<!-- react-16.6.3 OK  
+     <!-- 
      <script src="react-16.6.3/react.production.min.js"></script>
      <script src="react-16.6.3/react-dom.production.min.js"></script>
+	 -->
+	<!-- react-16.8.4   
+ 	 <script src="unpkg_react-16.8.4/react.development.js"></script>
+     <script src="unpkg_react-16.8.4/react-dom.development.js"></script>
 	-->
-     <script src="babel.min.js"></script>
+	<!-- react-16.13.1 --> 
+ 	 <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
       <!-- offical
-     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> 会跳转为下面版本
+     <script src="https://unpkg.com/@babel/standalone@7.9.1/babel.min.js"></script>
      -->
-<!--
-   	 <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+	<!--
 		babel.min.js可以将  ECMAScript 2016 代码转为 ES5 代码
 		内嵌了对 JSX 的支持 代码中嵌套多个 HTML 标签 ,不需要一定使用 JSX
 		实时编辑会慢，集成了webpack
@@ -52,18 +54,18 @@
 	};
 	 const  i=0; //const 不可变的
 	 var arr = [
-	  <h1>数组元素1</h1>,
-	  <h2>数组元素2</h2>,
+	  <h1 key="1">数组元素1</h1>,
+	  <h2 key="2">数组元素2</h2>,
 	];
 
 	//1.执行更快 2.编译过程中就能发现错误 3.模板更加简单
 	//JSX 使用大、小写开头的约定来区分本地组件的类和 HTML 标签。
 	//JSX 中不能使用 if else 语句，但可以使用 conditional (三元运算) 表达式来替代
       ReactDOM.render( //style 引用 数字后自动添加 px,也可不用中间变量就要用{{
-        <h1 style = {myStyle}>  Hello, world!
+        <span style = {myStyle}>  Hello, world!
 			{i == 1 ? 'True!' : 'False'}
 		    {arr}
-		</h1>,
+		</span>,
         document.getElementById('hello')
       );
 
@@ -99,8 +101,8 @@
 			});
 		}
 		  render() {
-				return( //根级只可一个无素用()
-					<div class={this.clsName}>
+				return( //根级只可一个元素,用(),这也用 className,不然报警告
+					<div className={this.clsName}>
 						<h1>Hi {this.props.content} </h1>
 						<h2>{this.state.count}</h2>
 					</div>
@@ -114,7 +116,7 @@
 	//浏览中调用  count.update()只更新h2这块,因为更新的是state下面的变量
 	//默认 state 或者 props  变量修改才会re-render,如果render()依赖其它数据，可以调用forceUpdate()
 
-	//class就关键字，要用className
+	//class是关键字，要用className,对于for属性 如 <label for=""> 要用htmlFor
 	let count=ReactDOM.render(
         <Count id="one" className="myCSS"></Count>,
         document.getElementById('example')
@@ -151,7 +153,7 @@
 		// style用 {{ 双大括号 , props.children 是全部属性
 		<div  style={{opacity: this.state.opacity}}>
 			<h4>{this.props.children}</h4>
-			<h8>{this.props.author}</h8>
+			<h6>{this.props.author}</h6>
 		</div>
 		);//{this.props.author} 得到标签属性 {}中的内容是JS
 	  }
@@ -160,7 +162,7 @@
 	class CommentForm extends React.Component
 	{
 		handleClick(event) {
-			this.refs.myInput.focus();  // refs 属性引用 表单的ref属性
+			this.refs.myInput.focus();  // refs 属性引用 表单的ref属性 ,过时API
 	    }
 		render() {
 			return (
@@ -192,21 +194,22 @@
 		//	return <Comment author={comment.author}> {comment.content}</Comment> // 属性={} 不能有""
 		//});
 
-		let mappedComment=this.props.nodes.map( comment => {   //Lamba 是 ECMAScript 6 功能
-			return <Comment author={comment.author}> {comment.content}</Comment> // 属性={} 不能有""
+		let mappedComment=this.props.nodes.map( (comment,index) => {   //Lamba 是 ECMAScript 6 功能
+			return <Comment key={20+index} author={comment.author}> {comment.content}</Comment> // 属性={} 不能有""
 		});
 
 		var arrayComment=[];
 		for(var i=0;i<3;i++)
 		{
-       var names="lisi"+i;
-      	arrayComment.push(<Comment author={names}> this is lisi {i} comment</Comment>)
-    }
+			var names="lisi"+i;
+			//一个父组件里有多个相同的子组件时,每个子组件要有key属性,每个值不能相同
+			arrayComment.push(<Comment key={10+i} author={names}> this is lisi {i} comment</Comment>)
+    	}
 
 		return ( //可嵌套自定义标签
 		<div>
 			{arrayComment}
-			<Comment author="wang"> this is wang comment</Comment>
+			<Comment key="90" author="wang"> this is wang comment</Comment>
 			{mappedComment}
 			<CommentForm></CommentForm>
 		</div>

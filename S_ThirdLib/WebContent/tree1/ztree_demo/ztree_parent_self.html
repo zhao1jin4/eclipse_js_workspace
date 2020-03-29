@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<TITLE> ZTREE DEMO </TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="./zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="./jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="./jquery.ztree.all.js"></script> 
+	 
+	<SCRIPT type="text/javascript">
+	//https://github.com/zTree/zTree_v3
+		 //基于radio示例改的
+/*
+		var zNodes =[
+			{ id:1, pId:0, name:"随意勾选 1", open:true},
+			{ id:11, pId:1, name:"随意勾选 1-1", open:true},
+			{ id:111, pId:11, name:"随意勾选 1-1-1"},
+			{ id:112, pId:11, name:"随意勾选 1-1-2"},
+			{ id:12, pId:1, name:"随意勾选 1-2", open:true},
+			{ id:121, pId:12, name:"随意勾选 1-2-1"},
+			{ id:122, pId:12, name:"随意勾选 1-2-2"},
+			{ id:2, pId:0, name:"随意勾选 2", open:true},
+			{ id:21, pId:2, name:"随意勾选 2-1"},
+			{ id:22, pId:2, name:"随意勾选 2-2", open:true},
+			{ id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+			{ id:222, pId:22, name:"随意勾选 2-2-2"},
+			{ id:23, pId:2, name:"随意勾选 2-3"}
+		];
+*/		
+		//easyUI也是children
+		var zNodes=[
+			{ id:1, name:"随意勾选 1", open:true,
+				children:
+				[
+					{id:11,name:"随意勾选 1-1",open:true}
+				]
+			},
+			{ id:21, name:"随意勾选 2-1",
+				children:
+				[
+					{ id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+				]
+			},
+		];
+		var setting = {
+			data: {
+				key:{
+					name:"name",
+					title:"name"
+				},
+				simpleData: {
+					enable: true,
+					idKey:"id",
+					pIdKey:"pId",
+					rootPid: 0
+				}
+			},
+			view:{
+				selectedMulti:true
+			},
+			check:{
+				enable:true,
+				chkStyle: "checkbox",//checkbox,radio
+				radioType: "level",//默认只影响同行，不是整个树
+				chkboxType:{"Y":"","N":""},
+				chkDisabledInherit: false
+			} 
+		};
+		
+		$(document).ready(function(){
+			var myTree=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			myTree.expandAll(false);//收起
+			myTree.expandAll(true);//展开
+		});
+		 
+	 
+	</SCRIPT>
+</HEAD>
+
+<BODY>
+	<ul id="treeDemo" class="ztree"></ul> 
+</BODY>
+</HTML>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vue router program  </title>
+
+<style type ="text/css">  
+	.router-link-active
+	{
+		color: yellow;
+		background-color: gray;
+	}
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../unpkg_vue-router-3.1.6/vue-router.js"></script>
+
+</head>
+<body>
+	<div id="programRouterDiv">
+		点两次报错？？(两次push一样的)
+	  <p>
+	    <button @click="goLisi">内部的编程式路由</button>
+	    <button @click="goBack">后退</button>
+	    <button @click="goForward">前进</button>
+	  </p>
+	  <router-view></router-view> <!-- 如果 router-view 没有设置名字，那么默认为 default。 -->
+	  <router-view name="outSection"></router-view>
+	</div>
+	<script type="text/javascript"> 
+   router=new VueRouter({
+		  routes: [ 
+			    	{
+			    		name:'userPath',//起名
+			    		path: '/user/:id', 
+			    		//component:  { template: '<div>User {{ $route.params.id }}</div>'}
+			    		components: {//尾有s ，两时影响两个 router-view
+			    			default:{ template: '<div>User {{ $route.params.id }}</div>'},
+			    			outSection:	{ template: '<div>outSection {{ $route.params.id }}</div>'}
+			    		}
+			    	}
+			     ]
+		});
+	const vm = new Vue(
+	{
+	  	router,
+		methods:
+		{
+			goLisi:function()
+			{
+				//在Vue实例内部，你可以通过 $router 访问路由实例。因此你可以调用 this.$router.push
+				//this.$router.push("/user/lisi");
+				//this.$router.push({ path: '/user/lisi'})
+				this.$router.replace({ name: 'userPath',params:{id: '123' }}) //如对象式传参数一定要有名字
+			},
+			goBack:function()
+			{
+				router.go(-1)// 后退一步记录 等同于 history.back() (如是router.replace 不能回到上一步操作)
+			},
+			goForward:function()
+			{
+				router.go(1)// 前进一步等同于 history.forward()
+			}
+		}
+	}).$mount('#programRouterDiv');
+	
+	function outGoLisi()
+	{
+		 router.replace("/user/lisi")//Vue实例外部用法,这里的router是 new VueRouter实例
+	}
+	</script> 
+	<button onclick='outGoLisi()'>外部的编程式路由</button> 
+	
+</body>
+</html>

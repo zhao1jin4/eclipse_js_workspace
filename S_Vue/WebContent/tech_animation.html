@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> tech   animation</title>
+
+
+<script type="text/javascript" src="vue-2.6.10/vue.js"></script>
+</head>
+<body> 
+<style type ="text/css">  
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter , .fade-leave-to{
+  opacity: 0;
+}
+</style>
+ <div id="demo">
+     自带的transition (fade是指定类样式名的前缀，不太好) <br/>
+  <transition name="fade">
+    <p v-if="show">hello</p>
+  </transition>
+  <button v-on:click="show = !show">Toggle</button>
+</div>
+<script type="text/javascript">
+new Vue({
+	  el: '#demo',
+	  data: {
+	    show: true
+	  }
+	})
+</script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> vuex demo  </title>
+
+<style type ="text/css">  
+</style>
+<script type="text/javascript" src="../vue-2.6.10/vue.js"></script>
+<script type="text/javascript" src="../vuex-3.1.1/vuex.js"></script>
+</head>
+<body>
+
+	 使用 Vuex 并不意味着你需要将所有的状态放入 Vuex
+	<div id="app"></div>
+	<script type="text/javascript">
+	// 如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
+	const store = new Vuex.Store({
+	  state: { //定全局共享数据，命名类似react,但这里可以所有子组件使用
+	    count: 10
+	  },
+	  mutations: { //修改store数据的函数,可以方便查找谁修改了变量,	这里不要执行异步操作
+		increment  (state) {//参数为store中的state,后面为传来的参数
+		    state.count++; 
+		},
+	    incrementByStep (state,step) { 
+	      state.count+=step 
+	    }
+	  }
+	});
+	const Counter = {
+	  template: `<div> {{$store.state.count}},mapState count:{{count}},{{countAlias}},{{countPlusLocalState}} </div>`, //{{ countCmp }} 
+	  //模板中仿问的是computed中的函数
+	  /*
+	  computed: {
+	    countCmp () {
+	      return store.state.count;//Vue实例外取到数据方法
+	       //return this.$store.state.count//Vue实例内取到数据方法
+	    },
+	  }
+	  */
+	  
+	  //方式二  import { mapState } from 'vuex' //只能用npm方式 ,取store中的值另一种方式
+	  //在单独构建的版本中辅助函数为 Vuex.mapState
+	 /*
+	  computed: Vuex.mapState([
+	    "count"
+	  ])
+	  */
+	 computed: Vuex.mapState({
+	    // 箭头函数可使代码更简练
+	    count: state => state.count, 
+	    // 传字符串参数 'count' 等同于 `state => state.count`
+	    countAlias: 'count', 
+	    // 为了能够使用 `this` 获取局部状态，必须使用常规函数
+	    countPlusLocalState (state) {
+	      return state.count + this.localState
+	    }
+	  }),
+	  data:function(){
+		  return {localState:10}
+	  }
+	}
+	const Add = {
+			  template: `<div> <button @click="addStore">add</button> 
+			  					<button @click="incrementByStep(3)">add传参数</button> 
+			  			</div>`,
+			  methods:{
+				  //addStore:function(){
+				  //	  this.$store.commit('incrementByStep',2);//commit的参数是store中mutations的函数名,第二为参数可选
+				  //}
+				//方式二  import { mapMutations } from 'vuex' 只用于npm方式
+				 //在单独构建的版本中辅助函数为 Vuex.mapMutations
+				 ...Vuex.mapMutations([
+		      		'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
+		      		'incrementByStep'//能传参数 
+				 ]),
+				...Vuex.mapMutations({
+					addStore: 'increment' // 将 `this.addStore()` 映射为 `this.$store.commit('increment')`
+				})
+			  }
+		  }
+	const app = new Vue({
+		  el: '#app',
+		  store,  // 把 store 对象提供给 “store” 选项，这可以把 store 的实例注入所有的子组件
+		  components: { Counter ,Add},
+		  template: `
+		    <div class="app">
+		      <counter></counter>
+		      <add></add>
+		    </div>
+		  `
+		})
+	</script>
+	
+</body>
+</html>

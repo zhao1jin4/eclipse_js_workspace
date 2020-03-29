@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <title>context</title>
      
-     <script src="unpkg_react-16.8.4/react.development.js"></script>
-    <script src="unpkg_react-16.8.4/react-dom.development.js"></script> 
-     <script src="babel.min.js"></script>
+     <script src="unpkg_react-16.13.1/react.development.js"></script>
+     <script src="unpkg_react-16.13.1/react-dom.development.js"></script>
+     
+     <script src="unpkg_babel-7.9.1/babel.min.js"></script>
 	 <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
@@ -45,8 +46,8 @@ class ThemedButton extends React.Component {
   // 在这个例子中，当前的 theme 值为 “dark”。
   static contextType = ThemeContext;//必须是  static contextType 
 
-static contextType111 = ThemeContext;
-  render() {
+  static contextType111 = ThemeContext;
+  render() { //取值用 this.context
     return <button theme={this.context} >主题{this.context}按钮</button>;
   }
 }
