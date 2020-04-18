@@ -20,7 +20,7 @@ import javax.servlet.http.Part;
 
 
 @WebServlet(urlPatterns="/uploadServlet3")
-@MultipartConfig(maxFileSize=50*1024*1024) //����֧���ļ��ϴ� enctype="multipart/form-data"
+@MultipartConfig(maxFileSize=50*1024*1024) //用于支持文件上传 enctype="multipart/form-data"
 public class UploadServlet3 extends HttpServlet{
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -34,24 +34,24 @@ public class UploadServlet3 extends HttpServlet{
 		
 		req.setCharacterEncoding("UTF-8");
 		
-		Part file1=req.getPart("attache1");//��<input type=file name="attache1"
+		Part file1=req.getPart("attache1");//是<input type=file name="attache1"
 		String name=file1.getName();//attache1 
 //		Collection headers=file1.getHeaderNames();
 //		System.out.println(headers);
 		String pairs=file1.getHeader("content-disposition");
 //		System.out.println(pairs);
 		
-		//form-data; name="attache1"; filename="���Ĳ���.txt"  
+		//form-data; name="attache1"; filename="中文测试.txt"  
 		//form-data; name="attache2"; filename=""
 		String nameHeader="filename=";
 		String path=pairs.substring(pairs.indexOf(nameHeader)+nameHeader.length()+1,pairs.lastIndexOf("\""));
 		if(!"".equals(path))
 		{
-			String filename=path.substring(path.lastIndexOf("\\")+1);//ֻIE�Ǵ�C:\,��req.setCharacterEncoding("UTF-8")���� OK
+			String filename=path.substring(path.lastIndexOf("\\")+1);//只IE是带C:\,和req.setCharacterEncoding("UTF-8")中文 OK
 			File dir=new File("d:\\temp");
 			if(!dir.exists())
 				dir.mkdir();
-			file1.write("d:/temp/"+filename);//һ��PartҪ����һ��write
+			file1.write("d:/temp/"+filename);//一个Part要调用一次write
 		}
 	
 		String type=file1.getContentType();
@@ -64,7 +64,7 @@ public class UploadServlet3 extends HttpServlet{
 		
 		InputStream input=file2.getInputStream();
 		String param=req.getParameter("username");
-		System.out.println(new String(param.getBytes("iso8859-1"),"UTF-8"));//���� OK
+		System.out.println(new String(param.getBytes("iso8859-1"),"UTF-8"));//中文 OK
 		
 	}
 

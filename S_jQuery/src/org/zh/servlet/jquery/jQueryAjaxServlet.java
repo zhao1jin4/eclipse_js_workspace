@@ -20,9 +20,9 @@ public class jQueryAjaxServlet extends HttpServlet{
 		System.out.println("Method:"+request.getMethod());
 
 		String username=request.getParameter("username");
-		System.out.println("username:"+username); //js�� encodeURI(user),encodeURIComponent �Ͳ�����,��������
+		System.out.println("username:"+username); //js端 encodeURI(user),encodeURIComponent 和不编码,这里正常
 		
-		String decode=URLDecoder.decode(username,"UTF-8");//js�� encodeURI(user),encodeURIComponent �Ͳ�����,��������
+		String decode=URLDecoder.decode(username,"UTF-8");//js端 encodeURI(user),encodeURIComponent 和不编码,这里正常
 		System.out.println("decode_username:"+decode);
 		writer.write("decode_username:"+decode);
 		

@@ -1,0 +1,61 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function parseXML()
+{
+	/*
+	var xmlDoc;
+	if (window.ActiveXObject)//IE
+	{
+	  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+	}
+	else if (document.implementation.createDocument)//Firefox
+	{
+	  xmlDoc=document.implementation.createDocument("","",null);
+	//document.implementation.createDocument (namespaceURI, qualifiedNameStr, DocumentType);
+	}
+	else
+	{
+	  alert('Your browser cannot handle this script');
+	}
+	xmlDoc.async=false;
+	//xmlDoc.load("../assets/cd_catalog.xml");//firefox/chrome 没有load方法??
+	*/
+	 
+	var txt=document.getElementById("xmlData").value;//<textarea>
+	var parser=new DOMParser();//Firefox/chrome可以
+	var xmlDoc=parser.parseFromString(txt,"text/xml");//返回一个Document 对象
+	
+	var allCD=xmlDoc.getElementsByTagName("cd");
+	for(var i=0;i<allCD.length;i++)
+	{
+		alert(allCD[i].firstChild.nodeValue+",attribute price="+allCD[i].getAttribute("price"));
+	}
+	
+	var s = new XMLSerializer(); 
+	var str = s.serializeToString(xmlDoc);
+	console.log(str);
+	
+}
+ 
+
+</script>
+</head>
+<body>
+
+	<textarea id="xmlData" rows="10" cols="50">
+		<cds>
+		   <cd price="20">张学友专辑</cd>
+		   <cd price="30">刘德华专辑</cd> 
+		</cds>
+	</textarea>
+	<input type="button" onclick="parseXML()" value="解析XML">
+	
+	<br/>
+	 
+	
+</body>
+</html>

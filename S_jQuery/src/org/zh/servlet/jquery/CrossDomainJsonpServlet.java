@@ -21,17 +21,18 @@ public class CrossDomainJsonpServlet extends HttpServlet
 		String flight=request.getParameter("flight");
 		System.out.println("flight="+flight); 
   
-		//ҳ����jsonpCallback:flightHandler
+		//页面中jsonpCallback:flightHandler
 		String strFunc=callback+
 		"({ code: '"+flight+
 		 "',  price: 1780,"+
 		"    tickets: 5"+
 		"});";
-		response.getWriter().write(strFunc);
+		response.getWriter().write(strFunc);  //要服务端为jquery定制的返回是不行的
 	 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 
 	}
 
 }

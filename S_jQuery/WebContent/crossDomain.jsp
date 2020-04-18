@@ -9,32 +9,37 @@
 	 
 	<script type="text/javascript">
  
-	   	
-    // 跨域 jsonp 
-    $(document).ready(function()
-    { 
-        $.ajax({
-             type: "get",
-             async: true,
-             url: "http://127.0.0.1:8080/S_jQuery/jQuery/crossDomainJsonp",
-             //url: "http://localhost:8080/S_jQuery/jQuery/crossDomainJsonp",
-             data:{flight:"FLT001"},
-             dataType: "jsonp",
-             jsonp: "callback",//默认为:callback，传到服务端的参数名
-             jsonpCallback:"flightHandler",//传到服务端的参数值,即函数名(也可不传jquery自动生成名字),JS端生成这个函数调用success
-             success: function(json){
-                 alert('您查询到航班'+json.code+'信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。');
-             },
-             error: function(){
-                 alert('fail');
-             }
+	 
+    function passFunction()
+    {
+      	
+        // 跨域 jsonp  也是基于<script>的src属性来实现，看firefox的请求网的case列为script,不是xhr
+        $(document).ready(function()
+        { 
+            $.ajax({
+                 type: "get",
+                 async: true,
+                 url: "http://127.0.0.1:8080/S_jQuery/jQuery/crossDomainJsonp",
+                 //url: "http://localhost:8080/S_jQuery/jQuery/crossDomainJsonp",
+                 data:{flight:"FLT001"},
+                 dataType: "jsonp",
+                 jsonp: "callback",//默认为:callback，传到服务端的参数名
+                 jsonpCallback:"flightHandler",//传到服务端的参数值,即函数名(也可不传jquery自动生成名字),JS端生成这个函数调用success
+                 success: function(json){
+                     alert('您查询到航班'+json.code+'信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。');
+                 },
+                 error: function(){
+                     alert('fail');
+                 }
+             });
          });
-     });
-   
+    }
+     
 	</script>
 </head>
 <body>
-	 
+	 <button onclick="passFunction()">测试json1</button>
+	 <button onclick="passNormalResetful()">测试restful  </button>
 </body>
 </html>
 

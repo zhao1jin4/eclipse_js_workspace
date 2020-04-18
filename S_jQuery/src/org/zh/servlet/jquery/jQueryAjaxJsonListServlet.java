@@ -24,8 +24,8 @@ public class jQueryAjaxJsonListServlet extends HttpServlet
 			JsonBuilderFactory bf = Json.createBuilderFactory(null); 
 			JsonArrayBuilder array=bf.createArrayBuilder();
 			JsonObjectBuilder obj=bf.createObjectBuilder() ; 
-			//obj.add("username",URLEncoder.encode("��","UTF-8"));
-			obj.add("username","��");
+			//obj.add("username",URLEncoder.encode("李","UTF-8"));
+			obj.add("username","李");
 			array.add(obj);
 			
 			JsonObjectBuilder obj1=bf.createObjectBuilder() ;  
